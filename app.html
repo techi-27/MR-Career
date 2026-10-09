@@ -1792,6 +1792,30 @@ html body .table-wrap td:nth-child(10) textarea{min-width:150px!important}
 }
 </style>
 
+
+<style id="v13-25-study-planner-and-learning-modal-layout">
+/* Study planner overview: explicit column widths prevent the oversized blank domain column. */
+html body .table-wrap table.plan-table{display:table!important;width:100%!important;min-width:1120px!important;max-width:none!important;table-layout:fixed!important}
+html body .table-wrap table.plan-table th,html body .table-wrap table.plan-table td{box-sizing:border-box!important;padding:10px 12px!important;vertical-align:top!important;white-space:normal!important;word-break:normal!important;overflow-wrap:break-word!important}
+html body .table-wrap table.plan-table th:nth-child(1),html body .table-wrap table.plan-table td:nth-child(1){width:48px!important;min-width:48px!important}
+html body .table-wrap table.plan-table th:nth-child(2),html body .table-wrap table.plan-table td:nth-child(2){width:180px!important;min-width:180px!important}
+html body .table-wrap table.plan-table th:nth-child(3),html body .table-wrap table.plan-table td:nth-child(3){width:115px!important;min-width:115px!important}
+html body .table-wrap table.plan-table th:nth-child(4),html body .table-wrap table.plan-table td:nth-child(4){width:125px!important;min-width:125px!important}
+html body .table-wrap table.plan-table th:nth-child(5),html body .table-wrap table.plan-table td:nth-child(5){width:125px!important;min-width:125px!important}
+html body .table-wrap table.plan-table th:nth-child(6),html body .table-wrap table.plan-table td:nth-child(6){width:65px!important;min-width:65px!important}
+html body .table-wrap table.plan-table th:nth-child(7),html body .table-wrap table.plan-table td:nth-child(7){width:210px!important;min-width:210px!important}
+html body .table-wrap table.plan-table th:nth-child(8),html body .table-wrap table.plan-table td:nth-child(8){width:145px!important;min-width:145px!important}
+html body .table-wrap table.plan-table th:nth-child(9),html body .table-wrap table.plan-table td:nth-child(9){width:125px!important;min-width:125px!important}
+/* Learning popup: keep the fixed sidebar control behind the modal and reserve scrollbar space. */
+html body .learning-modal{z-index:2147483000!important;align-items:flex-start!important;justify-content:center!important;padding:16px!important;overflow:hidden!important}
+html body .learning-panel{position:relative!important;width:min(1120px,calc(100vw - 48px))!important;max-width:100%!important;max-height:calc(100dvh - 32px)!important;overflow:auto!important;scrollbar-gutter:stable!important;padding:22px 30px 22px 26px!important;overscroll-behavior:contain!important}
+html body .learning-head{position:relative!important;align-items:flex-start!important;padding-right:48px!important}
+html body .learning-head .close-x{position:absolute!important;right:0!important;top:0!important;z-index:2!important}
+html body .sidebar-toggle-tab{z-index:100!important}
+html body .learning-modal .detail-grid{align-items:stretch!important;gap:14px!important}
+html body .learning-modal .detail-box{min-width:0!important;overflow-wrap:break-word!important}
+@media(max-width:760px){html body .learning-modal{padding:8px!important}html body .learning-panel{width:calc(100vw - 16px)!important;max-height:calc(100dvh - 16px)!important;padding:16px!important}html body .learning-modal .detail-grid{grid-template-columns:minmax(0,1fr)!important}}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
