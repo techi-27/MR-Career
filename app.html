@@ -1562,6 +1562,43 @@ html body .main > *, html body #content, html body #content > * {
 }
 </style>
 
+
+<style id="v13-16-sidebar-label-fix">
+/* Higher-specificity fix: preserve a full-width label column beside each nav icon. */
+html body .sidebar .nav button {
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:10px!important;
+  width:100%!important;
+  min-width:0!important;
+  overflow:visible!important;
+}
+html body .sidebar .nav button .nav-icon {
+  flex:0 0 38px!important;
+  width:38px!important;
+  min-width:38px!important;
+}
+html body .sidebar .nav button .nl {
+  display:block!important;
+  flex:1 1 0%!important;
+  width:0!important;
+  min-width:0!important;
+  max-width:100%!important;
+  white-space:normal!important;
+  word-break:normal!important;
+  overflow-wrap:break-word!important;
+  line-height:1.35!important;
+}
+html body.sidebar-collapsed .sidebar .nav button {justify-content:center!important;gap:0!important}
+html body.sidebar-collapsed .sidebar .nav button .nl {display:none!important}
+html body .sidebar::-webkit-scrollbar {width:5px!important}
+html body .sidebar::-webkit-scrollbar-thumb {background:rgba(71,85,105,.45)!important;border-radius:99px!important}
+html body .sidebar {scrollbar-width:thin;scrollbar-color:rgba(71,85,105,.45) transparent}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
