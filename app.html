@@ -1664,6 +1664,25 @@ html body .header-role-group{position:sticky!important;top:0!important;z-index:1
 html body .header-role-option{min-height:25px!important}
 </style>
 
+
+<style id="v13-20-role-dropdown-layer-fix">
+/* Render the compact role menu in the viewport layer so hero cards cannot cover it. */
+html body .header-role-menu{
+ position:fixed!important;left:8px;right:auto;top:160px;width:250px;
+ max-height:170px!important;height:auto!important;overflow:hidden!important;
+ z-index:2147483000!important;isolation:isolate!important;
+ background:#fff!important;color:#172033!important;
+ box-shadow:0 8px 22px rgba(15,23,42,.22)!important;
+}
+html body .header-role-options{
+ height:112px!important;min-height:0!important;max-height:112px!important;
+ overflow-y:auto!important;overflow-x:hidden!important;background:#fff!important;
+}
+html body .header-role-group{background:#fff!important;color:#667085!important}
+html body .header-role-option{background:#fff!important;color:#172033!important}
+html body .header-role-option:hover,html body .header-role-option:focus-visible{background:#edf5ff!important}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -2015,7 +2034,7 @@ function syncHeaderRolePicker(){
     wrap.append(trigger,menu);
     native.classList.add("role-select-native-hidden");
     native.parentNode.insertBefore(wrap,native.nextSibling);
-    trigger.addEventListener("click",()=>{const open=menu.hidden;menu.hidden=!open;trigger.setAttribute("aria-expanded",String(open));if(open){search.value="";renderHeaderRoleOptions();search.focus();}});
+    trigger.addEventListener("click",()=>{const open=menu.hidden;menu.hidden=!open;trigger.setAttribute("aria-expanded",String(open));if(open){search.value="";renderHeaderRoleOptions();positionHeaderRoleMenu();search.focus();}});
     search.addEventListener("input",renderHeaderRoleOptions);
     document.addEventListener("click",e=>{if(!wrap.contains(e.target)){menu.hidden=true;trigger.setAttribute("aria-expanded","false");}});
     document.addEventListener("keydown",e=>{if(e.key==="Escape"){menu.hidden=true;trigger.setAttribute("aria-expanded","false");trigger.focus();}});
@@ -2023,7 +2042,8 @@ function syncHeaderRolePicker(){
   const selected=native.options[native.selectedIndex];
   wrap.querySelector(".header-role-value").textContent=selected?selected.textContent.trim():"Choose a target role...";
   renderHeaderRoleOptions();
-  function renderHeaderRoleOptions(){
+  function positionHeaderRoleMenu(){const r=wrap.querySelector(".header-role-trigger").getBoundingClientRect();const m=wrap.querySelector(".header-role-menu");m.style.left=Math.max(8,Math.min(r.left,window.innerWidth-r.width-8))+"px";m.style.top=(r.bottom+4)+"px";m.style.width=r.width+"px";}
+    function renderHeaderRoleOptions(){
     const list=wrap.querySelector(".header-role-options"),search=wrap.querySelector(".header-role-search");
     if(!list||!search)return;
     const term=search.value.trim().toLowerCase();list.innerHTML="";
