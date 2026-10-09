@@ -1683,6 +1683,19 @@ html body .header-role-option{background:#fff!important;color:#172033!important}
 html body .header-role-option:hover,html body .header-role-option:focus-visible{background:#edf5ff!important}
 </style>
 
+
+<style id="v13-21-role-menu-body-portal">
+/* Keep role options outside transformed app containers so clicks and stacking work reliably. */
+html body .header-role-menu{
+ position:fixed!important;z-index:2147483647!important;
+ width:250px;max-height:170px!important;height:auto!important;
+ overflow:hidden!important;background:#fff!important;color:#172033!important;
+ pointer-events:auto!important;isolation:isolate!important;
+}
+html body .header-role-menu[hidden]{display:none!important}
+html body .header-role-options{display:block!important;height:112px!important;max-height:112px!important;overflow-y:auto!important;overflow-x:hidden!important;pointer-events:auto!important}
+html body .header-role-option{position:relative!important;z-index:1!important;display:block!important;width:100%!important;pointer-events:auto!important;cursor:pointer!important}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -2031,20 +2044,20 @@ function syncHeaderRolePicker(){
     const menu=document.createElement("div");menu.className="header-role-menu";menu.id="headerRoleMenu";menu.hidden=true;menu.setAttribute("role","listbox");
     const search=document.createElement("input");search.type="search";search.className="header-role-search";search.placeholder="Search roles…";search.setAttribute("aria-label","Search career roles");menu.appendChild(search);
     const list=document.createElement("div");list.className="header-role-options";menu.appendChild(list);
-    wrap.append(trigger,menu);
+    wrap.append(trigger);document.body.appendChild(menu);
     native.classList.add("role-select-native-hidden");
     native.parentNode.insertBefore(wrap,native.nextSibling);
     trigger.addEventListener("click",()=>{const open=menu.hidden;menu.hidden=!open;trigger.setAttribute("aria-expanded",String(open));if(open){search.value="";renderHeaderRoleOptions();positionHeaderRoleMenu();search.focus();}});
     search.addEventListener("input",renderHeaderRoleOptions);
-    document.addEventListener("click",e=>{if(!wrap.contains(e.target)){menu.hidden=true;trigger.setAttribute("aria-expanded","false");}});
+    document.addEventListener("click",e=>{if(!wrap.contains(e.target)&&!menu.contains(e.target)){menu.hidden=true;trigger.setAttribute("aria-expanded","false");}});
     document.addEventListener("keydown",e=>{if(e.key==="Escape"){menu.hidden=true;trigger.setAttribute("aria-expanded","false");trigger.focus();}});
   }
   const selected=native.options[native.selectedIndex];
   wrap.querySelector(".header-role-value").textContent=selected?selected.textContent.trim():"Choose a target role...";
   renderHeaderRoleOptions();
-  function positionHeaderRoleMenu(){const r=wrap.querySelector(".header-role-trigger").getBoundingClientRect();const m=wrap.querySelector(".header-role-menu");m.style.left=Math.max(8,Math.min(r.left,window.innerWidth-r.width-8))+"px";m.style.top=(r.bottom+4)+"px";m.style.width=r.width+"px";}
+  function positionHeaderRoleMenu(){const r=trigger.getBoundingClientRect();const m=menu;m.style.left=Math.max(8,Math.min(r.left,window.innerWidth-r.width-8))+"px";m.style.top=(r.bottom+4)+"px";m.style.width=r.width+"px";}
     function renderHeaderRoleOptions(){
-    const list=wrap.querySelector(".header-role-options"),search=wrap.querySelector(".header-role-search");
+    const list=menu.querySelector(".header-role-options"),search=menu.querySelector(".header-role-search");
     if(!list||!search)return;
     const term=search.value.trim().toLowerCase();list.innerHTML="";
     let visibleGroup="";
@@ -2059,7 +2072,7 @@ function syncHeaderRolePicker(){
     });
     function addOption(o){
       const b=document.createElement("button");b.type="button";b.className="header-role-option";b.setAttribute("role","option");b.setAttribute("aria-selected",String(o.value===native.value));b.textContent=o.textContent.trim();
-      b.addEventListener("click",()=>{native.value=o.value;wrap.querySelector(".header-role-menu").hidden=true;wrap.querySelector(".header-role-trigger").setAttribute("aria-expanded","false");handleRoleChange(o.value);});
+      b.addEventListener("click",()=>{native.value=o.value;menu.hidden=true;trigger.setAttribute("aria-expanded","false");handleRoleChange(o.value);});
       list.appendChild(b);
     }
   }
