@@ -1816,6 +1816,92 @@ html body .learning-modal .detail-grid{align-items:stretch!important;gap:14px!im
 html body .learning-modal .detail-box{min-width:0!important;overflow-wrap:break-word!important}
 @media(max-width:760px){html body .learning-modal{padding:8px!important}html body .learning-panel{width:calc(100vw - 16px)!important;max-height:calc(100dvh - 16px)!important;padding:16px!important}html body .learning-modal .detail-grid{grid-template-columns:minmax(0,1fr)!important}}
 </style>
+
+<style id="v13-26-curriculum-table-column-alignment">
+/* Curriculum/topic table only: override conflicting legacy global table rules. */
+html body .table-wrap:has(> table > tbody#topicRows){display:block!important;width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;contain:none!important;scrollbar-gutter:auto!important}
+html body .table-wrap:has(> table > tbody#topicRows) > table{
+ display:table!important;
+ width:100%!important;
+ min-width:1450px!important;
+ max-width:none!important;
+ table-layout:fixed!important;
+ border-collapse:separate!important;
+ border-spacing:0!important;
+}
+html body .table-wrap:has(> table > tbody#topicRows) th,
+html body .table-wrap:has(> table > tbody#topicRows) td{
+ box-sizing:border-box!important;
+ padding:10px 12px!important;
+ vertical-align:top!important;
+ word-break:normal!important;
+ overflow-wrap:normal!important;
+ hyphens:none!important;
+}
+html body .table-wrap:has(> table > tbody#topicRows) th{
+ white-space:nowrap!important;
+ letter-spacing:.02em!important;
+ font-size:11px!important;
+ line-height:1.25!important;
+}
+html body .table-wrap:has(> table > tbody#topicRows) th:nth-child(1),
+html body .table-wrap:has(> table > tbody#topicRows) td:nth-child(1){width:300px!important;min-width:300px!important}
+html body .table-wrap:has(> table > tbody#topicRows) th:nth-child(2),
+html body .table-wrap:has(> table > tbody#topicRows) td:nth-child(2){width:100px!important;min-width:100px!important}
+html body .table-wrap:has(> table > tbody#topicRows) th:nth-child(3),
+html body .table-wrap:has(> table > tbody#topicRows) td:nth-child(3){width:100px!important;min-width:100px!important}
+html body .table-wrap:has(> table > tbody#topicRows) th:nth-child(4),
+html body .table-wrap:has(> table > tbody#topicRows) td:nth-child(4){width:125px!important;min-width:125px!important}
+html body .table-wrap:has(> table > tbody#topicRows) th:nth-child(5),
+html body .table-wrap:has(> table > tbody#topicRows) td:nth-child(5){width:180px!important;min-width:180px!important}
+html body .table-wrap:has(> table > tbody#topicRows) th:nth-child(6),
+html body .table-wrap:has(> table > tbody#topicRows) td:nth-child(6){width:110px!important;min-width:110px!important}
+html body .table-wrap:has(> table > tbody#topicRows) th:nth-child(7),
+html body .table-wrap:has(> table > tbody#topicRows) td:nth-child(7){width:110px!important;min-width:110px!important}
+html body .table-wrap:has(> table > tbody#topicRows) th:nth-child(8),
+html body .table-wrap:has(> table > tbody#topicRows) td:nth-child(8){width:100px!important;min-width:100px!important}
+html body .table-wrap:has(> table > tbody#topicRows) th:nth-child(9),
+html body .table-wrap:has(> table > tbody#topicRows) td:nth-child(9){width:155px!important;min-width:155px!important}
+html body .table-wrap:has(> table > tbody#topicRows) th:nth-child(10),
+html body .table-wrap:has(> table > tbody#topicRows) td:nth-child(10){width:170px!important;min-width:170px!important}
+html body .table-wrap:has(> table > tbody#topicRows) td .badge{
+ display:inline-flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ width:max-content!important;
+ min-width:max-content!important;
+ max-width:none!important;
+ white-space:nowrap!important;
+ overflow-wrap:normal!important;
+ word-break:keep-all!important;
+ flex-shrink:0!important;
+}
+html body .table-wrap:has(> table > tbody#topicRows) td select{
+ display:block!important;
+ width:100%!important;
+ min-width:0!important;
+ max-width:100%!important;
+ box-sizing:border-box!important;
+ white-space:nowrap!important;
+}
+html body .table-wrap:has(> table > tbody#topicRows) td input,
+html body .table-wrap:has(> table > tbody#topicRows) td textarea{
+ width:100%!important;
+ min-width:0!important;
+ max-width:100%!important;
+ box-sizing:border-box!important;
+}
+html body .table-wrap:has(> table > tbody#topicRows) td:nth-child(1) .topic,
+html body .table-wrap:has(> table > tbody#topicRows) td:nth-child(1) .small{
+ overflow-wrap:break-word!important;
+ word-break:normal!important;
+}
+@media(max-width:760px){
+ html body .table-wrap:has(> table > tbody#topicRows) th,
+ html body .table-wrap:has(> table > tbody#topicRows) td{padding:8px!important}
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
