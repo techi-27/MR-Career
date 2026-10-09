@@ -1599,6 +1599,34 @@ html body .sidebar::-webkit-scrollbar-thumb {background:rgba(71,85,105,.45)!impo
 html body .sidebar {scrollbar-width:thin;scrollbar-color:rgba(71,85,105,.45) transparent}
 </style>
 
+
+<style id="v13-17-sidebar-final-repair">
+/* Keep original SVG navigation icons and reserve the full label width. */
+html body .sidebar .nav button .nl {
+  flex:1 1 auto!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+  white-space:normal!important;
+  word-break:normal!important;
+  overflow-wrap:break-word!important;
+}
+html body .sidebar-toggle-tab {
+  position:fixed!important; left:292px!important; top:24px!important; z-index:2000!important;
+  display:flex!important; align-items:center!important; justify-content:center!important;
+  width:32px!important; height:36px!important; padding:0!important;
+  font-size:24px!important; line-height:1!important; color:#34425f!important;
+  background:#fff!important; border:1px solid #dbe4ef!important; border-radius:0 9px 9px 0!important;
+}
+html body .sidebar-toggle-tab:after {content:none!important;display:none!important}
+html body.sidebar-collapsed .sidebar-toggle-tab {left:78px!important}
+@media(max-width:760px) {
+  html body .sidebar-toggle-tab {left:0!important;top:18px!important}
+  html body:has(.sidebar.mobile-open) .sidebar-toggle-tab {left:292px!important;top:18px!important}
+  html body.sidebar-collapsed .sidebar-toggle-tab {left:0!important}
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -1957,7 +1985,7 @@ function darkFix(){
   });
 }
 function applyTheme(){document.documentElement.removeAttribute("data-theme");}
-function decorateNav(){document.querySelectorAll(".nav button[data-view]").forEach(b=>{if(b.querySelector(".ni"))return;const t=b.textContent.trim(),m=t.match(/^(\S+)\s+(.*)$/);if(!m)return;b.setAttribute("title",m[2]);b.innerHTML=`<span class="ni">${m[1]}</span><span class="nl">${m[2]}</span>`;});}
+function decorateNav(){document.querySelectorAll(".nav button[data-view]").forEach(b=>{if(b.querySelector(".nav-icon, .nl"))return;const t=b.textContent.trim(),m=t.match(/^(\\S+)\\s+(.*)$/);if(!m)return;b.setAttribute("title",t);b.innerHTML=`<span class="ni" aria-hidden="true">${m[1]}</span><span class="nl">${m[2]}</span>`;});}
 try{applyTheme();decorateNav();}catch(e){}
 function syncSidebarToggle(){
   const btn=document.querySelector(".sidebar-toggle-tab");
