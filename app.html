@@ -1902,6 +1902,32 @@ html body .table-wrap:has(> table > tbody#topicRows) td:nth-child(1) .small{
 }
 </style>
 
+
+<style id="v13-27-learning-modal-inset-scrollbar">
+/* Scroll inside an inset viewport so the scrollbar does not sit on the dialog's rounded edge. */
+html body #learningModal.learning-modal{box-sizing:border-box!important}
+html body #learningModal .learning-panel{
+ display:flex!important;flex-direction:column!important;min-height:0!important;
+ padding:0!important;overflow:hidden!important;
+}
+html body #learningModal .learning-panel-scroll{
+ flex:1 1 auto!important;min-width:0!important;min-height:0!important;
+ width:calc(100% - 12px)!important;max-height:calc(100dvh - 32px)!important;
+ margin-right:12px!important;padding:22px 14px 22px 26px!important;
+ box-sizing:border-box!important;overflow-x:hidden!important;overflow-y:auto!important;
+ overscroll-behavior:contain!important;scrollbar-width:thin!important;
+ scrollbar-color:#c4cbe0 transparent!important;
+}
+html body #learningModal .learning-panel-scroll::-webkit-scrollbar{width:8px!important}
+html body #learningModal .learning-panel-scroll::-webkit-scrollbar-track{background:transparent!important}
+html body #learningModal .learning-panel-scroll::-webkit-scrollbar-thumb{background:#c4cbe0!important;border-radius:999px!important;border:2px solid transparent!important;background-clip:padding-box!important}
+@media(max-width:760px){
+ html body #learningModal.learning-modal{padding:8px!important}
+ html body #learningModal .learning-panel{width:calc(100vw - 16px)!important;max-height:calc(100dvh - 16px)!important}
+ html body #learningModal .learning-panel-scroll{width:calc(100% - 8px)!important;margin-right:8px!important;max-height:calc(100dvh - 16px)!important;padding:16px 10px 16px 16px!important}
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -3172,7 +3198,7 @@ function openLearning(domain,i){
  const interviews=(det.interview||[]).map((q,n)=>`<div class="interview-card"><b>Q${n+1}. ${esc(q)}</b><div class="small">Prepare a 2–3 minute answer with architecture, practical examples, failure modes and role-specific tools.</div></div>`).join("");
  const quizzes=(det.quiz||[]).map((q,n)=>`<div class="quiz-card" id="q${n}"><div class="quiz-q">Q${n+1}. ${esc(q)}</div><div class="answer"><b>How to answer:</b> Explain the concept, give one practical example and mention the role-appropriate tool or workflow.</div><div class="detail-actions"><button class="btn" onclick="this.parentElement.parentElement.classList.toggle('revealed')">Reveal guidance</button></div></div>`).join("");
  const weight=roleWeights()[domain]||0;
- modal.innerHTML=`<div class="learning-panel">
+ modal.innerHTML=`<div class="learning-panel"><div class="learning-panel-scroll">
   <div class="learning-head"><div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px"><button class="btn" onclick="closeLearning()">Back to ${esc(domain)}</button><span class="badge">${esc(domain)} · ${esc(role)} · ${weight}% role weight</span></div><h2 style="margin-top:8px">${esc(t.topic)}</h2><div class="small">${esc(t.learn)}</div></div><button class="close-x" onclick="closeLearning()">×</button></div>
   <div class="detail-grid">
    <div class="detail-box"><h3>🎯 Context — Why this matters for ${esc(role)}</h3><p>${esc(det.context)}</p></div>
@@ -3187,7 +3213,7 @@ function openLearning(domain,i){
   </div>
   <div class="section"><div class="section-title"><h2>🧠 Topic Quiz</h2><span class="small">Use before marking the topic completed</span></div><div class="detail-grid">${quizzes}</div></div>
   <div class="section"><div class="section-title"><h2>🎤 Interview Preparation</h2><span class="small">Answer aloud; then write your best answer in Notes</span></div><div class="detail-grid">${interviews}</div></div>
- </div>`;
+ </div></div>`;
  document.body.appendChild(modal);
 }
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeLearning()});
