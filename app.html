@@ -2031,6 +2031,35 @@ html body.sidebar-collapsed .sidebar-toggle-tab{left:22px!important;top:108px!im
  html body:has(.sidebar.mobile-open) .sidebar-toggle-tab{left:232px!important;top:108px!important}
 }
 </style>
+
+<style id="v13-59-sidebar-toggle-final-position">
+/* Final positioning override: place the handle in the gutter, clear of the sidebar scrollbar. */
+html body button.sidebar-toggle-tab{
+ position:fixed!important;
+ left:304px!important; right:auto!important;
+ top:138px!important; bottom:auto!important;
+ transform:none!important;
+ width:30px!important;height:42px!important;min-width:30px!important;
+ padding:0!important;box-sizing:border-box!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ border:1px solid #dbe4ef!important;border-left:0!important;
+ border-radius:0 10px 10px 0!important;
+ background:#fff!important;color:#344563!important;
+ box-shadow:2px 3px 8px rgba(35,55,85,.12)!important;
+ font-family:inherit!important;font-size:22px!important;font-weight:700!important;
+ line-height:1!important;z-index:80!important;
+}
+html body button.sidebar-toggle-tab:before,
+html body button.sidebar-toggle-tab:after{content:none!important;display:none!important}
+html body.sidebar-collapsed button.sidebar-toggle-tab{left:80px!important;top:138px!important}
+@media(max-width:760px){
+ html body button.sidebar-toggle-tab{
+  left:8px!important;top:112px!important;width:36px!important;height:40px!important;
+  border-left:1px solid #dbe4ef!important;border-radius:9px!important;z-index:1002!important;
+ }
+ html body:has(.sidebar.mobile-open) button.sidebar-toggle-tab{left:250px!important;top:112px!important}
+}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
