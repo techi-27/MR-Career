@@ -2106,6 +2106,93 @@ html body.sidebar-collapsed button.sidebar-toggle-tab{left:80px!important;top:13
 }
 </style>
 
+
+<style id="v13-61-responsive-ui-audit">
+/* Responsive UI audit: consistent readable typography, robust menus, and contained scrolling. */
+html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+html body { color:var(--ink,#172033); }
+html body .small, html body .subtitle, html body .v8-muted { line-height:1.5; }
+html body button, html body input, html body select, html body textarea { min-width:0; }
+html body :focus-visible { outline-color:#3979e6; outline-offset:2px; }
+html body .header-role-menu,
+html body .welcome-role-menu,
+html body .compact-role-menu,
+html body .switch-role-menu {
+  overscroll-behavior:contain;
+}
+html body .header-role-options,
+html body .welcome-role-options,
+html body .compact-role-options,
+html body .switch-role-options {
+  max-height:min(154px,calc(100dvh - 100px))!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  overscroll-behavior:contain!important;
+  -webkit-overflow-scrolling:touch!important;
+  scrollbar-width:thin;scrollbar-color:#bcc7dc transparent;
+}
+html body .header-role-options::-webkit-scrollbar,
+html body .welcome-role-options::-webkit-scrollbar,
+html body .compact-role-options::-webkit-scrollbar,
+html body .switch-role-options::-webkit-scrollbar {width:7px}
+html body .header-role-options::-webkit-scrollbar-thumb,
+html body .welcome-role-options::-webkit-scrollbar-thumb,
+html body .compact-role-options::-webkit-scrollbar-thumb,
+html body .switch-role-options::-webkit-scrollbar-thumb {background:#bcc7dc;border-radius:99px}
+html body .header-role-option,
+html body .welcome-role-option,
+html body .compact-role-option,
+html body .switch-role-option {min-height:34px;line-height:1.35;white-space:normal;overflow-wrap:anywhere}
+html body .header-role-trigger,
+html body .welcome-role-trigger,
+html body .compact-role-trigger,
+html body .switch-role-trigger {min-width:0;max-width:100%}
+html body .header-role-value,
+html body .welcome-role-label,
+html body .compact-role-trigger>span:first-child,
+html body .switch-role-label {min-width:0;overflow-wrap:anywhere}
+html body .sidebar-toggle-tab {
+  position:fixed!important;box-sizing:border-box!important;
+  width:30px!important;height:42px!important;min-width:30px!important;
+  padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  border:1px solid #dbe4ef!important;border-radius:0 10px 10px 0!important;
+  background:#fff!important;color:#344563!important;
+  box-shadow:2px 3px 8px rgba(35,55,85,.12)!important;
+  font-size:22px!important;font-weight:700!important;line-height:1!important;
+  z-index:80!important;transform:none!important;
+}
+html body .sidebar-toggle-tab:before,html body .sidebar-toggle-tab:after {content:none!important;display:none!important}
+@media(max-width:760px){
+  html body .main {width:100%!important;max-width:100%!important;min-width:0!important;margin-left:0!important;padding:12px!important}
+  html body .topbar {min-width:0!important;max-width:100%!important;flex-wrap:wrap!important;gap:10px!important}
+  html body .actions {width:100%;min-width:0;gap:8px}
+  html body .actions>* {max-width:100%;min-width:0}
+  html body .grid,html body .v9-smallgrid,html body .detail-grid {grid-template-columns:minmax(0,1fr)!important}
+  html body .section-title {display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:5px!important;min-width:0!important}
+  html body .section-title h2 {width:100%!important;max-width:100%!important;font-size:clamp(18px,5.2vw,23px)!important;line-height:1.28!important;overflow-wrap:break-word!important}
+  html body .section-title .small {display:block!important;width:100%!important;max-width:100%!important;font-size:13px!important;line-height:1.45!important;white-space:normal!important;overflow-wrap:break-word!important}
+  html body .v8-step {display:grid!important;grid-template-columns:32px minmax(0,1fr)!important;gap:10px!important;align-items:start!important}
+  html body .v8-step>div:last-child {min-width:0!important;max-width:100%!important}
+  html body .v8-step b {font-size:clamp(17px,4.8vw,20px)!important;line-height:1.3!important;overflow-wrap:break-word!important}
+  html body .v8-muted {font-size:14px!important;line-height:1.5!important;overflow-wrap:break-word!important;word-break:normal!important}
+  html body .v8-card {min-width:0!important;max-width:100%!important;padding:15px!important}
+  html body .btn,html body button {max-width:100%;white-space:normal;overflow-wrap:break-word}
+  html body .learning-modal {padding:8px!important;overflow-y:auto!important;overscroll-behavior:contain}
+  html body .learning-panel {width:100%!important;max-width:100%!important;max-height:calc(100dvh - 16px)!important}
+  html body .learning-panel-scroll {max-height:calc(100dvh - 32px)!important}
+  html body .header-role-menu {max-width:calc(100vw - 16px)!important}
+  html body .compact-role-menu,html body .switch-role-menu {max-width:calc(100vw - 24px)!important}
+  html body .table-wrap {max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior-x:contain!important}
+  html body .table-wrap table {max-width:none!important}
+}
+@media(max-width:380px){
+  html body .main {padding:9px!important}
+  html body h1 {font-size:22px!important}
+  html body .section-title h2 {font-size:18px!important}
+  html body .v8-card {padding:12px!important}
+  html body .actions>* {flex:1 1 100%}
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -2625,6 +2712,13 @@ function syncSidebarToggle(){
   btn.textContent=expanded?"‹":"›";
   btn.setAttribute("aria-label",expanded?"Collapse sidebar":"Expand sidebar");
   btn.title=expanded?"Collapse sidebar":"Expand sidebar";
+  /* Measure the real sidebar instead of relying on conflicting fixed pixel widths. */
+  const rect=sb.getBoundingClientRect();
+  const width=mobile?36:30;
+  const left=mobile?(expanded?Math.max(8,Math.min(rect.right-width-8,window.innerWidth-width-8)):8):Math.min(rect.right+4,window.innerWidth-width-8);
+  btn.style.setProperty("left",Math.max(4,left)+"px","important");
+  btn.style.setProperty("right","auto","important");
+  btn.style.setProperty("top",mobile?"112px":"138px","important");
 }
 function toggleSidebar(){
   const sb=document.querySelector(".sidebar");
