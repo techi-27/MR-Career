@@ -1485,7 +1485,7 @@ html body.sidebar-collapsed .sidebar .nav button .nl {display:none;}
     <div class="actions">
       <label style="display:flex;align-items:center;gap:6px;font-size:10px;color:#667085;font-weight:800">
       ROLE
-      <select id="roleSelector" class="role-select" onchange="handleRoleChange(this.value)" title="Select your target career role"></select>
+      <select id="roleSelector" class="role-select" onfocus="closeOtherRoleMenus('header')" onchange="handleRoleChange(this.value)" title="Select your target career role"></select>
     </label>
       <button class="btn" onclick="exportData()">Export</button>
       <button class="btn" onclick="importData()">Import</button>
@@ -2282,6 +2282,7 @@ function toggleCompactRolePicker(id){
  const picker=document.getElementById(id+"Picker");if(!picker)return;
  const menu=picker.querySelector(".compact-role-menu"),trigger=picker.querySelector(".compact-role-trigger");
  const opening=menu.hidden;
+ if(opening)closeOtherRoleMenus("compact");
  document.querySelectorAll(".compact-role-picker.open").forEach(p=>{p.classList.remove("open");const m=p.querySelector(".compact-role-menu"),b=p.querySelector(".compact-role-trigger");if(m)m.hidden=true;if(b)b.setAttribute("aria-expanded","false")});
  if(opening){picker.classList.add("open");menu.hidden=false;trigger.setAttribute("aria-expanded","true");const search=picker.querySelector(".compact-role-search");if(search){search.value="";filterCompactRolePicker(id,"");search.focus()}}
 }
@@ -2311,12 +2312,30 @@ function chooseWelcomeRole(role){
  if(picker)picker.classList.remove("is-open");
  trigger.setAttribute("aria-expanded","false");
 }
+function closeOtherRoleMenus(except){
+ const native=document.getElementById("roleSelector");
+ if(native&&except!=="header")native.blur();
+ if(except!=="welcome"){
+   const m=document.getElementById("welcomeRoleMenu"),t=document.getElementById("welcomeRoleTrigger"),p=document.getElementById("welcomeRolePicker");
+   if(m)m.hidden=true;
+   if(t)t.setAttribute("aria-expanded","false");
+   if(p)p.classList.remove("is-open");
+ }
+ document.querySelectorAll(".compact-role-picker").forEach(p=>{
+   if(except==="compact"&&p.classList.contains("open"))return;
+   p.classList.remove("open");
+   const m=p.querySelector(".compact-role-menu"),b=p.querySelector(".compact-role-trigger");
+   if(m)m.hidden=true;
+   if(b)b.setAttribute("aria-expanded","false");
+ });
+}
 function toggleWelcomeRoleMenu(force){
  const trigger=document.getElementById("welcomeRoleTrigger");
  const menu=document.getElementById("welcomeRoleMenu");
  const picker=document.getElementById("welcomeRolePicker");
  if(!trigger||!menu||!picker)return;
  const open=typeof force==="boolean"?force:menu.hidden;
+ if(open)closeOtherRoleMenus("welcome");
  menu.hidden=!open;
  picker.classList.toggle("is-open",open);
  trigger.setAttribute("aria-expanded",String(open));
