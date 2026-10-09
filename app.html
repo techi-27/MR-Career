@@ -1369,6 +1369,28 @@ input:focus,select:focus,textarea:focus,.welcome-role-search:focus{border-color:
 .switch-role-options{height:145px!important;max-height:145px!important;overflow-y:auto!important;overflow-x:hidden!important}
 .switch-role-option{height:29px!important;min-height:29px!important;max-height:29px!important;padding:4px 8px!important;line-height:20px!important;font-size:13px!important;overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important}
 </style>
+
+<style id="v13-50-scroll-overlap-fix">
+/* Keep the Explore IT Careers toolbar in normal document flow.
+   Sticky toolbar was covering the top of role cards during page scroll. */
+html body .main .topbar {
+  position: relative !important;
+  top: auto !important;
+  z-index: 2 !important;
+  margin-top: 0 !important;
+  scroll-margin-top: 12px;
+}
+/* Keep the sidebar toggle visible without letting it sit over the toolbar. */
+html body .sidebar-toggle-tab {
+  z-index: 15 !important;
+}
+@media (max-width: 760px) {
+  html body .main .topbar {
+    position: relative !important;
+    top: auto !important;
+  }
+}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
