@@ -1974,6 +1974,36 @@ html body.sidebar-collapsed .sidebar-toggle-tab{
  }
 }
 </style>
+
+<style id="v13-56-sidebar-toggle-edge-alignment">
+/* Single final source of truth: center the handle on the actual sidebar edge. */
+html body .sidebar-toggle-tab{
+ position:fixed!important;
+ left:278px!important; /* 292px sidebar minus half of 28px handle */
+ right:auto!important;
+ top:132px!important;
+ width:28px!important;height:40px!important;
+ box-sizing:border-box!important;
+ border-radius:0 9px 9px 0!important;
+ z-index:60!important;
+}
+html body .sidebar-toggle-tab:after{font-size:18px!important;line-height:40px!important}
+html body.sidebar-collapsed .sidebar-toggle-tab{
+ left:64px!important; /* 78px collapsed sidebar minus half of 28px handle */
+ right:auto!important;
+ border-radius:0 9px 9px 0!important;
+}
+@media(max-width:760px){
+ html body .sidebar-toggle-tab{
+  left:0!important;top:132px!important;width:28px!important;height:40px!important;
+  border-radius:0 9px 9px 0!important;
+ }
+ html body:has(.sidebar.mobile-open) .sidebar-toggle-tab{
+  left:262px!important; /* 276px mobile sidebar minus half of handle */
+  border-radius:9px 0 0 9px!important;
+ }
+}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
