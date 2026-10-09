@@ -2779,7 +2779,7 @@ function renderWeekly(){
   h+=`<div class="section"><div class="section-title"><h2>Next week priorities</h2></div><div class="v6-card">${gaps.map(([d],i)=>`<div class="v8-step"><div class="v8-stepnum">${i+1}</div><div><b>${esc(d)}</b><div class="v8-muted">${Math.round(domainProgress(d))}% complete</div></div></div>`).join("")}</div></div>`;
   setPage("Weekly Review",h);
 }function exportData(){
- try{const payload={app:"IT Career OS",version:"13.41",schemaVersion:1,exportedAt:new Date().toISOString(),state};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`IT-Career-OS-backup-${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){alert("Export failed: "+(e?.message||e));}
+ try{const payload={app:"MR.Career",legacyApp:"IT Career OS",version:"13.54",schemaVersion:1,exportedAt:new Date().toISOString(),state};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`MR-Career-backup-${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){alert("Export failed: "+(e?.message||e));}
 }
 function handleImportedFile(file){
  if(!file)return;
@@ -2788,7 +2788,7 @@ function handleImportedFile(file){
   try{
    const parsed=JSON.parse(text),raw=parsed?.state||parsed;
    const record=x=>!!x&&typeof x==="object"&&!Array.isArray(x);
-   if(parsed?.app && parsed.app!=="IT Career OS")throw new Error("This backup belongs to a different application.");
+   if(parsed?.app && !["MR.Career","IT Career OS"].includes(parsed.app) && parsed.legacyApp!=="IT Career OS")throw new Error("This backup belongs to a different application.");
    if(!record(raw))throw new Error("Backup must contain a valid state object.");
    if(!record(raw.settings))throw new Error("Backup is missing required settings.");
    if(!confirm("Importing will replace the current MR.Career progress in this browser. Export your current data first if you want to keep it. Continue?"))return;
