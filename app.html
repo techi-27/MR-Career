@@ -1627,6 +1627,24 @@ html body.sidebar-collapsed .sidebar-toggle-tab {left:78px!important}
 }
 </style>
 
+
+<style id="v13-18-header-role-menu-height">
+/* Compact custom header role dropdown; native select remains as the state source. */
+.role-select-native-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.header-role-picker{position:relative;display:inline-block;width:250px;max-width:34vw;min-width:180px;z-index:1500}
+.header-role-trigger{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:42px;padding:9px 12px;border:1px solid var(--line,#e4e7ec);border-radius:11px;background:var(--card,#fff);color:var(--ink,#172033);font:inherit;font-weight:700;text-align:left;cursor:pointer;box-sizing:border-box}
+.header-role-trigger .header-role-value{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.header-role-menu{position:absolute;top:calc(100% + 5px);left:0;right:0;z-index:99999;max-height:165px;overflow-y:auto;overflow-x:hidden;padding:5px;border:1px solid var(--line,#d0d5dd);border-radius:10px;background:var(--card,#fff);color:var(--ink,#172033);box-shadow:0 12px 28px rgba(15,23,42,.2)}
+.header-role-menu[hidden]{display:none!important}
+.header-role-option,.header-role-group{display:block;width:100%;box-sizing:border-box}
+.header-role-group{padding:6px 8px;font-size:10px;font-weight:800;color:var(--muted,#667085);background:var(--card,#fff)}
+.header-role-option{padding:6px 9px;border:0;border-radius:6px;background:transparent;color:var(--ink,#172033);font:inherit;font-size:12px;line-height:1.2;text-align:left;cursor:pointer}
+.header-role-option:hover,.header-role-option:focus-visible{background:var(--soft,#edf5ff);outline:none}
+.header-role-option[aria-selected="true"]{font-weight:800;background:var(--soft,#edf5ff)}
+.header-role-search{width:100%;height:30px;box-sizing:border-box;margin-bottom:5px;padding:5px 8px;border:1px solid var(--line,#d0d5dd);border-radius:7px;background:var(--card,#fff);color:var(--ink,#172033);font:inherit;font-size:12px}
+@media(max-width:760px){.header-role-picker{width:100%;max-width:100%;min-width:0}.header-role-menu{max-height:165px}}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -1960,10 +1978,50 @@ function updateRoleSelector(){
   if(!el)return;
   const role=selectedRole();
   el.innerHTML=roleSelectHTML();
-  if(role && [...el.options].some(o=>o.value===role)){
-    el.value=role;
-  }
+  if(role && [...el.options].some(o=>o.value===role)){el.value=role;}
   el.setAttribute("aria-label","Select target career role");
+  syncHeaderRolePicker();
+}
+function syncHeaderRolePicker(){
+  const native=document.getElementById("roleSelector");
+  if(!native)return;
+  let wrap=document.getElementById("headerRolePicker");
+  if(!wrap){
+    wrap=document.createElement("div");wrap.id="headerRolePicker";wrap.className="header-role-picker";
+    const trigger=document.createElement("button");trigger.type="button";trigger.className="header-role-trigger";trigger.setAttribute("aria-haspopup","listbox");trigger.setAttribute("aria-expanded","false");
+    trigger.innerHTML='<span class="header-role-value">Choose a target role...</span><span aria-hidden="true">▾</span>';
+    const menu=document.createElement("div");menu.className="header-role-menu";menu.id="headerRoleMenu";menu.hidden=true;menu.setAttribute("role","listbox");
+    const search=document.createElement("input");search.type="search";search.className="header-role-search";search.placeholder="Search roles…";search.setAttribute("aria-label","Search career roles");menu.appendChild(search);
+    const list=document.createElement("div");list.className="header-role-options";menu.appendChild(list);
+    wrap.append(trigger,menu);
+    native.classList.add("role-select-native-hidden");
+    native.parentNode.insertBefore(wrap,native.nextSibling);
+    trigger.addEventListener("click",()=>{const open=menu.hidden;menu.hidden=!open;trigger.setAttribute("aria-expanded",String(open));if(open){search.value="";renderHeaderRoleOptions();search.focus();}});
+    search.addEventListener("input",renderHeaderRoleOptions);
+    document.addEventListener("click",e=>{if(!wrap.contains(e.target)){menu.hidden=true;trigger.setAttribute("aria-expanded","false");}});
+    document.addEventListener("keydown",e=>{if(e.key==="Escape"){menu.hidden=true;trigger.setAttribute("aria-expanded","false");trigger.focus();}});
+  }
+  const selected=native.options[native.selectedIndex];
+  wrap.querySelector(".header-role-value").textContent=selected?selected.textContent.trim():"Choose a target role...";
+  renderHeaderRoleOptions();
+  function renderHeaderRoleOptions(){
+    const list=wrap.querySelector(".header-role-options"),search=wrap.querySelector(".header-role-search");
+    if(!list||!search)return;
+    const term=search.value.trim().toLowerCase();list.innerHTML="";
+    [...native.children].forEach(node=>{
+      if(node.tagName==="OPTGROUP"){
+        const matching=[...node.querySelectorAll("option")].filter(o=>o.value&&o.textContent.toLowerCase().includes(term));
+        if(!matching.length)return;
+        const heading=document.createElement("div");heading.className="header-role-group";heading.textContent=node.label;list.appendChild(heading);
+        matching.forEach(o=>addOption(o));
+      }else if(node.tagName==="OPTION"&&node.value&&node.textContent.toLowerCase().includes(term)){addOption(node);}
+    });
+    function addOption(o){
+      const b=document.createElement("button");b.type="button";b.className="header-role-option";b.setAttribute("role","option");b.setAttribute("aria-selected",String(o.value===native.value));b.textContent=o.textContent.trim();
+      b.addEventListener("click",()=>{native.value=o.value;wrap.querySelector(".header-role-menu").hidden=true;wrap.querySelector(".header-role-trigger").setAttribute("aria-expanded","false");handleRoleChange(o.value);});
+      list.appendChild(b);
+    }
+  }
 }
 
 
