@@ -2005,37 +2005,30 @@ html body.sidebar-collapsed .sidebar-toggle-tab{
 }
 </style>
 
-<style id="v13-57-sidebar-toggle-floating-control">
-/* Replace the edge tab with a compact circular control in the gutter.
-   This avoids covering sidebar labels or page-header buttons. */
+
+<style id="v13-58-sidebar-toggle-integrated-control">
+/* Stable alternative: keep the collapse control inside the sidebar,
+   below the brand, instead of floating across the sidebar/main boundary. */
 html body .sidebar-toggle-tab{
  position:fixed!important;
- left:298px!important;right:auto!important;top:118px!important;
- width:32px!important;height:32px!important;min-width:32px!important;
- padding:0!important;box-sizing:border-box!important;
+ left:244px!important;right:auto!important;top:108px!important;
+ width:34px!important;height:34px!important;min-width:34px!important;
+ box-sizing:border-box!important;padding:0!important;
  display:flex!important;align-items:center!important;justify-content:center!important;
- border:1px solid #d9e3f2!important;border-radius:50%!important;
+ border:1px solid #d7e1ef!important;border-radius:10px!important;
  background:#fff!important;color:#405577!important;
- box-shadow:0 3px 10px rgba(30,50,80,.12)!important;
- font-size:0!important;line-height:1!important;z-index:55!important;
+ box-shadow:0 2px 7px rgba(30,50,80,.10)!important;
+ font-size:20px!important;font-weight:700!important;line-height:1!important;
+ z-index:60!important;cursor:pointer!important;
 }
-html body .sidebar-toggle-tab:after{
- content:"‹"!important;font-size:22px!important;line-height:1!important;
-}
-html body.sidebar-collapsed .sidebar-toggle-tab{
- left:86px!important;right:auto!important;
-}
-html body.sidebar-collapsed .sidebar-toggle-tab:after{content:"›"!important}
+html body .sidebar-toggle-tab:after{content:none!important;display:none!important}
+html body.sidebar-collapsed .sidebar-toggle-tab{left:22px!important;top:108px!important}
 @media(max-width:760px){
  html body .sidebar-toggle-tab{
-  left:12px!important;top:112px!important;width:36px!important;height:36px!important;
-  min-width:36px!important;border-radius:50%!important;z-index:1001!important;
+  left:12px!important;top:108px!important;width:36px!important;height:36px!important;
+  min-width:36px!important;border-radius:10px!important;z-index:1001!important;
  }
- html body .sidebar-toggle-tab:after{content:"☰"!important;font-size:17px!important}
- html body:has(.sidebar.mobile-open) .sidebar-toggle-tab{
-  left:238px!important;top:112px!important;
- }
- html body:has(.sidebar.mobile-open) .sidebar-toggle-tab:after{content:"‹"!important}
+ html body:has(.sidebar.mobile-open) .sidebar-toggle-tab{left:232px!important;top:108px!important}
 }
 </style>
 </head>
