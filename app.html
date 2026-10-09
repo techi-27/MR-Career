@@ -1696,6 +1696,25 @@ html body .header-role-menu[hidden]{display:none!important}
 html body .header-role-options{display:block!important;height:112px!important;max-height:112px!important;overflow-y:auto!important;overflow-x:hidden!important;pointer-events:auto!important}
 html body .header-role-option{position:relative!important;z-index:1!important;display:block!important;width:100%!important;pointer-events:auto!important;cursor:pointer!important}
 </style>
+
+<style id="v13-22-authoritative-header-role-picker">
+/* Single authoritative layout for the header career-role picker. */
+html body .header-role-picker{position:relative!important;display:inline-block!important;width:250px!important;min-width:180px!important;max-width:34vw!important;z-index:1500!important;vertical-align:middle!important}
+html body .role-select-native-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+html body .header-role-trigger{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;width:100%!important;min-height:42px!important;padding:9px 12px!important;border:1px solid var(--line,#e4e7ec)!important;border-radius:11px!important;background:var(--card,#fff)!important;color:var(--ink,#172033)!important;font:inherit!important;font-weight:700!important;text-align:left!important;cursor:pointer!important;box-sizing:border-box!important}
+html body .header-role-value{display:block!important;min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+html body .header-role-menu{position:fixed!important;display:block!important;z-index:2147483647!important;max-height:170px!important;overflow:hidden!important;padding:5px!important;border:1px solid #d0d5dd!important;border-radius:10px!important;background:#fff!important;color:#172033!important;box-shadow:0 8px 22px rgba(15,23,42,.22)!important;box-sizing:border-box!important;isolation:isolate!important;pointer-events:auto!important}
+html body .header-role-menu[hidden]{display:none!important}
+html body .header-role-search{display:block!important;width:100%!important;height:30px!important;margin:0 0 5px!important;padding:5px 8px!important;box-sizing:border-box!important;border:1px solid #d0d5dd!important;border-radius:7px!important;background:#fff!important;color:#172033!important;font:inherit!important;font-size:12px!important}
+html body .header-role-options{display:block!important;min-height:48px!important;max-height:112px!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;pointer-events:auto!important;background:#fff!important}
+html body .header-role-group{display:block!important;padding:6px 8px!important;background:#fff!important;color:#667085!important;font-size:10px!important;font-weight:800!important}
+html body .header-role-option{display:block!important;width:100%!important;min-height:25px!important;padding:6px 9px!important;border:0!important;border-radius:6px!important;background:#fff!important;color:#172033!important;font:inherit!important;font-size:12px!important;line-height:1.2!important;text-align:left!important;cursor:pointer!important;pointer-events:auto!important}
+html body .header-role-option:hover,html body .header-role-option:focus-visible{background:#edf5ff!important;outline:none!important}
+html body .header-role-option[aria-selected="true"]{font-weight:800!important;background:#edf5ff!important}
+html body .header-role-empty{padding:8px!important;color:#667085!important;font-size:12px!important}
+@media(max-width:760px){html body .header-role-picker{width:100%!important;max-width:100%!important;min-width:0!important}}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -2037,47 +2056,134 @@ function syncHeaderRolePicker(){
   const native=document.getElementById("roleSelector");
   if(!native)return;
   let wrap=document.getElementById("headerRolePicker");
+  let menu=document.getElementById("headerRoleMenu");
+  let trigger,search,list;
   if(!wrap){
-    wrap=document.createElement("div");wrap.id="headerRolePicker";wrap.className="header-role-picker";
-    const trigger=document.createElement("button");trigger.type="button";trigger.className="header-role-trigger";trigger.setAttribute("aria-haspopup","listbox");trigger.setAttribute("aria-expanded","false");
+    wrap=document.createElement("div");
+    wrap.id="headerRolePicker";
+    wrap.className="header-role-picker";
+    trigger=document.createElement("button");
+    trigger.type="button";
+    trigger.className="header-role-trigger";
+    trigger.setAttribute("aria-haspopup","listbox");
+    trigger.setAttribute("aria-expanded","false");
     trigger.innerHTML='<span class="header-role-value">Choose a target role...</span><span aria-hidden="true">▾</span>';
-    const menu=document.createElement("div");menu.className="header-role-menu";menu.id="headerRoleMenu";menu.hidden=true;menu.setAttribute("role","listbox");
-    const search=document.createElement("input");search.type="search";search.className="header-role-search";search.placeholder="Search roles…";search.setAttribute("aria-label","Search career roles");menu.appendChild(search);
-    const list=document.createElement("div");list.className="header-role-options";menu.appendChild(list);
-    wrap.append(trigger);document.body.appendChild(menu);
+    wrap.appendChild(trigger);
     native.classList.add("role-select-native-hidden");
     native.parentNode.insertBefore(wrap,native.nextSibling);
-    trigger.addEventListener("click",()=>{const open=menu.hidden;menu.hidden=!open;trigger.setAttribute("aria-expanded",String(open));if(open){search.value="";renderHeaderRoleOptions();positionHeaderRoleMenu();search.focus();}});
+  } else {
+    trigger=wrap.querySelector(".header-role-trigger");
+  }
+  if(!menu){
+    menu=document.createElement("div");
+    menu.className="header-role-menu";
+    menu.id="headerRoleMenu";
+    menu.hidden=true;
+    menu.setAttribute("role","listbox");
+    search=document.createElement("input");
+    search.type="search";
+    search.className="header-role-search";
+    search.placeholder="Search roles…";
+    search.setAttribute("aria-label","Search career roles");
+    list=document.createElement("div");
+    list.className="header-role-options";
+    list.setAttribute("aria-label","Career roles");
+    menu.append(search,list);
+    document.body.appendChild(menu);
+    trigger.addEventListener("click",()=>{
+      const opening=menu.hidden;
+      menu.hidden=!opening;
+      trigger.setAttribute("aria-expanded",String(opening));
+      if(opening){
+        search.value="";
+        renderHeaderRoleOptions();
+        positionHeaderRoleMenu();
+        search.focus();
+      }
+    });
     search.addEventListener("input",renderHeaderRoleOptions);
-    document.addEventListener("click",e=>{if(!wrap.contains(e.target)&&!menu.contains(e.target)){menu.hidden=true;trigger.setAttribute("aria-expanded","false");}});
-    document.addEventListener("keydown",e=>{if(e.key==="Escape"){menu.hidden=true;trigger.setAttribute("aria-expanded","false");trigger.focus();}});
+    list.addEventListener("click",e=>{
+      const option=e.target.closest(".header-role-option");
+      if(!option)return;
+      const role=option.dataset.role;
+      if(!role || ![...native.options].some(o=>o.value===role))return;
+      native.value=role;
+      menu.hidden=true;
+      trigger.setAttribute("aria-expanded","false");
+      handleRoleChange(role);
+    });
+    document.addEventListener("click",e=>{
+      if(!wrap.contains(e.target)&&!menu.contains(e.target)){
+        menu.hidden=true;
+        trigger.setAttribute("aria-expanded","false");
+      }
+    });
+    document.addEventListener("keydown",e=>{
+      if(e.key==="Escape"&&!menu.hidden){
+        menu.hidden=true;
+        trigger.setAttribute("aria-expanded","false");
+        trigger.focus();
+      }
+    });
+    window.addEventListener("resize",()=>{if(!menu.hidden)positionHeaderRoleMenu();});
+    window.addEventListener("scroll",()=>{if(!menu.hidden)positionHeaderRoleMenu();},true);
+  } else {
+    search=menu.querySelector(".header-role-search");
+    list=menu.querySelector(".header-role-options");
+    if(!menu.isConnected)document.body.appendChild(menu);
   }
   const selected=native.options[native.selectedIndex];
-  wrap.querySelector(".header-role-value").textContent=selected?selected.textContent.trim():"Choose a target role...";
+  const label=wrap.querySelector(".header-role-value");
+  if(label)label.textContent=selected?selected.textContent.trim():"Choose a target role...";
   renderHeaderRoleOptions();
-  function positionHeaderRoleMenu(){const r=trigger.getBoundingClientRect();const m=menu;m.style.left=Math.max(8,Math.min(r.left,window.innerWidth-r.width-8))+"px";m.style.top=(r.bottom+4)+"px";m.style.width=r.width+"px";}
-    function renderHeaderRoleOptions(){
-    const list=menu.querySelector(".header-role-options"),search=menu.querySelector(".header-role-search");
-    if(!list||!search)return;
-    const term=search.value.trim().toLowerCase();list.innerHTML="";
-    let visibleGroup="";
-    [...native.options].forEach(o=>{
-      if(!o.value || !o.textContent.trim() || o.disabled)return;
-      const group=o.parentElement && o.parentElement.tagName==="OPTGROUP" ? o.parentElement.label : "";
-      if(!o.textContent.toLowerCase().includes(term) && !(group && group.toLowerCase().includes(term)))return;
-      if(group && group!==visibleGroup){
-        const heading=document.createElement("div");heading.className="header-role-group";heading.textContent=group;list.appendChild(heading);visibleGroup=group;
+
+  function positionHeaderRoleMenu(){
+    const rect=trigger.getBoundingClientRect();
+    const margin=8;
+    const width=Math.min(Math.max(rect.width,220),window.innerWidth-margin*2);
+    const left=Math.max(margin,Math.min(rect.left,window.innerWidth-width-margin));
+    const maxHeight=Math.min(170,window.innerHeight-margin*2);
+    const below=window.innerHeight-rect.bottom-margin;
+    const top=below>=Math.min(170,120)?rect.bottom+4:Math.max(margin,rect.top-maxHeight-4);
+    menu.style.left=left+"px";
+    menu.style.top=top+"px";
+    menu.style.width=width+"px";
+    menu.style.maxHeight=maxHeight+"px";
+    list.style.height=Math.max(48,Math.min(112,maxHeight-48))+"px";
+    list.style.maxHeight=list.style.height;
+  }
+  function renderHeaderRoleOptions(){
+    const term=(search.value||"").trim().toLowerCase();
+    list.replaceChildren();
+    let activeGroup="";
+    [...native.options].forEach(option=>{
+      if(!option.value||!option.textContent.trim()||option.disabled)return;
+      const group=option.parentElement?.tagName==="OPTGROUP"?option.parentElement.label:"";
+      if(!option.textContent.toLowerCase().includes(term)&&!(group&&group.toLowerCase().includes(term)))return;
+      if(group&&group!==activeGroup){
+        const heading=document.createElement("div");
+        heading.className="header-role-group";
+        heading.textContent=group;
+        list.appendChild(heading);
+        activeGroup=group;
       }
-      addOption(o);
+      const button=document.createElement("button");
+      button.type="button";
+      button.className="header-role-option";
+      button.setAttribute("role","option");
+      button.setAttribute("aria-selected",String(option.value===native.value));
+      button.dataset.role=option.value;
+      button.textContent=option.textContent.trim();
+      list.appendChild(button);
     });
-    function addOption(o){
-      const b=document.createElement("button");b.type="button";b.className="header-role-option";b.setAttribute("role","option");b.setAttribute("aria-selected",String(o.value===native.value));b.textContent=o.textContent.trim();
-      b.addEventListener("click",()=>{native.value=o.value;menu.hidden=true;trigger.setAttribute("aria-expanded","false");handleRoleChange(o.value);});
-      list.appendChild(b);
+    if(!list.children.length){
+      const empty=document.createElement("div");
+      empty.className="header-role-empty";
+      empty.textContent="No matching roles.";
+      list.appendChild(empty);
     }
   }
 }
-
 
 function darkFix(){
   const root=document.documentElement;if(root.getAttribute("data-theme")!=="dark")return;
