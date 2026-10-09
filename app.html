@@ -1998,135 +1998,154 @@ function syncHeaderRolePicker(){
   const native=document.getElementById("roleSelector");
   if(!native)return;
   let wrap=document.getElementById("headerRolePicker");
-  let menu=document.getElementById("headerRoleMenu");
-  let trigger,search,list;
   if(!wrap){
     wrap=document.createElement("div");
     wrap.id="headerRolePicker";
     wrap.className="header-role-picker";
-    trigger=document.createElement("button");
+    const trigger=document.createElement("button");
     trigger.type="button";
     trigger.className="header-role-trigger";
     trigger.setAttribute("aria-haspopup","listbox");
     trigger.setAttribute("aria-expanded","false");
+    trigger.onclick=toggleHeaderRoleMenu;
     trigger.innerHTML='<span class="header-role-value">Choose a target role...</span><span aria-hidden="true">▾</span>';
     wrap.appendChild(trigger);
     native.classList.add("role-select-native-hidden");
     native.parentNode.insertBefore(wrap,native.nextSibling);
-  } else {
-    trigger=wrap.querySelector(".header-role-trigger");
   }
+  let menu=document.getElementById("headerRoleMenu");
   if(!menu){
     menu=document.createElement("div");
-    menu.className="header-role-menu";
     menu.id="headerRoleMenu";
+    menu.className="header-role-menu";
     menu.hidden=true;
     menu.setAttribute("role","listbox");
-    search=document.createElement("input");
+    const search=document.createElement("input");
     search.type="search";
     search.className="header-role-search";
     search.placeholder="Search roles…";
     search.setAttribute("aria-label","Search career roles");
-    list=document.createElement("div");
+    search.addEventListener("input",renderHeaderRoleOptions);
+    const list=document.createElement("div");
     list.className="header-role-options";
     list.setAttribute("aria-label","Career roles");
     menu.append(search,list);
     document.body.appendChild(menu);
-    trigger.addEventListener("click",()=>{
-      const opening=menu.hidden;
-      if(opening)closeOtherRoleMenus("header");
-      menu.hidden=!opening;
-      trigger.setAttribute("aria-expanded",String(opening));
-      if(opening){
-        search.value="";
-        renderHeaderRoleOptions();
-        positionHeaderRoleMenu();
-        search.focus();
-      }
-    });
-    search.addEventListener("input",renderHeaderRoleOptions);
-    list.addEventListener("click",e=>{
+    list.addEventListener("click",function(e){
       const option=e.target.closest(".header-role-option");
-      if(!option)return;
-      const role=option.dataset.role;
-      if(!role || ![...native.options].some(o=>o.value===role))return;
-      native.value=role;
-      menu.hidden=true;
-      trigger.setAttribute("aria-expanded","false");
-      handleRoleChange(role);
+      if(option)chooseHeaderRole(option.dataset.role);
     });
-    document.addEventListener("click",e=>{
-      if(!wrap.contains(e.target)&&!menu.contains(e.target)){
-        menu.hidden=true;
-        trigger.setAttribute("aria-expanded","false");
-      }
-    });
-    document.addEventListener("keydown",e=>{
-      if(e.key==="Escape"&&!menu.hidden){
-        menu.hidden=true;
-        trigger.setAttribute("aria-expanded","false");
-        trigger.focus();
-      }
-    });
-    window.addEventListener("resize",()=>{if(!menu.hidden)positionHeaderRoleMenu();});
-    window.addEventListener("scroll",()=>{if(!menu.hidden)positionHeaderRoleMenu();},true);
-  } else {
-    search=menu.querySelector(".header-role-search");
-    list=menu.querySelector(".header-role-options");
-    if(!menu.isConnected)document.body.appendChild(menu);
+  }else if(!menu.isConnected){
+    document.body.appendChild(menu);
   }
   const selected=native.options[native.selectedIndex];
   const label=wrap.querySelector(".header-role-value");
   if(label)label.textContent=selected?selected.textContent.trim():"Choose a target role...";
   renderHeaderRoleOptions();
-
-  function positionHeaderRoleMenu(){
-    const rect=trigger.getBoundingClientRect();
-    const margin=8;
-    const width=Math.min(Math.max(rect.width,220),window.innerWidth-margin*2);
-    const left=Math.max(margin,Math.min(rect.left,window.innerWidth-width-margin));
-    const maxHeight=Math.min(170,window.innerHeight-margin*2);
-    const below=window.innerHeight-rect.bottom-margin;
-    const top=below>=Math.min(170,120)?rect.bottom+4:Math.max(margin,rect.top-maxHeight-4);
-    menu.style.left=left+"px";
-    menu.style.top=top+"px";
-    menu.style.width=width+"px";
-    menu.style.maxHeight=maxHeight+"px";
-    list.style.height=Math.max(48,Math.min(112,maxHeight-48))+"px";
-    list.style.maxHeight=list.style.height;
-  }
-  function renderHeaderRoleOptions(){
-    const term=(search.value||"").trim().toLowerCase();
-    list.replaceChildren();
-    let activeGroup="";
-    [...native.options].forEach(option=>{
-      if(!option.value||!option.textContent.trim()||option.disabled)return;
-      const group=option.parentElement?.tagName==="OPTGROUP"?option.parentElement.label:"";
-      if(!option.textContent.toLowerCase().includes(term)&&!(group&&group.toLowerCase().includes(term)))return;
-      if(group&&group!==activeGroup){
-        const heading=document.createElement("div");
-        heading.className="header-role-group";
-        heading.textContent=group;
-        list.appendChild(heading);
-        activeGroup=group;
-      }
-      const button=document.createElement("button");
-      button.type="button";
-      button.className="header-role-option";
-      button.setAttribute("role","option");
-      button.setAttribute("aria-selected",String(option.value===native.value));
-      button.dataset.role=option.value;
-      button.textContent=option.textContent.trim();
-      list.appendChild(button);
-    });
-    if(!list.children.length){
-      const empty=document.createElement("div");
-      empty.className="header-role-empty";
-      empty.textContent="No matching roles.";
-      list.appendChild(empty);
-    }
+}
+function toggleHeaderRoleMenu(){
+  const menu=document.getElementById("headerRoleMenu");
+  const trigger=document.querySelector("#headerRolePicker .header-role-trigger");
+  if(!menu||!trigger)return;
+  const opening=menu.hidden;
+  if(opening)closeOtherRoleMenus("header");
+  menu.hidden=!opening;
+  trigger.setAttribute("aria-expanded",String(opening));
+  if(opening){
+    const search=menu.querySelector(".header-role-search");
+    if(search)search.value="";
+    renderHeaderRoleOptions();
+    positionHeaderRoleMenu();
+    if(search)search.focus();
   }
 }
+function positionHeaderRoleMenu(){
+  const menu=document.getElementById("headerRoleMenu");
+  const trigger=document.querySelector("#headerRolePicker .header-role-trigger");
+  const list=menu&&menu.querySelector(".header-role-options");
+  if(!menu||!trigger||!list)return;
+  const rect=trigger.getBoundingClientRect(),margin=8;
+  const width=Math.min(Math.max(rect.width,220),window.innerWidth-margin*2);
+  const left=Math.max(margin,Math.min(rect.left,window.innerWidth-width-margin));
+  const maxHeight=Math.min(170,window.innerHeight-margin*2);
+  const below=window.innerHeight-rect.bottom-margin;
+  const top=below>=120?rect.bottom+4:Math.max(margin,rect.top-maxHeight-4);
+  menu.style.left=left+"px";
+  menu.style.top=top+"px";
+  menu.style.width=width+"px";
+  menu.style.maxHeight=maxHeight+"px";
+  list.style.height=Math.max(48,Math.min(112,maxHeight-48))+"px";
+  list.style.maxHeight=list.style.height;
+}
+function renderHeaderRoleOptions(){
+  const native=document.getElementById("roleSelector");
+  const menu=document.getElementById("headerRoleMenu");
+  if(!native||!menu)return;
+  const search=menu.querySelector(".header-role-search");
+  const list=menu.querySelector(".header-role-options");
+  if(!search||!list)return;
+  const term=search.value.trim().toLowerCase();
+  list.replaceChildren();
+  let activeGroup="";
+  [...native.options].forEach(option=>{
+    if(!option.value||!option.textContent.trim()||option.disabled)return;
+    const group=option.parentElement&&option.parentElement.tagName==="OPTGROUP"?option.parentElement.label:"";
+    if(!option.textContent.toLowerCase().includes(term)&&!(group&&group.toLowerCase().includes(term)))return;
+    if(group&&group!==activeGroup){
+      const heading=document.createElement("div");
+      heading.className="header-role-group";
+      heading.textContent=group;
+      list.appendChild(heading);
+      activeGroup=group;
+    }
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="header-role-option";
+    button.setAttribute("role","option");
+    button.setAttribute("aria-selected",String(option.value===native.value));
+    button.dataset.role=option.value;
+    button.textContent=option.textContent.trim();
+    list.appendChild(button);
+  });
+  if(!list.children.length){
+    const empty=document.createElement("div");
+    empty.className="header-role-empty";
+    empty.textContent="No matching roles.";
+    list.appendChild(empty);
+  }
+}
+function chooseHeaderRole(role){
+  const native=document.getElementById("roleSelector");
+  const menu=document.getElementById("headerRoleMenu");
+  const trigger=document.querySelector("#headerRolePicker .header-role-trigger");
+  if(!native||!role||![...native.options].some(option=>option.value===role))return;
+  native.value=role;
+  if(menu)menu.hidden=true;
+  if(trigger)trigger.setAttribute("aria-expanded","false");
+  handleRoleChange(role);
+}
+document.addEventListener("click",function(e){
+  const menu=document.getElementById("headerRoleMenu");
+  const wrap=document.getElementById("headerRolePicker");
+  if(menu&&!menu.hidden&&wrap&&!wrap.contains(e.target)&&!menu.contains(e.target)){
+    menu.hidden=true;
+    const trigger=wrap.querySelector(".header-role-trigger");
+    if(trigger)trigger.setAttribute("aria-expanded","false");
+  }
+});
+document.addEventListener("keydown",function(e){
+  if(e.key!=="Escape")return;
+  const menu=document.getElementById("headerRoleMenu");
+  const wrap=document.getElementById("headerRolePicker");
+  if(menu&&!menu.hidden){
+    menu.hidden=true;
+    const trigger=wrap&&wrap.querySelector(".header-role-trigger");
+    if(trigger){trigger.setAttribute("aria-expanded","false");trigger.focus();}
+  }
+});
+window.addEventListener("resize",function(){const menu=document.getElementById("headerRoleMenu");if(menu&&!menu.hidden)positionHeaderRoleMenu();});
+window.addEventListener("scroll",function(){const menu=document.getElementById("headerRoleMenu");if(menu&&!menu.hidden)positionHeaderRoleMenu();},true);
+
 
 function darkFix(){
   const root=document.documentElement;if(root.getAttribute("data-theme")!=="dark")return;
