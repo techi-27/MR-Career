@@ -2193,6 +2193,127 @@ html body .sidebar-toggle-tab:before,html body .sidebar-toggle-tab:after {conten
 }
 </style>
 
+
+<style id="v13-61-mobile-readability-audit">
+/* Mobile readability pass: consistent contrast, wrapping, spacing and form controls. */
+@media (max-width: 600px) {
+  html body { color: #172033; }
+  html body #content, html body .main, html body .section,
+  html body .card, html body .v8-card, html body .v9-hero2,
+  html body .v8-hero, html body .v6-hero {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  html body #content h1, html body #content h2, html body #content h3,
+  html body .main h1, html body .main h2, html body .main h3,
+  html body .section-title, html body .section-title h2,
+  html body .v9-hero2 h2, html body .v8-hero h2 {
+    color: #172033 !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+    hyphens: none !important;
+    line-height: 1.28 !important;
+  }
+  html body #content p, html body .main p, html body .section p,
+  html body .card p, html body .v8-card p, html body .small,
+  html body .v8-muted, html body .muted {
+    max-width: 100% !important;
+    min-width: 0 !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+    line-height: 1.5 !important;
+  }
+  /* Stack section heading + helper copy instead of squeezing them side by side. */
+  html body .section-title,
+  html body .v13-tech-headrow {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 5px !important;
+  }
+  html body .section-title > *,
+  html body .v13-tech-headrow > * { width: 100%; min-width: 0 !important; }
+  html body .v8-step { grid-template-columns: 30px minmax(0,1fr) !important; }
+  html body .v8-step > div, html body .v8-step > div:last-child { min-width: 0 !important; }
+  html body .actions, html body .hero-actions, html body .button-row,
+  html body .v6-actions, html body .v8-actions {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+  }
+  html body button, html body .btn, html body a.btn,
+  html body input, html body select, html body textarea {
+    box-sizing: border-box !important;
+    max-width: 100% !important;
+    min-width: 0;
+  }
+  html body button, html body .btn, html body a.btn {
+    white-space: normal !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+    line-height: 1.3 !important;
+  }
+  html body input, html body select, html body textarea {
+    font-size: 16px !important;
+  }
+  html body .table-wrap {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-x: contain !important;
+  }
+  html body .table-wrap table { max-width: none !important; }
+  html body .learning-panel-scroll {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-gutter: stable;
+  }
+  html body .welcome-role-picker,
+  html body .switch-role-picker,
+  html body .compact-role-picker { min-width: 0 !important; max-width: 100% !important; }
+  html body .welcome-role-menu,
+  html body .switch-role-menu,
+  html body .compact-role-menu {
+    max-width: calc(100vw - 28px) !important;
+    box-sizing: border-box !important;
+  }
+  html body .welcome-role-options,
+  html body .switch-role-options,
+  html body .compact-role-options {
+    max-height: min(32vh, 190px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  /* Prevent the fixed sidebar handle from covering the role selector/content on phones.
+     Keep it as a small, clearly bounded control at the sidebar edge. */
+  html body button.sidebar-toggle-tab {
+    left: 4px !important;
+    top: 8px !important;
+    width: 28px !important;
+    height: 32px !important;
+    min-width: 28px !important;
+    border: 1px solid #dbe4ef !important;
+    border-radius: 0 8px 8px 0 !important;
+    box-shadow: 0 2px 6px rgba(35,55,85,.12) !important;
+    z-index: 1002 !important;
+  }
+  html body:has(.sidebar.mobile-open) button.sidebar-toggle-tab {
+    left: min(244px, calc(100vw - 40px)) !important;
+    top: 8px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
