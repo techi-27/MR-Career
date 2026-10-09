@@ -1645,6 +1645,25 @@ html body.sidebar-collapsed .sidebar-toggle-tab {left:78px!important}
 @media(max-width:760px){.header-role-picker{width:100%;max-width:100%;min-width:0}.header-role-menu{max-height:165px}}
 </style>
 
+
+<style id="v13-19-header-role-dropdown-render-fix">
+/* Give the role menu a fixed compact scrolling list and keep it above page cards. */
+html body .header-role-picker{position:relative!important;z-index:9990!important}
+html body .header-role-menu{
+  display:block!important;position:absolute!important;top:calc(100% + 5px)!important;
+  left:0!important;right:0!important;max-height:165px!important;overflow:hidden!important;
+  padding:5px!important;background:#fff!important;color:#172033!important;
+  z-index:99999!important;box-sizing:border-box!important;
+}
+html body .header-role-menu[hidden]{display:none!important}
+html body .header-role-options{
+  display:block!important;height:112px!important;min-height:40px!important;max-height:112px!important;
+  overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;
+}
+html body .header-role-group{position:sticky!important;top:0!important;z-index:1!important}
+html body .header-role-option{min-height:25px!important}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -2008,13 +2027,15 @@ function syncHeaderRolePicker(){
     const list=wrap.querySelector(".header-role-options"),search=wrap.querySelector(".header-role-search");
     if(!list||!search)return;
     const term=search.value.trim().toLowerCase();list.innerHTML="";
-    [...native.children].forEach(node=>{
-      if(node.tagName==="OPTGROUP"){
-        const matching=[...node.querySelectorAll("option")].filter(o=>o.value&&o.textContent.toLowerCase().includes(term));
-        if(!matching.length)return;
-        const heading=document.createElement("div");heading.className="header-role-group";heading.textContent=node.label;list.appendChild(heading);
-        matching.forEach(o=>addOption(o));
-      }else if(node.tagName==="OPTION"&&node.value&&node.textContent.toLowerCase().includes(term)){addOption(node);}
+    let visibleGroup="";
+    [...native.options].forEach(o=>{
+      if(!o.value || !o.textContent.trim() || o.disabled)return;
+      const group=o.parentElement && o.parentElement.tagName==="OPTGROUP" ? o.parentElement.label : "";
+      if(!o.textContent.toLowerCase().includes(term) && !(group && group.toLowerCase().includes(term)))return;
+      if(group && group!==visibleGroup){
+        const heading=document.createElement("div");heading.className="header-role-group";heading.textContent=group;list.appendChild(heading);visibleGroup=group;
+      }
+      addOption(o);
     });
     function addOption(o){
       const b=document.createElement("button");b.type="button";b.className="header-role-option";b.setAttribute("role","option");b.setAttribute("aria-selected",String(o.value===native.value));b.textContent=o.textContent.trim();
