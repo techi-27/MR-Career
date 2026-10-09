@@ -1628,74 +1628,16 @@ html body.sidebar-collapsed .sidebar-toggle-tab {left:78px!important}
 </style>
 
 
-<style id="v13-18-header-role-menu-height">
-/* Compact custom header role dropdown; native select remains as the state source. */
-.role-select-native-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
-.header-role-picker{position:relative;display:inline-block;width:250px;max-width:34vw;min-width:180px;z-index:1500}
-.header-role-trigger{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:42px;padding:9px 12px;border:1px solid var(--line,#e4e7ec);border-radius:11px;background:var(--card,#fff);color:var(--ink,#172033);font:inherit;font-weight:700;text-align:left;cursor:pointer;box-sizing:border-box}
-.header-role-trigger .header-role-value{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.header-role-menu{position:absolute;top:calc(100% + 5px);left:0;right:0;z-index:99999;max-height:165px;overflow-y:auto;overflow-x:hidden;padding:5px;border:1px solid var(--line,#d0d5dd);border-radius:10px;background:var(--card,#fff);color:var(--ink,#172033);box-shadow:0 12px 28px rgba(15,23,42,.2)}
-.header-role-menu[hidden]{display:none!important}
-.header-role-option,.header-role-group{display:block;width:100%;box-sizing:border-box}
-.header-role-group{padding:6px 8px;font-size:10px;font-weight:800;color:var(--muted,#667085);background:var(--card,#fff)}
-.header-role-option{padding:6px 9px;border:0;border-radius:6px;background:transparent;color:var(--ink,#172033);font:inherit;font-size:12px;line-height:1.2;text-align:left;cursor:pointer}
-.header-role-option:hover,.header-role-option:focus-visible{background:var(--soft,#edf5ff);outline:none}
-.header-role-option[aria-selected="true"]{font-weight:800;background:var(--soft,#edf5ff)}
-.header-role-search{width:100%;height:30px;box-sizing:border-box;margin-bottom:5px;padding:5px 8px;border:1px solid var(--line,#d0d5dd);border-radius:7px;background:var(--card,#fff);color:var(--ink,#172033);font:inherit;font-size:12px}
-@media(max-width:760px){.header-role-picker{width:100%;max-width:100%;min-width:0}.header-role-menu{max-height:165px}}
-</style>
 
 
-<style id="v13-19-header-role-dropdown-render-fix">
-/* Give the role menu a fixed compact scrolling list and keep it above page cards. */
-html body .header-role-picker{position:relative!important;z-index:9990!important}
-html body .header-role-menu{
-  display:block!important;position:absolute!important;top:calc(100% + 5px)!important;
-  left:0!important;right:0!important;max-height:165px!important;overflow:hidden!important;
-  padding:5px!important;background:#fff!important;color:#172033!important;
-  z-index:99999!important;box-sizing:border-box!important;
-}
-html body .header-role-menu[hidden]{display:none!important}
-html body .header-role-options{
-  display:block!important;height:112px!important;min-height:40px!important;max-height:112px!important;
-  overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;
-}
-html body .header-role-group{position:sticky!important;top:0!important;z-index:1!important}
-html body .header-role-option{min-height:25px!important}
-</style>
 
 
-<style id="v13-20-role-dropdown-layer-fix">
-/* Render the compact role menu in the viewport layer so hero cards cannot cover it. */
-html body .header-role-menu{
- position:fixed!important;left:8px;right:auto;top:160px;width:250px;
- max-height:170px!important;height:auto!important;overflow:hidden!important;
- z-index:2147483000!important;isolation:isolate!important;
- background:#fff!important;color:#172033!important;
- box-shadow:0 8px 22px rgba(15,23,42,.22)!important;
-}
-html body .header-role-options{
- height:112px!important;min-height:0!important;max-height:112px!important;
- overflow-y:auto!important;overflow-x:hidden!important;background:#fff!important;
-}
-html body .header-role-group{background:#fff!important;color:#667085!important}
-html body .header-role-option{background:#fff!important;color:#172033!important}
-html body .header-role-option:hover,html body .header-role-option:focus-visible{background:#edf5ff!important}
-</style>
 
 
-<style id="v13-21-role-menu-body-portal">
-/* Keep role options outside transformed app containers so clicks and stacking work reliably. */
-html body .header-role-menu{
- position:fixed!important;z-index:2147483647!important;
- width:250px;max-height:170px!important;height:auto!important;
- overflow:hidden!important;background:#fff!important;color:#172033!important;
- pointer-events:auto!important;isolation:isolate!important;
-}
-html body .header-role-menu[hidden]{display:none!important}
-html body .header-role-options{display:block!important;height:112px!important;max-height:112px!important;overflow-y:auto!important;overflow-x:hidden!important;pointer-events:auto!important}
-html body .header-role-option{position:relative!important;z-index:1!important;display:block!important;width:100%!important;pointer-events:auto!important;cursor:pointer!important}
-</style>
+
+
+
+
 
 <style id="v13-22-authoritative-header-role-picker">
 /* Single authoritative layout for the header career-role picker. */
@@ -2092,6 +2034,7 @@ function syncHeaderRolePicker(){
     document.body.appendChild(menu);
     trigger.addEventListener("click",()=>{
       const opening=menu.hidden;
+      if(opening)closeOtherRoleMenus("header");
       menu.hidden=!opening;
       trigger.setAttribute("aria-expanded",String(opening));
       if(opening){
@@ -2712,6 +2655,12 @@ function chooseWelcomeRole(role){
 function closeOtherRoleMenus(except){
  const native=document.getElementById("roleSelector");
  if(native&&except!=="header")native.blur();
+ if(except!=="header"){
+   const headerMenu=document.getElementById("headerRoleMenu");
+   const headerTrigger=document.querySelector("#headerRolePicker .header-role-trigger");
+   if(headerMenu)headerMenu.hidden=true;
+   if(headerTrigger)headerTrigger.setAttribute("aria-expanded","false");
+ }
  if(except!=="welcome"){
    const m=document.getElementById("welcomeRoleMenu"),t=document.getElementById("welcomeRoleTrigger"),p=document.getElementById("welcomeRolePicker");
    if(m)m.hidden=true;
@@ -4125,6 +4074,7 @@ function toggleSwitchRoleMenu(field){
  const menu=document.getElementById("switchRoleMenu-"+field),trigger=document.getElementById("switchRoleTrigger-"+field);
  if(!menu||!trigger)return;
  const opening=menu.hidden;
+ if(opening)closeOtherRoleMenus("switch");
  document.querySelectorAll(".switch-role-menu").forEach(m=>m.hidden=true);
  document.querySelectorAll(".switch-role-trigger").forEach(b=>b.setAttribute("aria-expanded","false"));
  if(opening){menu.hidden=false;trigger.setAttribute("aria-expanded","true");const input=menu.querySelector(".switch-role-search");if(input){input.value="";filterSwitchRoles(field,"");input.focus();}}
