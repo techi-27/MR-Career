@@ -1491,6 +1491,77 @@ html body.sidebar-collapsed .sidebar .nav button .nl {display:none!important;}
   html body .sidebar .nav button .nl {font-size:14px!important;}
 }
 </style>
+
+<style id="v13-15-sidebar-layout-repair">
+/* Repair navigation label wrapping without changing app features or stored data. */
+html body .sidebar {
+  width: 292px !important;
+  min-width: 0 !important;
+}
+html body .main {
+  margin-left: 292px !important;
+  width: calc(100% - 292px) !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+html body .nav button {
+  display: grid !important;
+  grid-template-columns: 34px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  text-align: left !important;
+}
+html body .nav button .nav-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  min-width: 34px !important;
+}
+html body .nav button .nav-icon svg {
+  display: block !important;
+  width: 22px !important;
+  height: 22px !important;
+  flex: 0 0 22px !important;
+}
+html body .nav button .nl {
+  display: block !important;
+  min-width: 0 !important;
+  width: auto !important;
+  white-space: normal !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  line-height: 1.35 !important;
+}
+html body.sidebar-collapsed .sidebar { width: 78px !important; }
+html body.sidebar-collapsed .main {
+  margin-left: 78px !important;
+  width: calc(100% - 78px) !important;
+}
+html body.sidebar-collapsed .nav button {
+  display: flex !important;
+  justify-content: center !important;
+}
+html body.sidebar-collapsed .nav button .nl { display: none !important; }
+html body .main > *, html body #content, html body #content > * {
+  min-width: 0;
+  max-width: 100%;
+}
+@media (max-width: 760px) {
+  html body .main {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 14px !important;
+  }
+  html body .sidebar:not(.mobile-open) {
+    width: 292px !important;
+    max-width: min(292px, 88vw) !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
