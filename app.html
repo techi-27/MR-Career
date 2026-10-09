@@ -1719,6 +1719,79 @@ html body .table-wrap th{overflow-wrap:normal!important;word-break:normal!import
 }
 </style>
 
+
+<style id="v13-24-no-midword-wrap-and-table-fit">
+/* Keep labels intact; the table scrolls inside its own viewport on narrower screens. */
+html body .main,
+html body #content,
+html body .table-wrap{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+html body .table-wrap{
+ display:block!important;
+ width:100%!important;
+ overflow-x:auto!important;
+ overflow-y:hidden!important;
+ contain:layout paint;
+}
+html body .table-wrap table{
+ display:table!important;
+ width:max-content!important;
+ min-width:1450px!important;
+ max-width:none!important;
+ table-layout:auto!important;
+}
+html body .table-wrap th,
+html body .table-wrap td{
+ word-break:normal!important;
+ overflow-wrap:normal!important;
+ hyphens:none!important;
+}
+html body .table-wrap th:nth-child(2),
+html body .table-wrap th:nth-child(3),
+html body .table-wrap th:nth-child(4),
+html body .table-wrap th:nth-child(5),
+html body .table-wrap th:nth-child(6),
+html body .table-wrap th:nth-child(7),
+html body .table-wrap th:nth-child(8),
+html body .table-wrap th:nth-child(9),
+html body .table-wrap th:nth-child(10){
+ white-space:nowrap!important;
+}
+html body .table-wrap th:nth-child(1){min-width:270px!important}
+html body .table-wrap td:nth-child(1){min-width:270px!important;width:270px!important}
+html body .table-wrap th:nth-child(2),html body .table-wrap td:nth-child(2){min-width:82px!important;width:82px!important}
+html body .table-wrap th:nth-child(3),html body .table-wrap td:nth-child(3){min-width:92px!important;width:92px!important}
+html body .table-wrap th:nth-child(4),html body .table-wrap td:nth-child(4){min-width:120px!important;width:120px!important}
+html body .table-wrap th:nth-child(5),html body .table-wrap td:nth-child(5){min-width:180px!important;width:180px!important}
+html body .table-wrap th:nth-child(6),html body .table-wrap td:nth-child(6),
+html body .table-wrap th:nth-child(7),html body .table-wrap td:nth-child(7){min-width:105px!important;width:105px!important}
+html body .table-wrap th:nth-child(8),html body .table-wrap td:nth-child(8){min-width:90px!important;width:90px!important}
+html body .table-wrap th:nth-child(9),html body .table-wrap td:nth-child(9){min-width:145px!important;width:145px!important}
+html body .table-wrap th:nth-child(10),html body .table-wrap td:nth-child(10){min-width:170px!important;width:170px!important}
+html body .table-wrap td .badge{
+ display:inline-flex!important;
+ flex:0 0 auto!important;
+ width:max-content!important;
+ min-width:max-content!important;
+ max-width:none!important;
+ white-space:nowrap!important;
+ word-break:keep-all!important;
+ overflow-wrap:normal!important;
+}
+html body .table-wrap td select{
+ width:120px!important;
+ min-width:120px!important;
+ max-width:none!important;
+ white-space:nowrap!important;
+}
+html body .table-wrap td:nth-child(5) input{min-width:130px!important}
+html body .table-wrap td:nth-child(9) input{min-width:125px!important}
+html body .table-wrap td:nth-child(10) textarea{min-width:150px!important}
+@media(max-width:900px){
+ html body .table-wrap table{min-width:1450px!important}
+ html body .table-wrap{overscroll-behavior-x:contain!important;-webkit-overflow-scrolling:touch}
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
