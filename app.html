@@ -1165,10 +1165,13 @@ td .date-format-field{min-width:112px}
   .topbar .actions{width:100%!important;justify-content:flex-start!important;flex-wrap:wrap!important}
   .topbar .role-select{width:clamp(180px,24vw,250px)!important}
 }
+/* Keep the role caption and picker as distinct rows on narrow screens. */
+.topbar .role-selector-label{display:flex;align-items:center;gap:6px;font-size:10px;color:#667085;font-weight:800;min-width:0}
+.topbar .role-selector-label>span{flex:0 0 auto;white-space:nowrap;line-height:1.2}
 @media(max-width:600px){
-  .topbar .actions>label{width:100%;flex:1 1 100%;white-space:normal}
-  .topbar .role-select{width:100%!important;max-width:none!important;flex:1 1 auto}
-  .topbar .actions>.btn{flex:1 1 auto!important;min-width:68px!important}
+  .topbar .actions>.role-selector-label{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:6px!important;width:100%!important;flex:1 1 100%!important;white-space:normal!important}
+  .topbar .role-selector-label>span{display:block!important;white-space:nowrap!important}
+  .topbar .role-selector-label .role-select{display:block!important;width:100%!important;max-width:none!important;min-width:0!important;flex:0 0 auto!important}
 }
 </style>
 <style id="v13-22-tech-progress-sidebar-toggle">
@@ -2349,8 +2352,8 @@ html body .sidebar-toggle-tab:before,html body .sidebar-toggle-tab:after {conten
       <div><h1 id="pageTitle">Dashboard</h1><div class="subtitle">Local-first career planner — your learning data stays in this browser.</div></div>
     </div>
     <div class="actions">
-      <label style="display:flex;align-items:center;gap:6px;font-size:10px;color:#667085;font-weight:800">
-      ROLE
+      <label class="role-selector-label">
+      <span>ROLE</span>
       <select id="roleSelector" class="role-select" onfocus="closeOtherRoleMenus('header')" onchange="handleRoleChange(this.value)" title="Select your target career role"></select>
     </label>
       <button class="btn" onclick="exportData()">Export</button>
