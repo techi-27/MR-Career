@@ -1657,6 +1657,68 @@ html body .header-role-empty{padding:8px!important;color:#667085!important;font-
 @media(max-width:760px){html body .header-role-picker{width:100%!important;max-width:100%!important;min-width:0!important}}
 </style>
 
+
+<style id="v13-23-responsive-topic-table">
+/* Responsive curriculum tables: preserve usable column widths instead of crushing badges and selects. */
+html body .table-wrap{
+  width:100%!important;
+  max-width:100%!important;
+  overflow-x:auto!important;
+  overflow-y:visible!important;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;
+}
+html body .table-wrap table{
+  width:100%!important;
+  min-width:1450px!important;
+  table-layout:fixed!important;
+}
+html body .table-wrap th:nth-child(1),html body .table-wrap td:nth-child(1){width:270px!important;min-width:270px!important}
+html body .table-wrap th:nth-child(2),html body .table-wrap td:nth-child(2){width:85px!important;min-width:85px!important}
+html body .table-wrap th:nth-child(3),html body .table-wrap td:nth-child(3){width:95px!important;min-width:95px!important}
+html body .table-wrap th:nth-child(4),html body .table-wrap td:nth-child(4){width:125px!important;min-width:125px!important}
+html body .table-wrap th:nth-child(5),html body .table-wrap td:nth-child(5){width:180px!important;min-width:180px!important}
+html body .table-wrap th:nth-child(6),html body .table-wrap td:nth-child(6){width:105px!important;min-width:105px!important}
+html body .table-wrap th:nth-child(7),html body .table-wrap td:nth-child(7){width:105px!important;min-width:105px!important}
+html body .table-wrap th:nth-child(8),html body .table-wrap td:nth-child(8){width:90px!important;min-width:90px!important}
+html body .table-wrap th:nth-child(9),html body .table-wrap td:nth-child(9){width:145px!important;min-width:145px!important}
+html body .table-wrap th:nth-child(10),html body .table-wrap td:nth-child(10){width:170px!important;min-width:170px!important}
+html body .table-wrap td .badge{
+  display:inline-flex!important;
+  width:max-content!important;
+  max-width:100%!important;
+  white-space:nowrap!important;
+  word-break:normal!important;
+  overflow-wrap:normal!important;
+  align-items:center!important;
+}
+html body .table-wrap td select{
+  display:block!important;
+  width:100%!important;
+  min-width:110px!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  white-space:nowrap!important;
+}
+html body .table-wrap td input[type="date"],
+html body .table-wrap td input[type="number"],
+html body .table-wrap td input:not([type]),
+html body .table-wrap td textarea{
+  min-width:0!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+html body .table-wrap th{overflow-wrap:normal!important;word-break:normal!important}
+@media(max-width:1100px){
+  html body .table-wrap table{min-width:1450px!important}
+  html body .table-wrap{scrollbar-gutter:stable}
+}
+@media(max-width:600px){
+  html body .table-wrap{border-radius:10px!important}
+  html body .table-wrap th,html body .table-wrap td{padding:8px!important}
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
