@@ -1391,6 +1391,44 @@ html body .sidebar-toggle-tab {
   }
 }
 </style>
+
+<style id="v13-51-soften-dark-blue-colors">
+/* Softer light theme: reduce the heavy navy areas while preserving purple actions. */
+html body .sidebar {
+  background: linear-gradient(180deg,#f1f5ff 0%,#e9effb 58%,#e6edf8 100%) !important;
+  color: #25324b !important;
+  box-shadow: 5px 0 24px rgba(51,65,85,.08) !important;
+}
+html body .sidebar .brand,
+html body .sidebar .brand-name { color:#18233b !important; }
+html body .sidebar .brand small,
+html body .sidebar .mini { color:#71809c !important; }
+html body .sidebar .nav button { color:#465570 !important; }
+html body .sidebar .nav button:hover { background:#dfe7fb !important; color:#293858 !important; }
+html body .sidebar .nav button.active {
+  background:linear-gradient(135deg,#5b4bea,#8538ec) !important;
+  color:#fff !important;
+  box-shadow:0 7px 18px rgba(99,72,234,.18) !important;
+}
+html body .v8-hero,
+html body .v9-hero2,
+html body .planner-hero,
+html body .v6-hero {
+  background:linear-gradient(120deg,#dceafe 0%,#d9eafa 52%,#d5f3f1 100%) !important;
+  color:#172b49 !important;
+  box-shadow:0 12px 30px rgba(71,102,145,.10) !important;
+}
+html body .v8-hero h1, html body .v8-hero h2,
+html body .v9-hero2 h1, html body .v9-hero2 h2,
+html body .planner-hero h1, html body .planner-hero h2,
+html body .v6-hero h1, html body .v6-hero h2 { color:#172b49 !important; }
+html body .v8-hero p, html body .v9-hero2 p,
+html body .planner-hero p, html body .v6-hero p { color:#405875 !important; }
+html body .sidebar .sidebar-toggle-tab { color:#34425f !important; }
+@media (prefers-color-scheme: dark) {
+  html body .sidebar { background:linear-gradient(180deg,#f1f5ff,#e6edf8) !important; }
+}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
