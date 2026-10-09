@@ -1950,20 +1950,28 @@ html body.sidebar-collapsed .sidebar .nav button .nav-icon{
 </style>
 
 <style id="v13-55-sidebar-toggle-header-overlap-fix">
-/* Keep the sidebar handle compact and clear of page-header controls. */
+/* Anchor the sidebar handle on the sidebar's outer edge, not inside it. */
 html body .sidebar-toggle-tab{
- box-sizing:border-box!important;width:24px!important;height:40px!important;
- top:132px!important;left:264px!important;padding:0!important;
- border-radius:9px!important;z-index:60!important;
+ box-sizing:border-box!important;
+ width:28px!important;height:40px!important;
+ top:132px!important;left:272px!important;padding:0!important;
+ border-radius:0 9px 9px 0!important;
+ z-index:60!important;
  box-shadow:0 2px 8px rgba(47,128,237,.18)!important;
 }
 html body .sidebar-toggle-tab:after{font-size:18px!important;line-height:40px!important}
 html body.sidebar-collapsed .sidebar-toggle-tab{
- left:66px!important;border-radius:0 9px 9px 0!important;
+ left:74px!important;border-radius:0 9px 9px 0!important;
 }
 @media(max-width:760px){
- html body .sidebar-toggle-tab{left:0!important;top:132px!important;width:28px!important;height:40px!important;z-index:60!important}
- html body:has(.sidebar.mobile-open) .sidebar-toggle-tab{left:248px!important}
+ html body .sidebar-toggle-tab{
+  left:0!important;top:132px!important;width:28px!important;height:40px!important;
+  border-radius:0 9px 9px 0!important;z-index:60!important;
+ }
+ html body:has(.sidebar.mobile-open) .sidebar-toggle-tab{
+  left:calc(min(276px, 86vw) - 28px)!important;
+  border-radius:9px 0 0 9px!important;
+ }
 }
 </style>
 </head>
