@@ -7120,5 +7120,101 @@ html body .topbar .actions>.role-selector-label #headerRolePicker .header-role-t
   html body .topbar .top-left #pageTitle{overflow-wrap:anywhere!important;}
 }
 </style>
+
+
+<style id="v14-31-unified-dropdown-and-active-navigation">
+/* Keep active navigation clear without the unwanted coral stripe on its left edge. */
+html body .app aside.sidebar .nav button.active,
+html body aside.sidebar .nav button.active,
+html body .sidebar .nav button.active {
+  box-shadow: none !important;
+  border-left-color: transparent !important;
+  background-image: none !important;
+}
+
+/* One consistent dropdown affordance across native selects: a soft lavender square
+   with a centered indigo chevron, matching the header role picker. */
+html body select,
+html body .topbar select,
+html body .switch-role-picker select {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  background-color: #fff !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect x='1' y='1' width='38' height='38' rx='11' fill='%23efedff'/%3E%3Cpath d='m14 17 6 6 6-6' fill='none' stroke='%234f46e5' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 8px center !important;
+  background-size: 40px 40px !important;
+  padding-right: 54px !important;
+}
+
+/* The topbar uses a custom trigger rather than the hidden native select. */
+html body #headerRolePicker > .header-role-trigger > span[aria-hidden="true"] {
+  width: 40px !important;
+  height: 40px !important;
+  flex-basis: 40px !important;
+  border-radius: 11px !important;
+  background: #efedff !important;
+  color: #4f46e5 !important;
+  font-size: 0 !important;
+  position: relative !important;
+}
+html body #headerRolePicker > .header-role-trigger > span[aria-hidden="true"]::after {
+  content: "" !important;
+  width: 9px !important;
+  height: 9px !important;
+  border-right: 2.5px solid #4f46e5 !important;
+  border-bottom: 2.5px solid #4f46e5 !important;
+  transform: translateY(-2px) rotate(45deg) !important;
+}
+
+/* Career-switch custom dropdowns use the same square and chevron treatment. */
+html body .switch-role-trigger {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  padding-right: 8px !important;
+}
+html body .switch-role-trigger > span[aria-hidden="true"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 40px !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 11px !important;
+  background: #efedff !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  position: relative !important;
+}
+html body .switch-role-trigger > span[aria-hidden="true"]::after {
+  content: "" !important;
+  width: 9px !important;
+  height: 9px !important;
+  border-right: 2.5px solid #4f46e5 !important;
+  border-bottom: 2.5px solid #4f46e5 !important;
+  transform: translateY(-2px) rotate(45deg) !important;
+}
+html body .switch-role-trigger:hover > span[aria-hidden="true"],
+html body #headerRolePicker > .header-role-trigger:hover > span[aria-hidden="true"] {
+  background: #e3deff !important;
+}
+@media (max-width: 760px) {
+  html body select { background-position: right 6px center !important; }
+  html body .switch-role-trigger > span[aria-hidden="true"] {
+    flex-basis: 36px !important;
+    width: 36px !important;
+    height: 36px !important;
+  }
+  html body #headerRolePicker > .header-role-trigger > span[aria-hidden="true"] {
+    flex-basis: 36px !important;
+    width: 36px !important;
+    height: 36px !important;
+  }
+}
+</style>
+
 </body>
 </html>
