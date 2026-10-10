@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="Plan your IT career with role-based roadmaps, a personalized study planner, hands-on labs, quizzes, interview practice, projects, and job-readiness tools.">
 <meta name="theme-color" content="#312e81">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light">
 <meta property="og:type" content="website">
 <meta property="og:title" content="MR.Career — Learn, Practice, Build & Get Hired">
 <meta property="og:description" content="A local-first workspace for planning IT skills, building projects, practicing interviews, and preparing for your next role.">
@@ -354,6 +354,246 @@ body.sidebar-collapsed .sidebar-toggle-tab:after{content:"☰"}
 #globalSearchModal button{min-height:44px}
 #globalSearchModal input:focus-visible,#globalSearchModal button:focus-visible,#globalSearchButton:focus-visible{outline:3px solid var(--brand2);outline-offset:2px}
 @media(max-width:700px){#globalSearchModal{padding:4vh 10px 16px}#globalSearchModal .learning-modal-card{padding:14px}}
+
+/* ===== V14 Linear-inspired clean premium UI ===== */
+:root{
+  color-scheme:light;
+  --bg:#f7f8fa;
+  --card:#ffffff;
+  --ink:#1f2328;
+  --muted:#6b7280;
+  --line:#e6e8ec;
+  --brand:#5e6ad2;
+  --brand2:#5e6ad2;
+  --brand3:#16a085;
+  --soft:#f0f1ff;
+  --green:#16866a;
+  --orange:#b7791f;
+  --red:#cf4141;
+  --shadow:0 1px 2px rgba(16,24,40,.035),0 4px 14px rgba(16,24,40,.025);
+  --radius:12px;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:14px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,select,textarea{font:inherit}
+button{transition:background-color .15s ease,border-color .15s ease,color .15s ease,box-shadow .15s ease}
+.app{background:var(--bg)}
+.sidebar{
+  background:#fbfbfc !important;
+  color:#24262d !important;
+  border-right:1px solid #e8e9ed;
+  box-shadow:none !important;
+  padding:18px 12px;
+}
+.brand{
+  color:#202127;
+  font-size:18px;
+  font-weight:750;
+  letter-spacing:-.55px;
+  padding:9px 12px 22px;
+}
+.brand small{color:#858995 !important;font-size:11px;font-weight:500;letter-spacing:0}
+.brand:before{box-shadow:none}
+.sidebar .mini,.mini{
+  color:#9296a2 !important;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.09em;
+  margin:20px 10px 7px;
+}
+.nav button{
+  color:#646875 !important;
+  background:transparent !important;
+  border:1px solid transparent;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:550;
+  padding:9px 11px;
+  margin:2px 0;
+}
+.nav button:hover{
+  background:#f0f1f4 !important;
+  color:#262831 !important;
+}
+.nav button.active{
+  background:#eeefff !important;
+  color:#4e58b8 !important;
+  border-color:#e6e7ff;
+  font-weight:650;
+}
+body.sidebar-collapsed .brand:before{
+  background:#5e6ad2;
+  color:#fff;
+  border-radius:9px;
+}
+.main{
+  padding:26px 30px 44px;
+  min-width:0;
+  background:var(--bg);
+}
+.topbar{
+  background:rgba(247,248,250,.94) !important;
+  border:0 !important;
+  border-bottom:1px solid var(--line) !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  padding:0 0 18px !important;
+  margin-bottom:24px;
+}
+h1{color:#202127;font-size:25px;font-weight:720;letter-spacing:-.8px;line-height:1.25}
+h2,h3{letter-spacing:-.25px}
+.subtitle{color:#777b87;font-size:13px;line-height:1.45}
+.menu-btn{
+  width:36px;height:36px;border:1px solid var(--line);border-radius:9px;
+  background:#fff;color:#626675;box-shadow:none;font-size:18px;
+}
+.menu-btn:hover{background:#f1f2f5;border-color:#d5d7df}
+.actions{gap:8px}
+.btn{
+  border:1px solid #e0e2e8;
+  background:#fff;
+  color:#414450;
+  border-radius:8px;
+  padding:8px 12px;
+  font-size:12px;
+  font-weight:600;
+  box-shadow:none;
+}
+.btn:hover{background:#f8f8fa;border-color:#cfd2dc}
+.btn.primary{
+  background:#5e6ad2;
+  border-color:#5e6ad2;
+  color:#fff;
+  box-shadow:0 1px 2px rgba(94,106,210,.18);
+}
+.btn.primary:hover{background:#4f5bc3;border-color:#4f5bc3}
+.btn.danger{color:#c24141}
+.role-select,.header-role-trigger{
+  min-height:38px;
+  border:1px solid #e0e2e8 !important;
+  border-radius:9px !important;
+  background:#fff !important;
+  color:#30323b !important;
+  box-shadow:none !important;
+  font-size:12px;
+  font-weight:600;
+}
+#headerRolePicker > .header-role-trigger{
+  min-height:38px;
+  border:1px solid #dfe1e8 !important;
+  border-radius:9px !important;
+  background:#fff !important;
+  color:#30323b !important;
+  box-shadow:none !important;
+}
+#headerRolePicker > .header-role-trigger:hover{
+  background:#f8f8fb !important;
+  border-color:#c9cce0 !important;
+}
+#headerRolePicker > .header-role-trigger span[aria-hidden="true"]{
+  color:#777b89 !important;
+  font-size:13px !important;
+}
+.card,.plan-stat,.role-option,.quiz-card,.interview-card,.lab-card,.exam-card,.detail-box{
+  background:#fff;
+  border:1px solid #e7e8ed;
+  border-radius:12px;
+  box-shadow:0 1px 2px rgba(16,24,40,.025);
+}
+.card{padding:18px}
+.card:hover{box-shadow:0 3px 12px rgba(16,24,40,.035)}
+.kpi .label{color:#777b87;font-size:10px;font-weight:650;letter-spacing:.065em}
+.kpi .value{color:#242630;font-size:27px;font-weight:720;letter-spacing:-.7px}
+.kpi .hint{color:#858995}
+.progress{height:6px;background:#eceef3;border-radius:99px}
+.progress>span{background:#5e6ad2}
+.section-title{gap:12px}
+.section-title h2{font-size:15px;font-weight:680;color:#2b2d35}
+.domain-card{box-shadow:none;border-color:#e6e8ed}
+.domain-card:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(16,24,40,.05)}
+.domain-card .pct{color:#5e6ad2}
+.table-wrap{border-color:#e7e8ed;border-radius:10px;box-shadow:none}
+table{border-spacing:0}
+th{background:#f7f8fa;color:#747885;font-weight:650}
+td input,td select,td textarea,.controls input,.controls select{
+  border:1px solid #e0e2e8;
+  border-radius:8px;
+  background:#fff;
+  color:#30323b;
+}
+td input:focus,td select:focus,td textarea:focus,
+.controls input:focus,.controls select:focus,
+input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:2px solid rgba(94,106,210,.18);
+  outline-offset:1px;
+  border-color:#9299e8;
+}
+.badge{font-weight:650;letter-spacing:0}
+.notice{background:#f4f6ff;border:1px solid #e2e5ff;color:#4f579f;box-shadow:none}
+.planner-hero{
+  background:#fff;
+  color:#242630;
+  border:1px solid #e6e8ed;
+  border-radius:14px;
+  box-shadow:none;
+}
+.planner-hero h2{color:#242630;font-size:21px;font-weight:720;letter-spacing:-.6px}
+.planner-hero p{color:#777b87}
+.field label{color:#777b87}
+.field input,.field select{
+  border:1px solid #e0e2e8;
+  border-radius:8px;
+}
+.plan-stat .v{font-weight:720;color:#252731}
+.plan-stat .l{color:#777b87}
+.rec-row{border-color:#e6e8ed;border-radius:10px;box-shadow:none}
+.rec-row.selected{border-color:#a8adf0;background:#f7f7ff}
+.rec-order{background:#eeefff;color:#545fc0}
+.role-option{border-width:1px}
+.role-option:hover{border-color:#b9bdf0;transform:translateY(-1px)}
+.role-option.selected{border-color:#8b91e5;background:#f7f7ff;box-shadow:0 2px 8px rgba(94,106,210,.07)}
+.gap-chip{background:#fff8eb;color:#96631d;border-color:#f3e2bd}
+.learning-panel{border:1px solid #e7e8ed;border-radius:14px;box-shadow:0 20px 60px rgba(20,22,35,.18)}
+.close-x{background:#f1f2f5;color:#555966}
+.code-list{background:#242631;color:#e4e5ed}
+footer{color:#8a8d98}
+.sidebar-toggle-tab{
+  background:#5e6ad2 !important;
+  box-shadow:0 2px 8px rgba(94,106,210,.2) !important;
+  border-radius:0 8px 8px 0;
+}
+body.sidebar-collapsed .sidebar-toggle-tab{border-radius:0 8px 8px 0}
+*{scrollbar-color:#c9cbd4 transparent;scrollbar-width:thin}
+*::-webkit-scrollbar{width:8px;height:8px}
+*::-webkit-scrollbar-thumb{background:#c9cbd4;border-radius:99px;border:2px solid transparent;background-clip:padding-box}
+*::-webkit-scrollbar-thumb:hover{background:#aeb1bd;border:2px solid transparent;background-clip:padding-box}
+@media(max-width:1050px){
+  .main{padding:22px 22px 36px}
+  .topbar{gap:12px}
+}
+@media(max-width:760px){
+  .main{padding:16px 14px 30px}
+  .topbar{padding-bottom:14px !important;margin-bottom:18px;gap:12px}
+  .top-left{align-items:flex-start}
+  h1{font-size:22px}
+  .actions{gap:7px}
+  #headerRolePicker{width:100%;max-width:100%}
+  #headerRolePicker > .header-role-trigger{width:100%;max-width:100%}
+  .card{padding:15px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto !important;transition:none !important;animation:none !important}
+}
+/* ===== End V14 Linear-inspired clean premium UI ===== */
+
 </style>
 
 <style id="v9-2-hide-study-domains">
