@@ -289,9 +289,14 @@ test('changing target role invalidates the visible plan without deleting saved s
   await start.fill(dates.start); await start.press('Tab');
   await end.fill(dates.end); await end.press('Tab');
   await page.getByRole('button', { name: 'Generate Daily Study Plan' }).click();
+  const todayCell = page.locator('.study-day-cell.status-today').first();
+  await expect(todayCell).toBeVisible();
+  await todayCell.click();
+  await page.getByRole('button', { name: 'Mark session complete' }).click();
   const planBefore = await page.evaluate(() => JSON.parse(localStorage.getItem('itCareerOS_v10') || '{}').planner || {});
   expect(planBefore.generated).toBe(true);
   const priorStatus = planBefore.dailyStatus || {};
+  expect(Object.values(priorStatus)).toContain('completed');
   await chooseRole(page, 'Cloud Platform Engineer');
   const planAfter = await page.evaluate(() => JSON.parse(localStorage.getItem('itCareerOS_v10') || '{}').planner || {});
   expect(planAfter.generated).toBe(false);
