@@ -6872,5 +6872,60 @@ html body .topbar .actions>.role-selector-label{transition:none}
 })();
 </script>
 
+
+<style id="v14-27-equal-header-control-sizes">
+/* Make Role, Export, Import and Reset equal-sized controls in the top header. */
+html body .topbar .actions{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  align-items:center!important;
+  gap:10px!important;
+  min-width:0!important;
+  width:100%!important;
+}
+html body .topbar .actions>.role-selector-label{
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  margin:0!important;
+  flex:initial!important;
+}
+html body .topbar .actions>.role-selector-label>span{
+  flex:0 0 auto!important;
+  white-space:nowrap!important;
+}
+html body .topbar .actions>#headerRolePicker,
+html body .topbar .actions>.role-selector-label #headerRolePicker{
+  flex:1 1 0!important;
+  width:0!important;
+  min-width:0!important;
+  max-width:100%!important;
+}
+html body .topbar .actions>.btn{
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  min-height:46px!important;
+  box-sizing:border-box!important;
+  justify-content:center!important;
+  padding-inline:10px!important;
+  flex:initial!important;
+  white-space:nowrap!important;
+}
+@media(max-width:1050px){
+  html body .topbar .actions{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:7px!important}
+  html body .topbar .actions>.role-selector-label{gap:4px!important;font-size:10px!important}
+  html body .topbar .actions>.btn{padding-inline:6px!important;font-size:12px!important}
+}
+@media(max-width:760px){
+  html body .topbar .actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  html body .topbar .actions>.role-selector-label{grid-column:1 / -1!important}
+  html body .topbar .actions>.role-selector-label #headerRolePicker{width:100%!important}
+}
+</style>
+
 </body>
 </html>
