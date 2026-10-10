@@ -3782,14 +3782,23 @@ function syncSidebarToggle(){
   if(!btn||!sb)return;
   const mobile=window.innerWidth<=760;
   const expanded=mobile?sb.classList.contains("mobile-open"):!document.body.classList.contains("sidebar-collapsed");
-  btn.textContent=expanded?"‹":"›";
-  btn.setAttribute("aria-label",expanded?"Collapse sidebar":"Expand sidebar");
-  btn.title=expanded?"Collapse sidebar":"Expand sidebar";
+  /* On mobile the header hamburger closes an open drawer; keep the floating opener only while closed. */
+  if(mobile){
+    btn.style.setProperty("display",expanded?"none":"flex","important");
+    btn.textContent="☰";
+    btn.setAttribute("aria-label","Open sidebar");
+    btn.title="Open sidebar";
+  }else{
+    btn.style.setProperty("display","flex","important");
+    btn.textContent=expanded?"‹":"›";
+    btn.setAttribute("aria-label",expanded?"Collapse sidebar":"Expand sidebar");
+    btn.title=expanded?"Collapse sidebar":"Expand sidebar";
+  }
   /* Deterministic coordinates avoid stale/transformed sidebar measurements and conflicting legacy CSS. */
-  const handleWidth=mobile?36:34;
+  const handleWidth=mobile?40:34;
   /* Match the compact sidebar dimensions used by the current purple theme. */
   const sidebarWidth=mobile?Math.min(260,window.innerWidth*0.88):(expanded?214:66);
-  const left=mobile?(expanded?Math.max(0,sidebarWidth-handleWidth/2):8):Math.max(0,sidebarWidth-handleWidth/2);
+  const left=mobile?8:Math.max(0,sidebarWidth-handleWidth/2);
   btn.style.setProperty("position","fixed","important");
   btn.style.setProperty("left",left+"px","important");
   btn.style.setProperty("right","auto","important");
@@ -6420,6 +6429,29 @@ html body.sidebar-collapsed .sidebar .nav button{
     margin-left:auto !important;
     margin-right:auto !important;
   }
+}
+</style>
+
+
+<style id="v14-10-mobile-toggle-no-overlap">
+@media(max-width:760px){
+  html body button.sidebar-toggle-tab{
+    box-sizing:border-box !important;
+    align-items:center !important;
+    justify-content:center !important;
+    width:40px !important;
+    min-width:40px !important;
+    height:40px !important;
+    border-radius:12px !important;
+    background:#6846c7 !important;
+    border:1px solid rgba(255,255,255,.5) !important;
+    color:#fff !important;
+    box-shadow:0 3px 12px rgba(48,27,100,.24) !important;
+    font-family:Arial,sans-serif !important;
+    font-size:22px !important;
+    line-height:1 !important;
+  }
+  html body button.sidebar-toggle-tab[style*="display: none"]{pointer-events:none !important}
 }
 </style>
 
