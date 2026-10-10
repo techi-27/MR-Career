@@ -3161,12 +3161,68 @@ html body .cg-metrics{grid-template-columns:repeat(4,minmax(0,1fr)) !important}
 }
 </style>
 
+
+<style id="v14-5-brand-hamburger-sidebar-toggle">
+/* Put the sidebar toggle in the brand slot, replacing the MR logo. */
+html body .brand .brand-sidebar-toggle{
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 38px !important;
+  width:38px !important;
+  min-width:38px !important;
+  height:38px !important;
+  padding:0 !important;
+  margin:0 !important;
+  border:1px solid rgba(255,255,255,.22) !important;
+  border-radius:10px !important;
+  background:rgba(255,255,255,.10) !important;
+  color:#fff !important;
+  box-shadow:none !important;
+  cursor:pointer !important;
+}
+html body .brand .brand-sidebar-toggle:hover{
+  background:rgba(255,255,255,.19) !important;
+  border-color:rgba(255,255,255,.38) !important;
+}
+html body .brand .brand-sidebar-toggle:focus-visible{
+  outline:3px solid rgba(255,255,255,.48) !important;
+  outline-offset:2px !important;
+}
+html body .brand .hamburger-lines{
+  width:19px;height:16px;display:flex;flex-direction:column;
+  align-items:stretch;justify-content:space-between;
+}
+html body .brand .hamburger-lines i{
+  display:block;width:19px;height:2px;flex:0 0 2px;
+  border-radius:2px;background:currentColor;
+}
+html body .brand .brand-sidebar-toggle .hamburger-lines i:nth-child(2){width:14px}
+html body.sidebar-collapsed .brand .brand-sidebar-toggle{
+  flex-basis:38px !important;width:38px !important;height:38px !important;
+}
+html body.sidebar-collapsed .brand .brand-name,
+html body.sidebar-collapsed .brand small{display:none !important}
+/* The old edge tab is no longer needed on desktop; retain it on mobile so a closed drawer can reopen. */
+@media(min-width:761px){
+  html body button.sidebar-toggle-tab{display:none !important}
+}
+@media(max-width:760px){
+  html body .brand .brand-sidebar-toggle{flex-basis:34px !important;width:34px !important;min-width:34px !important;height:34px !important}
+  html body .brand .hamburger-lines{width:17px;height:14px}
+  html body .brand .hamburger-lines i{width:17px}
+  html body .brand .brand-sidebar-toggle .hamburger-lines i:nth-child(2){width:13px}
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
 <div class="app">
 <aside class="sidebar">
-  <div class="brand"><span class="brand-mark" aria-hidden="true">MR</span><span class="brand-name">MR.Career</span><small>Learn • Practice • Build • Get Hired</small></div>
+  <div class="brand"><button type="button" class="brand-mark brand-sidebar-toggle" onclick="toggleSidebar()" aria-label="Collapse sidebar" title="Collapse sidebar"><span class="hamburger-lines" aria-hidden="true"><i></i><i></i><i></i></span></button><span class="brand-name">MR.Career</span><small>Learn • Practice • Build • Get Hired</small></div>
   
   <div class="nav">
     <div class="mini">Start here</div>
