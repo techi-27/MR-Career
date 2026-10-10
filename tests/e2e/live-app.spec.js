@@ -85,6 +85,27 @@ test('all application routes render content without a page-error fallback', asyn
   expect(pageErrors, 'Uncaught browser errors: ' + pageErrors.join('\n')).toEqual([]);
 });
 
+test('global search opens, filters results and supports keyboard shortcut', async ({ page }) => {
+  await openApp(page);
+  await page.keyboard.press('Control+k');
+  const modal = page.locator('#globalSearchModal');
+  await expect(modal).toBeVisible();
+  await page.locator('#globalSearchInput').fill('Kubernetes');
+  await expect(page.locator('#globalSearchResults')).toContainText(/Kubernetes/i);
+  await page.keyboard.press('Escape');
+  await expect(modal).toHaveCount(0);
+});
+
+test('career discovery accepts an answer and displays recommendations', async ({ page }) => {
+  await openApp(page);
+  await page.evaluate(() => window.navigate('discover'));
+  const answer = page.locator('.v8-answer').first();
+  await expect(answer).toBeVisible();
+  await answer.click();
+  await expect(page.locator('.v8-match').first()).toBeVisible();
+  await expect(page.locator('.v8-match').first()).toContainText(/%/);
+});
+
 test('resume analyzer and job-description analyzer produce results', async ({ page }) => {
   await openApp(page);
   await chooseRole(page, 'Platform Engineer');
@@ -206,6 +227,15 @@ test('public information pages load and navigation CTA is visible', async ({ pag
     expect(response.status(), `${item.file} should return HTTP 200`).toBe(200);
     await expect(page).toHaveTitle(item.title);
     await expect(page.locator('body')).toBeVisible();
+    for (const width of [320, 390, 820, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      const dimensions = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        document: document.documentElement.scrollWidth,
+      }));
+      expect(dimensions.document, `${item.file} overflows at ${width}px: ${JSON.stringify(dimensions)}`)
+        .toBeLessThanOrEqual(dimensions.viewport + 1);
+    }
   }
 
   await page.goto(new URL('about.html', SITE_BASE).toString(), { waitUntil: 'domcontentloaded' });
