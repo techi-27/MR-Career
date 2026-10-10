@@ -6447,74 +6447,7 @@ html body .topbar label.role-selector-label::after {
 </style>
 
 
-<style id="v14-8-final-sidebar-color-override">
-/* LAST stylesheet on the page: force the brighter purple theme after legacy CSS. */
-html body .app .sidebar,
-html body aside.sidebar,
-html body .sidebar{
-  background:linear-gradient(180deg,#6846c7 0%,#5b3ab2 55%,#51319f 100%) !important;
-  background-color:#5b3ab2 !important;
-  color:#ffffff !important;
-  border-right:1px solid rgba(255,255,255,.24) !important;
-}
-html body .app .sidebar .brand,
-html body aside.sidebar .brand,
-html body .sidebar .brand{
-  color:#ffffff !important;
-}
-html body .app .sidebar .brand .brand-name,
-html body aside.sidebar .brand .brand-name,
-html body .sidebar .brand .brand-name{
-  color:#ffffff !important;
-  text-shadow:0 1px 1px rgba(35,16,79,.18) !important;
-}
-html body .app .sidebar .brand small,
-html body aside.sidebar .brand small,
-html body .sidebar .brand small{
-  color:#f0eaff !important;
-}
-html body .app .sidebar .mini,
-html body aside.sidebar .mini,
-html body .sidebar .mini{
-  color:#e8dcff !important;
-}
-html body .app .sidebar .nav button,
-html body aside.sidebar .nav button,
-html body .sidebar .nav button{
-  color:#ffffff !important;
-}
-html body .app .sidebar .nav button .nav-icon,
-html body aside.sidebar .nav button .nav-icon,
-html body .sidebar .nav button .nav-icon{
-  color:#eadfff !important;
-}
-html body .app .sidebar .nav button.active,
-html body aside.sidebar .nav button.active,
-html body .sidebar .nav button.active{
-  background:linear-gradient(100deg,#8b5cf6 0%,#7544e8 100%) !important;
-  color:#ffffff !important;
-  border-color:rgba(255,255,255,.24) !important;
-}
-html body .app .sidebar .nav button:hover,
-html body aside.sidebar .nav button:hover,
-html body .sidebar .nav button:hover{
-  background:rgba(255,255,255,.16) !important;
-  color:#ffffff !important;
-}
-html body .app .sidebar .brand .brand-sidebar-toggle,
-html body aside.sidebar .brand .brand-sidebar-toggle,
-html body .sidebar .brand .brand-sidebar-toggle{
-  background:rgba(255,255,255,.18) !important;
-  border:1px solid rgba(255,255,255,.62) !important;
-  color:#ffffff !important;
-  box-shadow:0 2px 8px rgba(28,13,65,.2) !important;
-}
-html body .app .sidebar .brand .brand-sidebar-toggle .hamburger-lines i,
-html body aside.sidebar .brand .brand-sidebar-toggle .hamburger-lines i,
-html body .sidebar .brand .brand-sidebar-toggle .hamburger-lines i{
-  background:#ffffff !important;
-}
-</style>
+
 
 
 <style id="v14-9-enforce-narrow-sidebar-width">
@@ -6867,5 +6800,30 @@ html body .sidebar::-webkit-scrollbar-thumb:hover{background:#98a6b8!important}
 </style>
 
 
+
+<style id="v14-25-final-sidebar-contrast-fix">
+/* Final high-specificity override: remove legacy purple sidebar and restore readable contrast. */
+html body .app aside.sidebar,
+html body .app > aside.sidebar,
+html body aside.sidebar.sidebar{
+  background:#ffffff!important;background-image:none!important;background-color:#ffffff!important;
+  color:#172747!important;border-right:1px solid #e2e8f0!important;box-shadow:2px 0 12px rgba(23,39,71,.04)!important;
+}
+html body .app aside.sidebar .brand,
+html body .app aside.sidebar .brand .brand-name,
+html body .app aside.sidebar .brand .brand-name span{color:#172747!important;text-shadow:none!important}
+html body .app aside.sidebar .brand small{color:#64748b!important}
+html body .app aside.sidebar .mini{color:#64748b!important;font-weight:750!important;opacity:1!important}
+html body .app aside.sidebar .nav button,
+html body .app aside.sidebar .nav button .nav-icon,
+html body .app aside.sidebar .nav button .nl{color:#475569!important;opacity:1!important}
+html body .app aside.sidebar .nav button{background:transparent!important;border:1px solid transparent!important;box-shadow:none!important}
+html body .app aside.sidebar .nav button:hover{background:#f3f6fb!important;border-color:#e2e8f0!important;color:#172747!important}
+html body .app aside.sidebar .nav button.active{background:#edf4ff!important;background-image:none!important;border-color:#dce8fb!important;color:#172747!important;box-shadow:inset 3px 0 0 #ff5b55!important}
+html body .app aside.sidebar .nav button.active .nav-icon,
+html body .app aside.sidebar .nav button.active .nl{color:#172747!important}
+html body .app aside.sidebar .brand .brand-sidebar-toggle{background:linear-gradient(135deg,#ff5b55 0%,#4e91d9 100%)!important;border:1px solid #e2e8f0!important;color:#fff!important;box-shadow:0 2px 7px rgba(23,39,71,.13)!important}
+html body .app aside.sidebar .brand .brand-sidebar-toggle .hamburger-lines i{background:#fff!important}
+</style>
 </body>
 </html>
