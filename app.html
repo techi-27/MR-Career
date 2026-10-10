@@ -4431,7 +4431,7 @@ function toggleSidebar(){
   syncSidebarToggle();
 }
 window.addEventListener("resize",syncSidebarToggle,{passive:true});
-window.addEventListener("DOMContentLoaded",syncSidebarToggle);
+window.addEventListener("DOMContentLoaded",syncSidebarToggle);window.addEventListener("resize",syncSidebarToggle);
 function closeMobileSidebar(){document.querySelector(".sidebar").classList.remove("mobile-open");document.getElementById("mobileOverlay").style.display="none";syncSidebarToggle();}
 
 function roleTopicRows(limit=12){
