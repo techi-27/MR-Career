@@ -3223,6 +3223,49 @@ html body.sidebar-collapsed .brand:before{content:none !important;display:none !
 html body.sidebar-collapsed .brand{justify-content:center !important;padding-left:0 !important;padding-right:0 !important}
 </style>
 
+
+<style id="v14-7-brighter-sidebar-colors">
+/* Brighter, higher-contrast purple sidebar and hamburger toggle. */
+.sidebar{
+  background:linear-gradient(180deg,#6846c7 0%,#5b3ab2 55%,#51319f 100%) !important;
+  border-right:1px solid rgba(255,255,255,.22) !important;
+}
+.sidebar .brand .brand-name{color:#fff !important}
+.sidebar .brand small{color:#f0eaff !important}
+.sidebar .mini{color:#e1d5ff !important}
+.sidebar .nav button{color:#fff !important}
+.sidebar .nav button .nav-icon{color:#e0d1ff !important}
+.sidebar .nav button:hover{
+  background:rgba(255,255,255,.17) !important;
+  border-color:rgba(255,255,255,.15) !important;
+  color:#fff !important;
+}
+.sidebar .nav button.active{
+  background:linear-gradient(100deg,#8b5cf6 0%,#7544e8 100%) !important;
+  border-color:rgba(255,255,255,.22) !important;
+  color:#fff !important;
+  box-shadow:inset 3px 0 0 #fff !important;
+}
+.sidebar .nav button.active .nav-icon,
+.sidebar .nav button:hover .nav-icon{color:#fff !important}
+html body .brand .brand-sidebar-toggle{
+  background:rgba(255,255,255,.17) !important;
+  border:1px solid rgba(255,255,255,.38) !important;
+  color:#fff !important;
+  box-shadow:0 2px 8px rgba(35,17,80,.15) !important;
+}
+html body .brand .brand-sidebar-toggle:hover{
+  background:rgba(255,255,255,.27) !important;
+  border-color:rgba(255,255,255,.55) !important;
+}
+.sidebar-toggle-tab{
+  background:#8b5cf6 !important;
+}
+@media(max-width:760px){
+  .sidebar{background:linear-gradient(180deg,#6846c7 0%,#5b3ab2 55%,#51319f 100%) !important}
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
