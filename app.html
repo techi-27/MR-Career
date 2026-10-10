@@ -3407,6 +3407,26 @@ html body .sidebar .brand .brand-sidebar-toggle{background:rgba(255,255,255,.12)
 html body .sidebar .brand .brand-sidebar-toggle:hover{background:rgba(255,255,255,.23)!important}
 </style>
 
+
+<style id="v14-18-remove-blue-sidebar-edge">
+/* Remove the bright blue vertical edge/scrollbar strip on the sidebar's right side. */
+html body .app > .sidebar,
+html body aside.sidebar,
+html body .sidebar{
+  border-right:1px solid rgba(23,39,71,.22)!important;
+  scrollbar-color:rgba(219,234,254,.28) transparent!important;
+  scrollbar-width:thin!important;
+}
+html body .sidebar::-webkit-scrollbar{width:5px!important;background:transparent!important}
+html body .sidebar::-webkit-scrollbar-track{background:transparent!important;border:0!important;box-shadow:none!important}
+html body .sidebar::-webkit-scrollbar-thumb{
+  background:rgba(219,234,254,.28)!important;
+  border:0!important;border-radius:99px!important;box-shadow:none!important;
+}
+html body .sidebar::-webkit-scrollbar-thumb:hover{background:rgba(219,234,254,.45)!important}
+html body .sidebar::-webkit-scrollbar-corner{background:transparent!important}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
