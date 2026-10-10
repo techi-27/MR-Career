@@ -98,17 +98,17 @@ test('simplified navigation hides incomplete and duplicate destinations while le
   expect(visibleTabs).not.toContain('Daily career coach');
 
   const legacyRoutes = [
-    ['tech', 'Roadmap & Learning'],
-    ['skills', 'Roadmap & Learning'],
-    ['quizzes', 'Learn & Practice'],
-    ['skillgap', 'Job Readiness'],
-    ['coach', 'My Progress'],
-    ['portfolio', 'Project Studio'],
+    ['tech', 'Roadmap & Learning', 'Roadmap & Learning'],
+    ['skills', 'Roadmap & Learning', 'Roadmap & Learning'],
+    ['quizzes', 'Learn & Practice', 'Practice Labs'],
+    ['skillgap', 'Job Readiness', 'Job Readiness'],
+    ['coach', 'My Progress', 'Weekly Review'],
+    ['portfolio', null, 'Project Studio'],
   ];
-  for (const [legacy, expectedTabGroup] of legacyRoutes) {
+  for (const [legacy, expectedTabGroup, expectedTitle] of legacyRoutes) {
     await page.evaluate(viewName => window.navigate(viewName), legacy);
-    await expect(page.locator('#content .workspace-tabs')).toContainText(expectedTabGroup);
-    await expect(page.locator('#pageTitle')).not.toHaveText('Page Error');
+    if (expectedTabGroup) await expect(page.locator('#content .workspace-tabs')).toContainText(expectedTabGroup);
+    await expect(page.locator('#pageTitle')).toHaveText(expectedTitle);
   }
 });
 
