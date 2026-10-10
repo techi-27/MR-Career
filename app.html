@@ -6873,55 +6873,17 @@ html body .topbar .actions>.role-selector-label{transition:none}
 </script>
 
 
-<style id="v14-28-equal-header-control-heights">
-/* Keep the existing natural widths; only normalize control heights in the top header. */
-html body .topbar .actions{
-  display:flex!important;
-  align-items:center!important;
-  gap:10px!important;
-  min-width:0!important;
-}
-html body .topbar .actions>.role-selector-label{
-  display:flex!important;
-  align-items:center!important;
-  gap:8px!important;
-  width:auto!important;
-  min-width:0!important;
-  max-width:none!important;
-  margin:0!important;
-  flex:0 1 auto!important;
-}
-html body .topbar .actions>.role-selector-label #headerRolePicker{
-  width:auto!important;
-  min-width:220px!important;
-  max-width:360px!important;
-  flex:1 1 300px!important;
-}
+<style id="v14-29-compact-header-control-heights">
+/* Slightly reduce header control height while preserving each control's natural width. */
 html body .topbar .actions>.btn,
 html body .topbar .actions>.role-selector-label .header-role-trigger,
 html body .topbar .actions>.role-selector-label select.role-select{
-  min-height:46px!important;
-  height:46px!important;
+  min-height:40px!important;
+  height:40px!important;
   box-sizing:border-box!important;
 }
-html body .topbar .actions>.btn{
-  width:auto!important;
-  min-width:0!important;
-  max-width:none!important;
-  padding-inline:14px!important;
-  flex:0 0 auto!important;
-  white-space:nowrap!important;
-}
-@media(max-width:1050px){
-  html body .topbar .actions{gap:7px!important}
-  html body .topbar .actions>.role-selector-label #headerRolePicker{min-width:180px!important}
-  html body .topbar .actions>.btn{padding-inline:10px!important;font-size:12px!important}
-}
-@media(max-width:760px){
-  html body .topbar .actions{display:flex!important;flex-wrap:wrap!important}
-  html body .topbar .actions>.role-selector-label{flex:1 1 100%!important}
-  html body .topbar .actions>.role-selector-label #headerRolePicker{width:100%!important;min-width:0!important;max-width:none!important}
-  html body .topbar .actions>.btn{flex:1 1 auto!important}
+html body .topbar .actions>.role-selector-label #headerRolePicker .header-role-trigger{
+  min-height:40px!important;height:40px!important;padding-top:8px!important;padding-bottom:8px!important;
 }
 </style>
 
