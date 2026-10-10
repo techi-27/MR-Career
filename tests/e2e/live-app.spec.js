@@ -133,6 +133,7 @@ test('project checklist changes are saved locally', async ({ page }) => {
   await checkbox.check();
   await expect(checkbox).toBeChecked();
   await page.reload({ waitUntil: 'domcontentloaded' });
+  await page.evaluate(() => window.navigate('projects'));
   await expect(page.locator('.v9-check input[type="checkbox"]').first()).toBeChecked();
 });
 
