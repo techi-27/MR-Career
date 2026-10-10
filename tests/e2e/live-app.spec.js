@@ -67,3 +67,42 @@ test('main navigation items can be opened without uncaught JavaScript errors', a
     'At least one expected main navigation item should exist'
   ).toBeGreaterThan(0);
 });
+
+test('About page navigation CTA text is visible', async ({ page }) => {
+  const aboutUrl = APP_URL.replace(/app\.html(?:\?.*)?$/, 'about.html');
+  const response = await page.goto(aboutUrl, { waitUntil: 'domcontentloaded', timeout: 60_000 });
+
+  expect(response, 'The About page should return a document response').not.toBeNull();
+  expect(response.status(), 'The About page should return HTTP 200').toBe(200);
+
+  const cta = page.locator('.navlinks .nav-cta');
+  await expect(cta).toBeVisible();
+  await expect(cta).toContainText('Open workspace');
+
+  const style = await cta.evaluate(el => {
+    const css = getComputedStyle(el);
+    const rect = el.getBoundingClientRect();
+    const text = el.firstChild?.textContent?.trim() || '';
+    const textColor = css.color;
+    const bgColor = css.backgroundColor;
+    return {
+      text,
+      textColor,
+      bgColor,
+      fontSize: css.fontSize,
+      visibility: css.visibility,
+      opacity: css.opacity,
+      width: rect.width,
+      height: rect.height,
+      right: rect.right,
+      viewportWidth: document.documentElement.clientWidth,
+    };
+  });
+
+  expect(style.text).toContain('Open workspace');
+  expect(style.visibility).toBe('visible');
+  expect(Number(style.opacity)).toBeGreaterThan(0);
+  expect(style.width, 'CTA should have enough width to show its label').toBeGreaterThan(100);
+  expect(style.height, 'CTA should have enough height to show its label').toBeGreaterThan(30);
+  expect(style.right, 'CTA should not be clipped beyond the viewport').toBeLessThanOrEqual(style.viewportWidth + 1);
+});
