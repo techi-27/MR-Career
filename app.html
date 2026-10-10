@@ -3690,6 +3690,22 @@ html body .v6-timeline-item .v6-actions > button.btn {
 }
 </style>
 
+<style id="v14-33-guided-career-journey-simplification">
+.career-home-hero{margin-bottom:18px}.career-home-hero h2{max-width:720px}
+.career-home-progress .card,.career-next-card{padding:18px}
+.career-journey-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.career-journey-step{display:flex;align-items:center;gap:12px;min-width:0;width:100%;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);text-align:left;cursor:pointer;box-sizing:border-box}
+.career-journey-step.is-current{border-color:#91b7f5;background:#f2f7ff}
+.career-journey-step.is-done .career-journey-number{background:#e6f7ee;color:#16794b}
+.career-journey-number{display:flex;align-items:center;justify-content:center;flex:0 0 32px;width:32px;height:32px;border-radius:50%;background:#edf2ff;color:#315bb5;font-weight:800}
+.career-journey-copy{display:grid;gap:4px;min-width:0;flex:1}
+.career-journey-copy b{font-size:13px;line-height:1.35}.career-journey-copy small{font-size:11px;color:var(--muted)}
+.career-journey-arrow{font-size:22px;color:var(--muted)}
+.career-quick-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.career-quick-links button{display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;cursor:pointer}
+.career-quick-links button:hover,.career-journey-step:hover{border-color:#9db8ed;box-shadow:0 5px 16px rgba(25,50,90,.07)}
+@media(max-width:760px){.career-journey-steps,.career-quick-links{grid-template-columns:minmax(0,1fr)}}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -3698,25 +3714,14 @@ html body .v6-timeline-item .v6-actions > button.btn {
   <div class="brand"><button type="button" class="brand-mark brand-sidebar-toggle" onclick="toggleSidebar()" aria-label="Collapse sidebar" title="Collapse sidebar"><span class="hamburger-lines" aria-hidden="true"><i></i><i></i><i></i></span></button><span class="brand-name">MR.Career</span><small>Learn • Practice • Build • Get Hired</small></div>
   
   <div class="nav">
-    <div class="mini">Start here</div>
+    <div class="mini">YOUR JOURNEY</div>
     <button data-view="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9M9 21v-7h6v7"/></svg></span><span class="nl">Home</span></button>
-    <button data-view="careers"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg></span><span class="nl">Explore IT Careers</span></button>
-    <button data-view="profile"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span class="nl">My Career Profile</span></button>
-
-    <div class="mini">Plan your switch</div>
-    <button data-view="switch"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2.2 4.8-4.8 2.2 2.2-4.8z"/></svg></span><span class="nl">My Career Plan</span></button>
-
-    <div class="mini">Learn & practice</div>
-    <button data-view="roadmap"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></svg></span><span class="nl">Roadmap &amp; Learning</span></button>
-    <button data-view="labs"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/><path d="M8 15h8"/></svg></span><span class="nl">Learn &amp; Practice</span></button>
-
-    <div class="mini">Build &amp; get hired</div>
-    <button data-view="projects"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V4h8v3M3 12h18M10 12v2h4v-2"/></svg></span><span class="nl">Project Studio</span></button>
-    <button data-view="resume"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg></span><span class="nl">Application Toolkit</span></button>
-    <button data-view="readiness"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V4h8v3M3 12h18M10 12v2h4v-2"/></svg></span><span class="nl">Readiness &amp; Skill Gaps</span></button>
-
-    <div class="mini">Progress</div>
-    <button data-view="weekly"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 3h8M9 3v3h6V3M6 6H4v15h16V6h-2"/><path d="m8 13 2 2 5-5M8 18h8"/></svg></span><span class="nl">My Progress</span></button>
+    <button data-view="careers"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg></span><span class="nl">Career Tools</span></button>
+    <button data-view="roadmap"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></svg></span><span class="nl">My Journey</span></button>
+    <button data-view="projects"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V4h8v3M3 12h18M10 12v2h4v-2"/></svg></span><span class="nl">Projects</span></button>
+    <button data-view="interview"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 3.9a8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg></span><span class="nl">Interview Prep</span></button>
+    <div class="mini">PERSONAL SETTINGS</div>
+    <button data-view="profile"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span class="nl">Profile &amp; Settings</span></button>
   </div>
 </aside>
 <div id="mobileOverlay" onclick="closeMobileSidebar()"></div><main class="main">
@@ -4868,34 +4873,48 @@ function goBack(){
  renderRoute(previous);window.scrollTo({top:0,behavior:"auto"});
 }
 function renderDashboard(){
- const s=stats(), role=selectedRole(), cfg=ROLE_CONFIG[role];
- let h=`<div class="grid">
-  <div class="card kpi"><div class="label">Selected Target</div><div class="value" style="font-size:19px">${esc(role)}</div><div class="hint">${esc(cfg.description)}</div></div>
-  <div class="card kpi"><div class="label">Role Readiness</div><div class="value">${s.progress}%</div><div class="hint">Weighted for this role</div><div class="progress" style="margin-top:10px"><span style="width:${s.progress}%"></span></div></div>
-  <div class="card kpi"><div class="label">Completed Topics</div><div class="value">${s.completed}/${s.total}</div><div class="hint">${s.inprog} currently in progress</div></div>
-  <div class="card kpi"><div class="label">Study Hours</div><div class="value">${s.hours.toFixed(1)}h</div><div class="hint">Actual hours recorded</div></div>
-  <div class="card kpi"><div class="label">Selected Role Topics</div><div class="value">${s.avg}%</div><div class="hint">Unweighted average across this role's topics</div></div>
-  <div class="card kpi"><div class="label">Planned Study Days</div><div class="value">${plannerDays(plannerState())||0}</div><div class="hint">Set your dates in Study Planner</div></div>
-  <div class="card kpi"><div class="label">Career Goal</div><div class="value" style="font-size:17px">${esc(state.profile?.goal||"Get job")}</div><div class="hint">${esc(state.profile?.experience||"Fresher")} · ${Number(state.profile?.weeklyHours)||10} hrs/week</div></div>
- </div>`;
- h+=`<div class="section"><div class="card"><div class="notice"><b>Current Target:</b> ${esc(role)} &nbsp; | &nbsp; <b>Experience:</b> ${esc(state.profile?.experience||"Fresher")} &nbsp; | &nbsp; <b>Role Readiness:</b> ${s.progress}%</div></div></div>`;
- h+=renderContinueLearningCard();
-h+=`<div class="section"><div class="section-title"><h2>${esc(role)} — Critical Skill Gaps</h2><span class="small">Based on the role weighting</span></div><div class="card">`;
- if(s.gaps.length) h+=`<div class="gap-list">${s.gaps.map(([d,w])=>`<span class="gap-chip">${esc(d)} · ${Math.round(domainProgress(d))}%</span>`).join("")}</div>`;
- else h+=`<div class="notice">No major critical domain is below 70%. Keep building projects and interview readiness.</div>`;
- h+=`</div></div>`;
- h+=`<div class="section"><div class="card"><div class="notice"><b>Need a custom timeline?</b> Use Study Planner to choose your own start date and end date, select the tools/topics you want, and generate a date-based learning plan.</div><div class="plan-actions"><button class="btn primary" onclick="navigate('planner')">Open Study Planner</button></div></div></div>`;
- h+=`<div class="section"><div class="section-title"><h2>Target Career Skill Progress</h2><span class="small">Weights change automatically when you change the role above</span></div><div class="grid">`;
- CURRICULUM.domains.forEach((d,i)=>{
-   const p=Math.round(domainProgress(d.name)), weight=roleWeights()[d.name]||0;
-   if(weight===0)return;
-   h+=`<div class="card domain-card" onclick="navigate('domain:${i}')"><div class="top"><h3>${esc(d.name)}</h3><span class="pct">${p}%</span></div><div class="bar progress"><span style="width:${p}%"></span></div><div class="domain-meta"><span>Role weight: ${weight}%</span><span>${d.topics.filter((_,j)=>getTopic(d.name,j).status==="Completed").length}/${d.topics.length} done</span></div></div>`;
- });
- h+=`</div></div>`;
- h+=`<div class="section"><div class="section-title"><h2>Choose / Change Your Career Target</h2></div><div class="card"><div class="role-choice">`;
- Object.entries(ROLE_CONFIG).forEach(([r,c])=>h+=`<div class="role-option ${r===role?"selected":""}" onclick="setRole(${esc(jsArg(r))})"><h3>${esc(r)} ${r===role?"✓":""}</h3><p>${esc(c.description)}</p></div>`);
- h+=`</div></div></div>`;
- setPage("Dashboard",h);
+  const s=stats(), role=selectedRole(), cfg=ROLE_CONFIG[role]||{};
+  const topics=allTopics();
+  const next=topics.find(x=>["Learning","Practicing","Need Revision"].includes(x.status))||topics.find(x=>x.status!=="Completed");
+  const plan=plannerState();
+  const completedStages=[
+    {label:"Choose your target role",done:!!role,view:"profile"},
+    {label:"Get a personalised learning plan",done:!!plan.generated,view:"planner"},
+    {label:"Learn and practise each day",done:s.completed>0,view:"roadmap"},
+    {label:"Build projects and prove your skills",done:completedProjectProofCount()>0,view:"projects"},
+    {label:"Prepare for interviews and apply for jobs",done:Number(state.v9?.interviewScore||0)>0||!!state.v9?.resumeText,view:"interview"}
+  ];
+  const nextStage=completedStages.findIndex(x=>!x.done);
+  let h=`<section class="v8-hero career-home-hero">
+    <div class="v8-label" style="color:#b9dcff">YOUR CAREER JOURNEY</div>
+    <h2>Small steps. Real career progress.</h2>
+    <p>Follow one clear next step toward becoming a <b>${esc(role)}</b>. Your learning, practice and projects stay together in one place.</p>
+    <div class="v6-actions"><button class="btn primary" onclick="navigate('roadmap')">Continue my journey</button><button class="btn" onclick="navigate('profile')">Change target role</button></div>
+  </section>`;
+  h+=`<section class="section career-home-progress"><div class="section-title"><h2>Your progress</h2><span class="small">${s.completed} of ${s.total} topics completed</span></div>
+    <div class="card"><div class="top"><div><div class="label">TARGET ROLE</div><h3>${esc(role)}</h3><p class="small">${esc(cfg.description||"Your personalised career path")}</p></div><span class="pct">${s.progress}%</span></div><div class="progress"><span style="width:${s.progress}%"></span></div></div></section>`;
+  if(next){
+    const domain=next.domain||CURRICULUM.domains.find(d=>d.topics.includes(next.topic))?.name||CURRICULUM.domains[0]?.name||"";
+    const d=CURRICULUM.domains.find(x=>x.name===domain);
+    const index=Number.isInteger(next.index)?next.index:Math.max(0,d?d.topics.findIndex(t=>t.topic===(next.topic||next.name)):-1);
+    h+=`<section class="section"><div class="section-title"><h2>Today's next step</h2><span class="small">One task at a time</span></div><div class="card career-next-card">
+      <div class="v8-label">LEARN &amp; PRACTISE</div><h3>${esc(next.topic||next.name||"Your next topic")}</h3><p class="small">${esc(domain)} · ${esc(next.status||"Not Started")} · ${pct(next)}% complete</p><div class="progress"><span style="width:${pct(next)}%"></span></div>
+      <div class="plan-actions"><button class="btn primary" onclick='openLearning(${JSON.stringify(domain)},${index})'>Start learning</button><button class="btn" onclick="navigate('planner')">Study calendar</button></div>
+    </div></section>`;
+  } else {
+    h+=`<section class="section"><div class="card"><h3>Learning journey complete</h3><p class="small">Keep your skills fresh with projects and interview practice.</p><div class="plan-actions"><button class="btn primary" onclick="navigate('projects')">Build a project</button><button class="btn" onclick="navigate('interview')">Practise interviews</button></div></div></section>`;
+  }
+  h+=`<section class="section"><div class="section-title"><h2>Your five steps</h2><span class="small">Your progress updates as you work</span></div><div class="career-journey-steps">`;
+  completedStages.forEach((stage,i)=>{
+    h+=`<button type="button" class="career-journey-step ${stage.done?"is-done":i===nextStage?"is-current":""}" onclick="navigate('${stage.view}')"><span class="career-journey-number">${stage.done?"✓":i+1}</span><span class="career-journey-copy"><b>${stage.label}</b><small>${stage.done?"Completed":i===nextStage?"Your next milestone":"Up next"}</small></span><span class="career-journey-arrow" aria-hidden="true">›</span></button>`;
+  });
+  h+=`</div></section>`;
+  h+=`<section class="section"><div class="section-title"><h2>Quick access</h2></div><div class="career-quick-links">
+    <button class="card" onclick="navigate('planner')"><b>Daily learning plan</b><span class="small">Plan and track your study days</span></button>
+    <button class="card" onclick="navigate('projects')"><b>Build a project</b><span class="small">Show proof of your skills</span></button>
+    <button class="card" onclick="navigate('interview')"><b>Interview preparation</b><span class="small">Practise role-specific questions</span></button>
+  </div></section>`;
+  setPage("Home",h);
 }
 
 function roleCommands(role,domain){
