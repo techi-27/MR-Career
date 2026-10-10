@@ -6455,5 +6455,49 @@ html body.sidebar-collapsed .sidebar .nav button{
 }
 </style>
 
+
+<style id="v14-13-final-sidebar-toggle-alignment">
+/* Final alignment fix: center the hamburger over the same icon column as the nav items. */
+@media (min-width: 761px) {
+  html body.sidebar-collapsed .sidebar .brand {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px 0 14px !important;
+    margin: 0 !important;
+  }
+  html body.sidebar-collapsed .sidebar .brand .brand-sidebar-toggle {
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    width: 34px !important;
+    min-width: 34px !important;
+    max-width: 34px !important;
+    height: 34px !important;
+    flex: 0 0 34px !important;
+    margin: 0 auto !important;
+  }
+  html body.sidebar-collapsed .sidebar .nav button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  html body.sidebar-collapsed .sidebar .nav button .nav-icon {
+    position: static !important;
+    left: auto !important;
+    margin: 0 auto !important;
+  }
+}
+</style>
+
 </body>
 </html>
