@@ -5741,11 +5741,19 @@ const V8_DISCOVERY_QUESTIONS = [
   ["Build a web app or API","software"],["Deploy and automate a cloud service","cloud"],["Analyze a dataset or train a model","data"],["Review a system for security risks","security"],["Create an automated test suite","quality"],["Prototype and test a user experience","design"],["Configure an enterprise workflow","enterprise"],["Design a system and explain its trade-offs","architecture"]]}
 ];
 const V8_TAG_ROLES = (() => {
- const families = ["Software & Development","Cloud & Infrastructure","Data & AI","Cybersecurity","Quality Engineering","Design & Product","Enterprise Technology","Architecture & Leadership"];
- const tags = {software:families[0],cloud:families[1],data:families[2],security:families[3],quality:families[4],design:families[5],enterprise:families[6],architecture:families[7]};
+ const tags = {
+   software:["Software & Development"],
+   cloud:["Cloud & Infrastructure"],
+   data:["Data & AI"],
+   security:["Cybersecurity"],
+   quality:["Quality Engineering"],
+   design:["Design & Product"],
+   enterprise:["Enterprise Technology"],
+   architecture:["Cloud & Infrastructure","Engineering & Delivery Leadership"]
+ };
  const result={};
- Object.entries(tags).forEach(([tag,family])=>{
-   result[tag]=Object.keys(ROLE_CONFIG).filter(role=>roleFamily(role)===family);
+ Object.entries(tags).forEach(([tag,families])=>{
+   result[tag]=Object.keys(ROLE_CONFIG).filter(role=>families.includes(roleFamily(role)));
  });
  return result;
 })();
