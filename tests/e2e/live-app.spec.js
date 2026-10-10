@@ -63,6 +63,36 @@ test('role selector changes the target role and persists after reload', async ({
   await expect(page.locator('#headerRolePicker .header-role-value')).toContainText('Platform Engineer');
 });
 
+test('profile fields start unset and preserve explicit choices without inventing study hours', async ({ page }) => {
+  await openApp(page);
+  await chooseRole(page);
+  await page.evaluate(() => window.navigate('profile'));
+
+  const experience = page.locator('#profileExperience');
+  const goal = page.locator('#profileGoal');
+  const hours = page.locator('#profileWeeklyHours');
+  await expect(experience).toHaveValue('');
+  await expect(goal).toHaveValue('');
+  await expect(hours).toHaveValue('');
+
+  await experience.selectOption('College Student');
+  await goal.selectOption('Explore careers');
+  await hours.fill('10');
+  await hours.fill('');
+  await page.getByRole('button', { name: 'Save Profile' }).click();
+
+  await expect(experience).toHaveValue('College Student');
+  await expect(goal).toHaveValue('Explore careers');
+  await expect(hours).toHaveValue('');
+  await expect(page.locator('#summaryWeeklyHours')).toHaveText('Not set');
+
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await page.evaluate(() => window.navigate('profile'));
+  await expect(page.locator('#profileExperience')).toHaveValue('College Student');
+  await expect(page.locator('#profileGoal')).toHaveValue('Explore careers');
+  await expect(page.locator('#profileWeeklyHours')).toHaveValue('');
+});
+
 test('all application routes render content without a page-error fallback', async ({ page }) => {
   const pageErrors = [];
   page.on('pageerror', error => pageErrors.push(error.message));
@@ -87,6 +117,8 @@ test('all application routes render content without a page-error fallback', asyn
 test('simplified navigation hides incomplete and duplicate destinations while legacy links redirect safely', async ({ page }) => {
   await openApp(page);
   await chooseRole(page);
+  // The Home dashboard intentionally has no secondary tabs; test the contextual tabs on the roadmap.
+  await page.evaluate(() => window.navigate('roadmap'));
   const workspace = page.locator('#content .workspace-tabs');
   await expect(workspace).toBeVisible();
 
@@ -98,11 +130,11 @@ test('simplified navigation hides incomplete and duplicate destinations while le
   expect(visibleTabs).not.toContain('Daily career coach');
 
   const legacyRoutes = [
-    ['tech', 'Roadmap & Learning', 'Roadmap & Learning'],
-    ['skills', 'Roadmap & Learning', 'Roadmap & Learning'],
-    ['quizzes', 'Learn & Practice', 'Practice Labs'],
-    ['skillgap', 'Job Readiness', 'Job Readiness'],
-    ['coach', 'My Progress', 'Weekly Review'],
+    ['tech', 'My journey', 'Roadmap & Learning'],
+    ['skills', 'My journey', 'Roadmap & Learning'],
+    ['quizzes', 'Learn & practise', 'Practice Labs'],
+    ['skillgap', 'Job readiness', 'Job Readiness'],
+    ['coach', 'Your progress', 'Weekly Review'],
     ['portfolio', null, 'Project Studio'],
   ];
   for (const [legacy, expectedTabGroup, expectedTitle] of legacyRoutes) {
