@@ -6826,51 +6826,8 @@ html body .app aside.sidebar .brand .brand-sidebar-toggle{background:linear-grad
 html body .app aside.sidebar .brand .brand-sidebar-toggle .hamburger-lines i{background:#fff!important}
 </style>
 
-<style id="v14-26-role-picker-next-to-toolkit-tabs">
-/* On Resume/JD tools, place the role picker beside the toolkit tabs instead of in the global header. */
-html body #content .workspace-tabs{display:flex!important;align-items:center!important;gap:16px!important;flex-wrap:wrap!important}
-html body #content .workspace-tabs .workspace-tabs-items{display:flex!important;align-items:center!important;gap:10px!important;flex:1 1 auto!important;min-width:0!important;flex-wrap:wrap!important}
-html body #content .workspace-tabs .role-selector-label{display:flex!important;align-items:center!important;gap:8px!important;margin-left:auto!important;min-width:250px!important;max-width:340px!important;flex:0 1 320px!important;padding:0!important;color:#64748b!important;font-size:12px!important;font-weight:800!important;letter-spacing:.04em!important}
-html body #content .workspace-tabs #headerRolePicker{width:100%!important;min-width:0!important;max-width:100%!important;flex:1 1 auto!important}
-html body .topbar .actions>.role-selector-label{transition:none}
-@media(max-width:900px){html body #content .workspace-tabs .role-selector-label{margin-left:0!important;flex:1 1 100%!important;min-width:0!important;max-width:100%!important}}
-@media(max-width:600px){html body #content .workspace-tabs{align-items:stretch!important;gap:10px!important}html body #content .workspace-tabs .workspace-tabs-items{width:100%!important}html body #content .workspace-tabs .role-selector-label{width:100%!important;display:flex!important}}
-</style>
-<script id="v14-26-relocate-role-picker-for-toolkit">
-(function(){
-  function placeRolePicker(){
-    const label=document.querySelector('.topbar .actions > .role-selector-label') ||
-      document.querySelector('#content .workspace-tabs .role-selector-label');
-    const actions=document.querySelector('.topbar .actions');
-    const tabs=document.querySelector('#content .workspace-tabs');
-    const items=tabs&&tabs.querySelector('.workspace-tabs-items');
-    if(!label||!actions)return;
-    const view=String(window.__itCareerCurrentView||'dashboard');
-    const shouldMove=(view==='resume'||view==='jd');
-    if(shouldMove&&items){
-      if(label.parentElement!==items)items.appendChild(label);
-    }else if(label.parentElement!==actions){
-      const exportButton=actions.querySelector('button[onclick*="exportData"]');
-      actions.insertBefore(label,exportButton||actions.firstChild);
-    }
-  }
-  function start(){
-    placeRolePicker();
-    const content=document.getElementById('content');
-    if(content&&window.MutationObserver){
-      const observer=new MutationObserver(function(){placeRolePicker();});
-      observer.observe(content,{childList:true,subtree:true});
-    }
-    const originalNavigate=window.navigate;
-    if(typeof originalNavigate==='function'&&!originalNavigate.__rolePickerRelocationWrapped){
-      const wrapped=function(){const result=originalNavigate.apply(this,arguments);setTimeout(placeRolePicker,0);return result;};
-      wrapped.__rolePickerRelocationWrapped=true;
-      window.navigate=wrapped;
-    }
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
-})();
-</script>
+
+
 
 
 <style id="v14-29-compact-header-control-heights">
