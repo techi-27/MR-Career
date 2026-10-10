@@ -248,6 +248,57 @@ test('missed study sessions can be moved to catch-up', async ({ page }) => {
   await expect(page.locator('.study-day-cell.status-rescheduled').first()).toBeVisible();
 });
 
+test('planner rejects invalid calendar dates without creating a plan', async ({ page }) => {
+  await openApp(page);
+  await chooseRole(page, 'Platform Engineer');
+  await page.evaluate(() => window.navigate('planner'));
+  const start = page.locator('.date-text[data-date-action="plannerStart"]');
+  const end = page.locator('.date-text[data-date-action="plannerEnd"]');
+  await start.fill('02/30/26');
+  page.once('dialog', async dialog => {
+    expect(dialog.message()).toMatch(/valid date/i);
+    await dialog.accept();
+  });
+  await start.press('Tab');
+  await expect(start).not.toHaveValue('02/30/26');
+
+  await start.fill('10/15/26');
+  await start.press('Tab');
+  await end.fill('10/14/26');
+  await end.press('Tab');
+  page.once('dialog', async dialog => {
+    expect(dialog.message()).toMatch(/End date must be on or after/i);
+    await dialog.accept();
+  });
+  await page.getByRole('button', { name: 'Generate Daily Study Plan' }).click();
+  await expect(page.locator('.plan-table')).toHaveCount(0);
+});
+
+test('changing target role invalidates the visible plan without deleting saved session history', async ({ page }) => {
+  await openApp(page);
+  await chooseRole(page, 'Platform Engineer');
+  await page.evaluate(() => window.navigate('planner'));
+  const dates = await page.evaluate(() => {
+    const start = new Date(); start.setHours(12,0,0,0);
+    const end = new Date(start); end.setDate(end.getDate()+7);
+    const fmt = d => `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}/${String(d.getFullYear()).slice(-2)}`;
+    return {start:fmt(start),end:fmt(end)};
+  });
+  const start = page.locator('.date-text[data-date-action="plannerStart"]');
+  const end = page.locator('.date-text[data-date-action="plannerEnd"]');
+  await start.fill(dates.start); await start.press('Tab');
+  await end.fill(dates.end); await end.press('Tab');
+  await page.getByRole('button', { name: 'Generate Daily Study Plan' }).click();
+  const planBefore = await page.evaluate(() => JSON.parse(localStorage.getItem('itCareerOS_v10') || '{}').planner || {});
+  expect(planBefore.generated).toBe(true);
+  const priorStatus = planBefore.dailyStatus || {};
+  await chooseRole(page, 'Cloud Platform Engineer');
+  const planAfter = await page.evaluate(() => JSON.parse(localStorage.getItem('itCareerOS_v10') || '{}').planner || {});
+  expect(planAfter.generated).toBe(false);
+  expect(planAfter.dailyStatus || {}).toEqual(priorStatus);
+  await expect(page.locator('.plan-table')).toHaveCount(0);
+});
+
 test('project checklist changes are saved locally', async ({ page }) => {
   await openApp(page);
   await chooseRole(page, 'Platform Engineer');
