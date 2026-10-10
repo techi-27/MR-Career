@@ -7278,5 +7278,72 @@ html body .toolkit-arrow{color:#5a7eb6;font-size:20px}
 html body .rec-row.not-selected{opacity:.68}
 @media(max-width:700px){html body .toolkit-grid{grid-template-columns:minmax(0,1fr)}html body .toolkit-hero{padding:18px}html body .toolkit-hero h2{font-size:23px}}
 </style>
+
+<style id="v14-35-planner-topic-alignment-fix">
+/* Planner topic rows now contain five items (order, topic, priority, reason, status).
+   Override older checkbox-era grid rules so labels do not collapse into narrow columns. */
+html body .recommendation-list .rec-row{
+ display:grid!important;
+ grid-template-columns:34px minmax(220px,1.15fr) 76px minmax(220px,1.6fr) minmax(105px,auto)!important;
+ column-gap:14px!important;
+ row-gap:8px!important;
+ align-items:center!important;
+ min-width:0!important;
+ width:100%!important;
+ box-sizing:border-box!important;
+ padding:14px 16px!important;
+}
+html body .recommendation-list .rec-row>*{
+ grid-column:auto!important;
+ grid-row:auto!important;
+ min-width:0!important;
+}
+html body .recommendation-list .rec-row .rec-order{
+ width:27px!important;height:27px!important;flex:0 0 27px!important;
+}
+html body .recommendation-list .rec-row .rec-topic{
+ display:block!important;
+ width:auto!important;
+ font-size:13px!important;
+ line-height:1.45!important;
+ font-weight:800!important;
+ white-space:normal!important;
+ overflow-wrap:normal!important;
+ word-break:normal!important;
+ hyphens:none!important;
+}
+html body .recommendation-list .rec-row .rec-topic .small{
+ display:block!important;font-size:11px!important;font-weight:500!important;
+ line-height:1.4!important;white-space:normal!important;overflow-wrap:normal!important;
+}
+html body .recommendation-list .rec-row .rec-why{
+ font-size:12px!important;line-height:1.5!important;white-space:normal!important;
+ overflow-wrap:break-word!important;word-break:normal!important;
+}
+html body .recommendation-list .rec-row>.small{
+ font-size:11px!important;line-height:1.4!important;white-space:normal!important;
+ overflow-wrap:normal!important;word-break:normal!important;
+}
+@media(max-width:1000px){
+ html body .recommendation-list .rec-row{
+  grid-template-columns:30px minmax(0,1fr) 76px!important;
+ }
+ html body .recommendation-list .rec-row .rec-topic{grid-column:2!important;grid-row:1!important}
+ html body .recommendation-list .rec-row>div:nth-child(3){grid-column:3!important;grid-row:1!important}
+ html body .recommendation-list .rec-row .rec-why{grid-column:2 / 4!important;grid-row:2!important}
+ html body .recommendation-list .rec-row>.small{grid-column:2 / 4!important;grid-row:3!important}
+}
+@media(max-width:560px){
+ html body .recommendation-list .rec-row{
+  grid-template-columns:28px minmax(0,1fr)!important;
+  column-gap:10px!important;padding:12px!important;
+ }
+ html body .recommendation-list .rec-row .rec-order{grid-column:1!important;grid-row:1!important}
+ html body .recommendation-list .rec-row .rec-topic{grid-column:2!important;grid-row:1!important}
+ html body .recommendation-list .rec-row>div:nth-child(3){grid-column:2!important;grid-row:2!important;justify-self:start!important}
+ html body .recommendation-list .rec-row .rec-why{grid-column:2!important;grid-row:3!important}
+ html body .recommendation-list .rec-row>.small{grid-column:2!important;grid-row:4!important}
+}
+</style>
 </body>
 </html>
