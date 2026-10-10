@@ -3618,6 +3618,43 @@ html body .v6-timeline-item > .v6-card {
 }
 </style>
 
+
+<style id="v14-31-fix-priority-skill-learn-buttons">
+/* Priority skill-gap rows contain three items: rank, skill details, and Learn action. */
+html body .v8-step:has(> button) {
+  display: grid !important;
+  grid-template-columns: 30px minmax(0, 1fr) max-content !important;
+  align-items: center !important;
+  column-gap: 12px !important;
+  min-width: 0 !important;
+}
+html body .v8-step:has(> button) > button.btn {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 68px !important;
+  max-width: 100% !important;
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  justify-self: end !important;
+  padding: 9px 14px !important;
+}
+html body .v8-step:has(> button) > div:nth-child(2) {
+  min-width: 0 !important;
+}
+@media (max-width: 480px) {
+  html body .v8-step:has(> button) {
+    grid-template-columns: 26px minmax(0, 1fr) max-content !important;
+    column-gap: 8px !important;
+  }
+  html body .v8-step:has(> button) > button.btn {
+    min-width: 64px !important;
+    padding: 8px 10px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
