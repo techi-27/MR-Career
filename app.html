@@ -3266,6 +3266,74 @@ html body .brand .brand-sidebar-toggle:hover{
 }
 </style>
 
+
+<style id="mr-career-multicolor-theme">
+/* MR.Career multicolor system: navy foundation, coral actions, blue information, yellow highlights. */
+:root{
+  --bg:#f7f8fb!important;--card:#ffffff!important;--ink:#172747!important;--muted:#667085!important;--line:#e4e7ec!important;
+  --brand:#172747!important;--brand2:#ff5b55!important;--brand3:#ffd900!important;--accent:#4e91d9!important;
+  --green:#16866a!important;--orange:#b7791f!important;--red:#cf4141!important;
+  --soft:#fff0ee!important;--soft-ink:#b93832!important;
+  --shadow:0 8px 24px rgba(23,39,71,.07)!important;--shadow-lg:0 20px 48px rgba(23,39,71,.14)!important;
+  --side-bg:linear-gradient(180deg,#172747 0%,#203f66 100%)!important;
+  --side-ink:#f2f6ff!important;--side-hover:rgba(78,145,217,.2)!important;
+  --side-active:linear-gradient(100deg,#ff5b55 0%,#e94e66 52%,#4e91d9 100%)!important;
+  --hero:linear-gradient(120deg,#172747 0%,#244b77 66%,#4e91d9 100%)!important;
+}
+:root[data-theme="dark"]{
+  --bg:#101729!important;--card:#18243b!important;--ink:#f2f5fb!important;--muted:#b1bdd0!important;--line:#30415c!important;
+  --brand:#f2f5fb!important;--brand2:#ff716b!important;--brand3:#ffd900!important;--accent:#78b4f2!important;
+  --green:#53c5a0!important;--orange:#ffd166!important;--red:#ff817b!important;
+  --soft:#3a2634!important;--soft-ink:#ffb2ad!important;
+  --shadow:0 8px 24px rgba(0,0,0,.2)!important;--shadow-lg:0 20px 48px rgba(0,0,0,.28)!important;
+  --side-bg:linear-gradient(180deg,#101a2e 0%,#192c47 100%)!important;
+  --side-ink:#e8effa!important;--side-hover:rgba(120,180,242,.16)!important;
+  --side-active:linear-gradient(100deg,#b94b55 0%,#744e92 55%,#326ca8 100%)!important;
+  --hero:linear-gradient(120deg,#101a2e 0%,#1c3555 66%,#285b88 100%)!important;
+}
+html body{background:var(--bg)!important;color:var(--ink)!important}
+html body .sidebar{background:var(--side-bg)!important;border-right:1px solid color-mix(in srgb,var(--accent) 24%,transparent)!important}
+html body .sidebar .brand small{color:color-mix(in srgb,var(--side-ink) 78%,var(--accent))!important}
+html body .sidebar .mini{color:color-mix(in srgb,var(--side-ink) 65%,var(--accent))!important}
+html body .sidebar .nav button{color:var(--side-ink)!important;border:1px solid transparent!important}
+html body .sidebar .nav button:hover{background:var(--side-hover)!important;color:var(--side-ink)!important}
+html body .sidebar .nav button.active{background:var(--side-active)!important;color:#fff!important;border-color:rgba(255,255,255,.22)!important;box-shadow:inset 3px 0 0 #ffd900,0 5px 14px rgba(23,39,71,.15)!important}
+html body .sidebar .nav button .nav-icon{color:inherit!important}
+html body .brand .brand-sidebar-toggle{background:rgba(255,255,255,.14)!important;border-color:rgba(255,255,255,.32)!important}
+html body .topbar{background:var(--card)!important;border-color:var(--line)!important;color:var(--ink)!important}
+html body .btn.primary,html body button.btn.primary,html body .actions .primary:not(.secondary){background:linear-gradient(110deg,#ff5b55 0%,#ed526b 58%,#4e91d9 100%)!important;border-color:transparent!important;color:#fff!important;box-shadow:0 5px 14px rgba(255,91,85,.2)!important}
+html body .btn.primary:hover,html body button.btn.primary:hover{filter:saturate(1.08) brightness(1.02)!important;box-shadow:0 8px 20px rgba(255,91,85,.25)!important}
+html body .btn:not(.primary):not(.danger),html body button.btn:not(.primary):not(.danger){background:var(--card)!important;color:var(--ink)!important;border-color:var(--line)!important}
+html body .btn:not(.primary):hover,html body button.btn:not(.primary):hover{border-color:var(--accent)!important}
+html body .card,html body .v6-card,html body .v9-card,html body .plan-stat,html body .detail-box,html body .quiz-card,html body .interview-card,html body .lab-card,html body .exam-card{background:var(--card)!important;border-color:var(--line)!important;color:var(--ink)!important}
+html body .grid > .card:nth-child(4n+1),html body .kpi:nth-child(4n+1),html body .plan-stat:nth-child(4n+1){border-top:3px solid #ff5b55!important}
+html body .grid > .card:nth-child(4n+2),html body .kpi:nth-child(4n+2),html body .plan-stat:nth-child(4n+2){border-top:3px solid #4e91d9!important}
+html body .grid > .card:nth-child(4n+3),html body .kpi:nth-child(4n+3),html body .plan-stat:nth-child(4n+3){border-top:3px solid #ffd900!important}
+html body .grid > .card:nth-child(4n+4),html body .kpi:nth-child(4n+4),html body .plan-stat:nth-child(4n+4){border-top:3px solid #35b89a!important}
+html body .progress>span,html body .v6-progress>span,html body .bar span{background:linear-gradient(90deg,#ff5b55 0%,#ffd900 48%,#4e91d9 78%,#35b89a 100%)!important}
+html body .badge,html body .plan-chip,html body .v6-chip,html body .chip,html body .pill,html body .tag{background:#e8f2ff!important;color:#245b91!important;border-color:#cfe3fb!important}
+html body .badge.p0{background:#fff0ee!important;color:#b93832!important;border-color:#ffd2cf!important}
+html body .badge.p1{background:#fff5cc!important;color:#765b00!important;border-color:#ffe58a!important}
+html body .badge.p2{background:#e8f2ff!important;color:#245b91!important;border-color:#cfe3fb!important}
+html body .notice,html body .v8-callout{background:#eaf4ff!important;border-color:#cfe3fb!important;color:#24527c!important}
+html body .kpi .value,html body .v6-big,html body .v6-metric{color:var(--ink)!important}
+html body .kpi:nth-child(4n+1) .value{color:#d94a45!important}
+html body .kpi:nth-child(4n+2) .value{color:#3277b9!important}
+html body .kpi:nth-child(4n+3) .value{color:#9a7800!important}
+html body .kpi:nth-child(4n+4) .value{color:#16866a!important}
+html body input:focus,html body select:focus,html body textarea:focus,html body button:focus-visible,html body a:focus-visible{outline-color:var(--accent)!important}
+html body .rec-row:hover,html body .rec-row.selected{border-color:var(--brand2)!important;background:color-mix(in srgb,var(--brand2) 7%,var(--card))!important}
+html body .learning-panel{background:var(--card)!important;color:var(--ink)!important;border-color:var(--line)!important}
+html body .table-wrap,html body table{background:var(--card)!important;color:var(--ink)!important}
+html body th{background:color-mix(in srgb,var(--accent) 8%,var(--card))!important;color:var(--muted)!important}
+html body td,html body th{border-color:var(--line)!important;color:var(--ink)!important}
+html body .sidebar-toggle-tab{background:linear-gradient(180deg,#ff5b55,#4e91d9)!important;color:#fff!important;border-color:rgba(255,255,255,.45)!important}
+@media(max-width:760px){
+ html body .sidebar{background:var(--side-bg)!important}
+ html body .topbar{box-shadow:0 4px 16px rgba(23,39,71,.07)!important}
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
