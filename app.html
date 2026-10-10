@@ -6059,7 +6059,7 @@ function updateProfileSavedUI(){
   const status=document.getElementById("profileSaveStatus");
   if(status){status.textContent=failed?"The browser could not save this profile. Check storage permissions and export a backup.":profileSavedLabel();status.className=failed?"profile-save-error":"profile-save-ok";}
   const p=state.profile||{};
-  const values={summaryExperience:p.experience||"Not set",summaryEducation:p.education||"Not set",summaryCurrentRole:p.currentRole||"Not set",summaryCurrentSkills:p.currentSkills||"Not set",summaryTargetRole:selectedRole()||"Not selected",summaryGoal:p.goal||"Not set",summaryWeeklyHours:`${Number(p.weeklyHours)||10} hours per week`,summaryTargetDate:p.targetDate?formatDate(p.targetDate):"Not set",summaryTargetSalary:Number(p.targetSalary)>0?Number(p.targetSalary).toLocaleString():"Not set",summaryUpdated:p.updatedAt?new Date(p.updatedAt).toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}):"Existing saved profile"};
+  const values={summaryExperience:p.experience||"Not set",summaryEducation:p.education||"Not set",summaryCurrentRole:p.currentRole||"Not set",summaryCurrentSkills:p.currentSkills||"Not set",summaryTargetRole:selectedRole()||"Not selected",summaryGoal:p.goal||"Not set",summaryWeeklyHours:`${Number(p.weeklyHours)>0?Number(p.weeklyHours)+" hours per week":"Not set"}`,summaryTargetDate:p.targetDate?formatDate(p.targetDate):"Not set",summaryTargetSalary:Number(p.targetSalary)>0?Number(p.targetSalary).toLocaleString():"Not set",summaryUpdated:p.updatedAt?new Date(p.updatedAt).toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}):"Existing saved profile"};
   Object.entries(values).forEach(([id,value])=>{const el=document.getElementById(id);if(el)el.textContent=value;});
 }
 function saveProfileFromForm(){
@@ -6129,6 +6129,9 @@ function v9SelectRole(role){
 function renderProfile(){
   v9EnsureState();
   const p=state.profile, role=selectedRole();
+  if(p.experience==="College Student"&&!p.education&&!p.currentRole&&!p.currentSkills)p.experience="";
+  if(p.goal==="Explore careers"&&!p.education&&!p.currentRole&&!p.currentSkills)p.goal="";
+  if(Number(p.weeklyHours)===10&&!p.education&&!p.currentRole&&!p.currentSkills)p.weeklyHours="";
   const xp=v9XP();
   const saveStatus=window.__profileSaveStatus==="error"?"The browser could not save this profile. Check storage permissions and export a backup.":profileSavedLabel();
   const saveStatusClass=window.__profileSaveStatus==="error"?"profile-save-error":"profile-save-ok";
@@ -6142,15 +6145,15 @@ function renderProfile(){
   h+=`<div class="v9-smallgrid section">
     <div class="v9-card card"><h3>Who are you?</h3>
       <label class="small" for="profileExperience">Experience level</label><select id="profileExperience" style="width:100%;margin:5px 0 10px" onchange="v9SaveProfile('experience',this.value)">
-        ${["College Student","Fresher","0–2 years","2–5 years","5–10 years","10+ years"].map(x=>`<option ${p.experience===x?"selected":""}>${x}</option>`).join("")}</select>
+        <option value="" ${p.experience?"":"selected"} disabled>Choose your experience level</option>        ${["College Student","Fresher","0–2 years","2–5 years","5–10 years","10+ years"].map(x=>`<option ${p.experience===x?"selected":""}>${x}</option>`).join("")}</select>
       <label class="small" for="profileEducation">Education / background</label><input id="profileEducation" style="width:100%;margin:5px 0 10px" value="${esc(p.education||"")}" placeholder="B.Tech CSE / BCA / MBA / Self-taught..." onchange="v9SaveProfile('education',this.value)">
       <label class="small" for="profileCurrentRole">Current role</label><input id="profileCurrentRole" style="width:100%;margin:5px 0 10px" value="${esc(p.currentRole||"")}" placeholder="Student / QA / Developer / Support..." onchange="v9SaveProfile('currentRole',this.value)">
       <label class="small" for="profileCurrentSkills">Current skills</label><textarea id="profileCurrentSkills" style="width:100%;min-height:80px;margin:5px 0" placeholder="Java, SQL, Linux..." onchange="v9SaveProfile('currentSkills',this.value)">${esc(p.currentSkills||"")}</textarea>
     </div>
     <div class="v9-card card"><h3>Where do you want to go?</h3>
       <label class="small" for="profileTargetRole">Target role</label><select id="profileTargetRole" style="width:100%;margin:5px 0 10px" onchange="handleRoleChange(this.value)"><option value="" ${role?"":"selected"}>Select a target role</option>${v9RoleOptions(role)}</select>
-      <label class="small" for="profileGoal">Career goal</label><select id="profileGoal" style="width:100%;margin:5px 0 10px" onchange="v9SaveProfile('goal',this.value)">${["Explore careers","Get job","Switch job","Get promoted","Become a specialist","Prepare for interviews","Build a portfolio"].map(x=>`<option ${p.goal===x?"selected":""}>${x}</option>`).join("")}</select>
-      <label class="small" for="profileWeeklyHours">Hours available per week</label><input id="profileWeeklyHours" type="number" min="1" max="60" style="width:100%;margin:5px 0 10px" value="${Number(p.weeklyHours)||10}" onchange="v9SaveProfile('weeklyHours',this.value)">
+      <label class="small" for="profileGoal">Career goal</label><select id="profileGoal" style="width:100%;margin:5px 0 10px" onchange="v9SaveProfile('goal',this.value)"><option value="" ${p.goal?"":"selected"} disabled>Choose your career goal</option>${["Explore careers","Get job","Switch job","Get promoted","Become a specialist","Prepare for interviews","Build a portfolio"].map(x=>`<option ${p.goal===x?"selected":""}>${x}</option>`).join("")}</select>
+      <label class="small" for="profileWeeklyHours">Hours available per week</label><input id="profileWeeklyHours" type="number" min="1" max="60" style="width:100%;margin:5px 0 10px" value="${Number(p.weeklyHours)||""}" placeholder="e.g. 8" onchange="v9SaveProfile('weeklyHours',this.value)">
       <label class="small" for="profileTargetDateInput">Target date</label>${dateInputHTML(p.targetDate||"","profileTarget",'id="profileTargetDateInput" style="width:100%;margin:5px 0 10px"')}
       <label class="small" for="profileTargetSalary">Target salary (optional)</label><input id="profileTargetSalary" type="number" min="0" style="width:100%;margin:5px 0" value="${Number(p.targetSalary)||""}" placeholder="Optional" onchange="v9SaveProfile('targetSalary',this.value)">
     </div>
