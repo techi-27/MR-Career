@@ -20,7 +20,7 @@ async function chooseRole(page, role = 'Platform Engineer') {
   const menu = page.locator('#headerRoleMenu');
   await expect(menu).toBeVisible();
   await menu.locator('.header-role-search').fill(role);
-  await page.locator('.header-role-option', { hasText: role }).click();
+  await page.locator('.header-role-option').filter({ has: page.locator(`button[data-role="${role}"]`) }).click();
   await expect(page.locator('#headerRolePicker .header-role-value')).toContainText(role);
 }
 
