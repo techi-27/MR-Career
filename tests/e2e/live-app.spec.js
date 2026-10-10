@@ -160,6 +160,35 @@ test('study planner generates a dated plan and shows the daily calendar', async 
   await expect(page.locator('.study-day-cell.status-completed').first()).toBeVisible();
 });
 
+test('missed study sessions can be moved to catch-up', async ({ page }) => {
+  await openApp(page);
+  await chooseRole(page, 'Platform Engineer');
+  await page.evaluate(() => window.navigate('planner'));
+  const dates = await page.evaluate(() => {
+    const startDate = new Date();
+    startDate.setHours(12, 0, 0, 0);
+    startDate.setDate(startDate.getDate() - 2);
+    const endDate = new Date();
+    endDate.setHours(12, 0, 0, 0);
+    endDate.setDate(endDate.getDate() + 12);
+    const fmt = d => `${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}/${String(d.getFullYear()).slice(-2)}`;
+    return { start: fmt(startDate), end: fmt(endDate) };
+  });
+  const start = page.locator('input[data-date-action="plannerStart"]');
+  const end = page.locator('input[data-date-action="plannerEnd"]');
+  await start.fill(dates.start);
+  await start.press('Tab');
+  await end.fill(dates.end);
+  await end.press('Tab');
+  await page.getByRole('button', { name: 'Generate Daily Study Plan' }).click();
+
+  const missed = page.locator('.study-day-cell.status-missed').first();
+  await expect(missed).toBeVisible();
+  await missed.click();
+  await page.getByRole('button', { name: 'Move to catch-up day' }).click();
+  await expect(page.locator('.study-day-cell.status-rescheduled').first()).toBeVisible();
+});
+
 test('project checklist changes are saved locally', async ({ page }) => {
   await openApp(page);
   await chooseRole(page, 'Platform Engineer');
