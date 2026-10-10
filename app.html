@@ -4130,7 +4130,7 @@ function getTopic(domain,i){
   return {...base,details,...(state.topics[topicKey(domain,i)]||{})};
 }
 function migrateState(){
-  const fallback={topics:{},weekly:{},interview:{},profile:{experience:"College Student",goal:"Explore careers",weeklyHours:10},
+  const fallback={topics:{},weekly:{},interview:{},profile:{experience:"",goal:"",weeklyHours:""},
     settings:{selectedRole:"",sidebarCollapsed:false},v9:{},v6:{},planner:{startDate:"",endDate:"",duration:"6",durationUnit:"months",selected:{},generated:false}};
   try{
     const keys=[KEY,...LEGACY_KEYS];
@@ -4143,7 +4143,7 @@ state.settings=state.settings||{selectedRole:"",sidebarCollapsed:false}; if(!Obj
 const hadRemovedAppearanceSettings=["theme","palette","customAccent"].some(k=>Object.prototype.hasOwnProperty.call(state.settings,k));
 ["theme","palette","customAccent"].forEach(k=>delete state.settings[k]);
 state.topics=state.topics||{};state.weekly=state.weekly||{};state.interview=state.interview||{};
-state.profile=state.profile||{experience:"College Student",goal:"Explore careers",weeklyHours:10}; state.discovery=state.discovery||{answers:{},completed:false}; state.interview=state.interview||{}; state.v6=state.v6||{daily:{},portfolio:{},jd:"",jdResult:null,doneLabs:[],doneProjects:[],doneProjectKeys:[],quizScore:0,interviewScore:0}; state.planner=state.planner||{startDate:"",endDate:"",duration:"6",durationUnit:"months",selected:{},generated:false}; state.planner.selected=state.planner.selected||{}; state.planner.dailyStatus=state.planner.dailyStatus&&typeof state.planner.dailyStatus==="object"?state.planner.dailyStatus:{}; state.planner.recoveryTasks=Array.isArray(state.planner.recoveryTasks)?state.planner.recoveryTasks:[]; state.v6.doneProjectKeys=state.v6.doneProjectKeys||[];
+state.profile=state.profile||{experience:"",goal:"",weeklyHours:""}; state.discovery=state.discovery||{answers:{},completed:false}; state.interview=state.interview||{}; state.v6=state.v6||{daily:{},portfolio:{},jd:"",jdResult:null,doneLabs:[],doneProjects:[],doneProjectKeys:[],quizScore:0,interviewScore:0}; state.planner=state.planner||{startDate:"",endDate:"",duration:"6",durationUnit:"months",selected:{},generated:false}; state.planner.selected=state.planner.selected||{}; state.planner.dailyStatus=state.planner.dailyStatus&&typeof state.planner.dailyStatus==="object"?state.planner.dailyStatus:{}; state.planner.recoveryTasks=Array.isArray(state.planner.recoveryTasks)?state.planner.recoveryTasks:[]; state.v6.doneProjectKeys=state.v6.doneProjectKeys||[];
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){console.warn("Local storage unavailable:",e);return false}}
 if(hadRemovedAppearanceSettings)save();
 function selectedRole(){return state.settings?.selectedRole || ""}
@@ -4163,7 +4163,7 @@ function roleStats(role=selectedRole()){
   return {progress,gaps,critical,entries};
 }
 
-function setCareerProfile(key,value){state.profile=state.profile||{experience:"College Student",goal:"Explore careers",weeklyHours:10};state.profile[key]=key==="weeklyHours"?Number(value):value;save();renderCurrent();}
+function setCareerProfile(key,value){state.profile=state.profile||{experience:"",goal:"",weeklyHours:""};state.profile[key]=key==="weeklyHours"?Number(value):value;save();renderCurrent();}
 function setRole(role){handleRoleChange(role);}
 
 function handleRoleChange(role){
@@ -4489,7 +4489,7 @@ function toggleV9Project(i,checked){
 }
 function renderLabs(){
   const role=selectedRole(), rows=roleTopicRows(14);
-  let h=pageHero("LEARN & PRACTICE",`🧪 ${esc(role)} Practice Labs`,`Hands-on tasks matched to your selected role. Finish a lab, document it and keep the proof in GitHub.`);
+  let h=pageHero("LEARN & PRACTICE",`${esc(role)} Practice Labs`,`Hands-on tasks matched to your selected role. Finish a lab, document it and keep the proof in GitHub.`);
   rows.forEach((r,i)=>{
     const lab=r.data?.details?.lab||`Build a hands-on ${r.domain} exercise covering ${r.topic.topic}.`;
     const done=(state.v9?.doneLabs||[]).includes(`${r.domain}::${r.idx}`);
@@ -4631,7 +4631,7 @@ function renderJDAnalysisHtml(){
   <div class="v6-card" style="margin-top:10px"><b>Potentially missing role areas</b><div class="gap-list" style="margin-top:8px">${missing.map(x=>`<span class="gap-chip">${esc(x.replace(/^\d+\s*/,""))}</span>`).join("")||"<span class='small'>No unmatched major role areas were detected.</span>"}</div></div>`;
 }
 function renderJD(){
-  let h=pageHero("CAREER TOOLS","📄 Job Description Analyzer","Paste a job description to see which skills match your selected role.");
+  let h=pageHero("CAREER TOOLS","Job Description Analyzer","Paste a job description to see which skills match your selected role.");
   h+=`<div class="v6-card"><textarea id="jdInput" style="width:100%;min-height:220px" placeholder="Paste the job description here...">${esc(state.v9?.jd||"")}</textarea><div class="v6-actions"><button class="btn primary" onclick="analyzeJDLocal()">Analyze JD</button></div><div id="jdResult">${renderJDAnalysisHtml()}</div></div>`;
   setPage("Job Description Analyzer",h);
 }
@@ -4729,7 +4729,7 @@ function handleImportedFile(file){
    state={
      ...incoming,
      settings:{selectedRole:"",sidebarCollapsed:false,...incoming.settings},
-     profile:{experience:"College Student",goal:"Explore careers",weeklyHours:10,...(record(incoming.profile)?incoming.profile:{})},
+     profile:{experience:"",goal:"",weeklyHours:"",...(record(incoming.profile)?incoming.profile:{})},
      topics:record(incoming.topics)?incoming.topics:{},
      weekly:record(incoming.weekly)?incoming.weekly:{},
      interview:record(incoming.interview)?incoming.interview:{},
@@ -5143,10 +5143,10 @@ function openLearning(domain,i){
  modal.innerHTML=`<div class="learning-panel"><div class="learning-panel-scroll">
   <div class="learning-head"><div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px"><button class="btn" onclick="closeLearning()">Back to ${esc(domain)}</button><span class="badge">${esc(domain)} · ${esc(role)} · ${weight}% role weight</span></div><h2 style="margin-top:8px">${esc(t.topic)}</h2><div class="small">${esc(t.learn)}</div></div><button class="close-x" onclick="closeLearning()">×</button></div>
   <div class="detail-grid">
-   <div class="detail-box"><h3>🎯 Context — Why this matters for ${esc(role)}</h3><p>${esc(det.context)}</p></div>
+   <div class="detail-box"><h3>Context — Why this matters for ${esc(role)}</h3><p>${esc(det.context)}</p></div>
    <div class="detail-box"><h3>📚 What you need to learn</h3><ul>${learn}</ul></div>
    ${commandHtml}
-   <div class="detail-box"><h3>🧪 Hands-on lab</h3><p>${esc(det.lab)}</p><p><b>Proof:</b> Add a README, architecture/design evidence, screenshots/results and GitHub link.</p></div>
+   <div class="detail-box"><h3>Hands-on lab</h3><p>${esc(det.lab)}</p><p><b>Proof:</b> Add a README, architecture/design evidence, screenshots/results and GitHub link.</p></div>
    <div class="detail-box"><h3>🏆 Exam / certification relevance</h3><p>${esc(det.exam)}</p></div>
    <div class="detail-box"><h3>📈 Your progress</h3><p>Status: <b>${esc(t.status)}</b> · Progress: <b>${pct(t)}%</b> · Actual hours: <b>${Number(t.actualHours)||0}</b></p>
     <div class="progress"><span style="width:${pct(t)}%"></span></div>
@@ -5641,7 +5641,7 @@ function renderRoadmap(){
   const rec=typeof recommendedTopics==="function"?recommendedTopics(role):[];
   let h=`<div class="v6-hero">
     <div class="v6-label" style="color:#b9dcff">ROLE ROADMAP</div>
-    <h2>🗺️ ${esc(role)} Roadmap</h2>
+    <h2>${esc(role)} Roadmap</h2>
     <p>This page answers one question: <b>what should I learn for this role?</b> It is independent of your study dates. Use Study Planner when you want to turn this roadmap into a dated schedule.</p>
     <div class="v6-actions">
       <button class="btn primary" onclick="navigate('planner')">Build My Study Plan</button>
@@ -5801,7 +5801,7 @@ function renderJobs(){
   const role=selectedRole(), cfg=ROLE_CONFIG[role], order=ROLE_ORDER[role]||UNIVERSAL_ROLE_ORDER[role]||[], statsRole=roleStats();
   let h=`<div class="v8-hero">
     <div class="v8-label" style="color:#b9dcff">TARGET ROLE & CAREER PATHS</div>
-    <h2>🎯 ${esc(role)}</h2>
+    <h2>${esc(role)}</h2>
     <p>${esc(cfg?.description||"Choose a target role and the OS will generate a role-specific learning path.")}</p>
   </div>`;
 
@@ -6180,7 +6180,7 @@ function searchAndRender(kind,value){
 function renderCareers(){
   const q=(state.v9?.careerSearch||"").toLowerCase();
   const roles=Object.keys(ROLE_CONFIG).filter(r=>!q||(`${r} ${roleFamily(r)} ${v9RoleDescription(r)}`).toLowerCase().includes(q));
-  let h=`<div class="v9-hero2"><h2>🌎 Explore IT Careers</h2><p>Explore career paths from college and entry level through senior, architecture and management. Select a role to make the entire OS adapt to it.</p></div>`;
+  let h=`<div class="v9-hero2"><h2>Explore IT Careers</h2><p>Explore career paths from college and entry level through senior, architecture and management. Select a role to make the entire OS adapt to it.</p></div>`;
   // Redundant action buttons removed: workspace tabs already provide Career discovery and Compare roles.
   h+=`<div class="card"><input style="width:100%" placeholder="Search roles, families or keywords..." id="careerSearch" value="${esc(state.v9?.careerSearch||"")}" oninput="searchAndRender('careers',this.value)"></div><div class="section">`;
   roles.forEach(r=>h+=`<div class="v9-role-card"><div><div class="family">${esc(roleFamily(r))}</div><h3>${esc(r)}</h3><p class="v8-muted">${esc(v9RoleDescription(r))}</p><div><span class="v9-badge">${v9RoleProgress(r)}% progress</span><span class="v9-badge">Recommended match ${v9CareerMatch(r)}%</span></div></div><div><button class="btn primary" onclick="v9SelectRole(${esc(jsArg(r))})">Make my role</button></div></div>`);
@@ -6197,7 +6197,7 @@ function renderCompare(){
   while(state.v9.compare.length<3)state.v9.compare.push(defaults[state.v9.compare.length]||current);
   const list=state.v9.compare;
   const options=Object.keys(ROLE_CONFIG).sort();
-  let h=`<div class="v9-hero2"><h2>⚖️ Compare Careers</h2><p>Compare career paths by skills, learning depth, projects and your current progress.</p></div>`;
+  let h=`<div class="v9-hero2"><h2>Compare Careers</h2><p>Compare career paths by skills, learning depth, projects and your current progress.</p></div>`;
   h+=`<div class="plan-actions"><button class="btn" onclick="navigate('careers')">Back to Explore IT Careers</button><button class="btn" onclick="navigate('discover')">Find roles that fit me</button></div>`;
   h+=`<div class="v9-selectgrid">`;
   [0,1,2].forEach(i=>h+=`<div class="card"><label class="small">Career ${i+1}</label><select style="width:100%;margin-top:5px" onchange="state.v9.compare[${i}]=this.value;save();renderCompare()">${options.map(r=>`<option ${list[i]===r?"selected":""}>${esc(r)}</option>`).join("")}</select></div>`);
@@ -6236,7 +6236,7 @@ function v9ResumeAnalyze(){
 function renderResume(){
   v9EnsureState();
   const score=Number(state.v9.resumeScore)||0, role=selectedRole();
-  let h=`<div class="v9-hero2"><h2>📄 Resume Analyzer</h2><p>Paste your resume text and MR.Career will check role alignment, structure and evidence. Keep the resume concise; the analyzer is a local heuristic, not an ATS guarantee.</p></div>`;
+  let h=`<div class="v9-hero2"><h2>Resume Analyzer</h2><p>Paste your resume text and MR.Career will check role alignment, structure and evidence. Keep the resume concise; the analyzer is a local heuristic, not an ATS guarantee.</p></div>`;
   h+=`<div class="card"><textarea id="resumeText" style="width:100%;min-height:260px" placeholder="Paste your resume text here...">${esc(state.v9.resumeText||"")}</textarea><div class="v6-actions"><button class="btn primary" onclick="state.v9.resumeText=document.getElementById('resumeText').value;v9ResumeAnalyze()">Analyze for ${esc(role)}</button><button class="btn" onclick="state.v9.resumeText='';state.v9.resumeScore=0;save();renderResume()">Clear</button></div></div>`;
   if(score){
     const hits=state.v9.resumeHits||[];
