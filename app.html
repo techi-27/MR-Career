@@ -3093,6 +3093,74 @@ html body button.sidebar-toggle-tab:focus-visible{
 }
 </style>
 
+
+<style id="v14-4-fix-toggle-specificity-and-dashboard-overflow">
+/* Final high-specificity override so older sidebar rules cannot turn the round toggle back into a tab. */
+html body button.sidebar-toggle-tab,
+html body.sidebar-collapsed button.sidebar-toggle-tab,
+html body:not(.sidebar-collapsed) button.sidebar-toggle-tab{
+  border-radius:50% !important;
+  background:#fff !important;
+  color:#5b3eaa !important;
+  border:1px solid #ded8f5 !important;
+  box-shadow:0 3px 12px rgba(48,32,94,.18) !important;
+  overflow:hidden !important;
+}
+html body button.sidebar-toggle-tab:hover,
+html body.sidebar-collapsed button.sidebar-toggle-tab:hover{
+  background:#f1edff !important;
+  color:#4e3299 !important;
+  border-color:#c9b9f3 !important;
+}
+/* Prevent the header controls and career-growth grid from forcing horizontal page overflow. */
+html,body{max-width:100%;overflow-x:hidden}
+html body .main{
+  box-sizing:border-box !important;
+  min-width:0 !important;
+  max-width:100% !important;
+}
+html body .topbar{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  min-width:0 !important;
+  max-width:100% !important;
+}
+html body .topbar .top-left{flex:1 1 300px;min-width:0}
+html body .topbar .actions{
+  display:flex !important;
+  flex:1 1 460px;
+  min-width:0 !important;
+  max-width:100% !important;
+  flex-wrap:wrap !important;
+  align-items:center;
+}
+html body .topbar .actions > *{min-width:0}
+html body #headerRolePicker{flex:1 1 220px;min-width:0;max-width:100%}
+html body #headerRolePicker > .header-role-trigger{max-width:100%}
+html body .cg-welcome{
+  grid-template-columns:minmax(0,1.45fr) minmax(0,.85fr) !important;
+  min-width:0 !important;
+  max-width:100% !important;
+}
+html body .cg-welcome-copy,
+html body .cg-role-preview,
+html body .cg-metrics > *,
+html body .cg-focus-grid > *,
+html body .cg-bottom-path > *{min-width:0;max-width:100%}
+html body .cg-metrics{grid-template-columns:repeat(4,minmax(0,1fr)) !important}
+@media(max-width:1100px){
+  html body .cg-welcome{grid-template-columns:minmax(0,1fr) !important}
+  html body .cg-role-preview{width:100%}
+  html body .cg-metrics{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+}
+@media(max-width:760px){
+  html body .topbar .actions{flex:1 1 100%}
+  html body .cg-metrics{grid-template-columns:minmax(0,1fr) !important}
+  html body .cg-welcome{padding:20px !important}
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
