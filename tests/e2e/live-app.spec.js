@@ -248,6 +248,21 @@ test('missed study sessions can be moved to catch-up', async ({ page }) => {
   await expect(page.locator('.study-day-cell.status-rescheduled').first()).toBeVisible();
 });
 
+test('mobile navigation can open and close the off-canvas sidebar', async ({ page }) => {
+  await openApp(page);
+  const trigger = page.locator('.mobile-menu-trigger');
+  const sidebar = page.locator('#appSidebar');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(trigger).toBeVisible();
+  await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+  await trigger.click();
+  await expect(sidebar).toHaveClass(/mobile-open/);
+  await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  await page.locator('#mobileOverlay').click({ position: { x: 300, y: 300 } });
+  await expect(sidebar).not.toHaveClass(/mobile-open/);
+  await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+});
+
 test('planner rejects invalid calendar dates without creating a plan', async ({ page }) => {
   await openApp(page);
   await chooseRole(page, 'Platform Engineer');
