@@ -268,6 +268,26 @@ test('Reset asks for confirmation and returns to first-run role setup', async ({
   expect(storedRole).toBe('');
 });
 
+test('roadmap avoids duplicate tools and core guidance is visible', async ({ page }) => {
+  await openApp(page);
+  await chooseRole(page, 'Platform Engineer');
+
+  await page.evaluate(() => window.navigate('roadmap'));
+  await expect(page.getByRole('button', { name: 'Build study plan' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Practice labs' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Certification guidance' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Explore technologies' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Skill dependencies' })).toHaveCount(0);
+
+  await page.evaluate(() => window.navigate('interview'));
+  await expect(page.getByText(/self-assessed, not an AI evaluation/i)).toBeVisible();
+  await expect(page.getByText(/Context/).first()).toBeVisible();
+  await expect(page.getByText('Answer outline you can follow')).toBeVisible();
+
+  await page.evaluate(() => window.navigate('readiness'));
+  await expect(page.getByText(/65% role-skill progress \+ 20% hands-on lab completion \+ 15% interview self-assessment/i)).toBeVisible();
+});
+
 test('public information pages load and navigation CTA is visible', async ({ page }) => {
   const pages = [
     { file: 'index.html', title: /MR\.Career/i },
