@@ -3655,6 +3655,41 @@ html body .v8-step:has(> button) > div:nth-child(2) {
 }
 </style>
 
+
+<style id="v14-32-fix-roadmap-learn-button-width">
+/* The screenshot's narrow buttons belong to the Recommended Learning Journey timeline. */
+html body .v6-timeline-item .v6-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+html body .v6-timeline-item .v6-actions > button.btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: 104px !important;
+  min-height: 42px !important;
+  max-width: 100% !important;
+  padding: 10px 16px !important;
+  white-space: nowrap !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  line-height: 1.25 !important;
+}
+@media (max-width: 640px) {
+  html body .v6-timeline-item .v6-actions > button.btn {
+    min-width: 96px !important;
+    padding: 9px 12px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
