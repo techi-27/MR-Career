@@ -3051,6 +3051,48 @@ body.sidebar-collapsed .sidebar-toggle-tab{
 }
 </style>
 
+
+<style id="v14-3-floating-sidebar-toggle">
+/* Replace the protruding rectangular tab with a compact floating circular control. */
+html body button.sidebar-toggle-tab{
+  box-sizing:border-box !important;
+  border:1px solid #ded8f5 !important;
+  border-radius:50% !important;
+  background:#fff !important;
+  color:#5b3eaa !important;
+  box-shadow:0 3px 12px rgba(48,32,94,.18) !important;
+  padding:0 !important;
+  font-family:Arial,sans-serif !important;
+  font-size:21px !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  cursor:pointer !important;
+  transition:background .16s ease,box-shadow .16s ease,transform .16s ease !important;
+}
+html body button.sidebar-toggle-tab:hover{
+  background:#f1edff !important;
+  border-color:#c9b9f3 !important;
+  box-shadow:0 4px 14px rgba(48,32,94,.23) !important;
+  transform:scale(1.04);
+}
+html body button.sidebar-toggle-tab:focus-visible{
+  outline:3px solid rgba(114,82,199,.3) !important;
+  outline-offset:2px !important;
+}
+@media(max-width:760px){
+  html body button.sidebar-toggle-tab{
+    top:18px !important;
+    border-radius:50% !important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html body button.sidebar-toggle-tab{transition:none !important}
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -3571,9 +3613,10 @@ function syncSidebarToggle(){
   btn.setAttribute("aria-label",expanded?"Collapse sidebar":"Expand sidebar");
   btn.title=expanded?"Collapse sidebar":"Expand sidebar";
   /* Deterministic coordinates avoid stale/transformed sidebar measurements and conflicting legacy CSS. */
-  const handleWidth=mobile?36:30;
-  const sidebarWidth=mobile?Math.min(292,window.innerWidth*0.88):(expanded?276:78);
-  const left=mobile?(expanded?Math.max(0,sidebarWidth-handleWidth):0):Math.max(0,sidebarWidth-handleWidth/2);
+  const handleWidth=mobile?36:34;
+  /* Match the compact sidebar dimensions used by the current purple theme. */
+  const sidebarWidth=mobile?Math.min(260,window.innerWidth*0.88):(expanded?238:66);
+  const left=mobile?(expanded?Math.max(0,sidebarWidth-handleWidth/2):8):Math.max(0,sidebarWidth-handleWidth/2);
   btn.style.setProperty("position","fixed","important");
   btn.style.setProperty("left",left+"px","important");
   btn.style.setProperty("right","auto","important");
