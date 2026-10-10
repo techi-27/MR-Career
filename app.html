@@ -5145,40 +5145,84 @@ function shouldShowCommandPanel(role,domain,commands){
   return !["Design & Product"].includes(family);
 }
 
+function learningWorkspaceState(domain,i){
+ const key=topicKey(domain,i);
+ if(!state.topics[key])state.topics[key]={};
+ const t=state.topics[key];
+ t.learningChecklist=t.learningChecklist&&typeof t.learningChecklist==="object"?t.learningChecklist:{};
+ t.learningNotes=typeof t.learningNotes==="string"?t.learningNotes:"";
+ t.practiceAnswer=typeof t.practiceAnswer==="string"?t.practiceAnswer:"";
+ t.reflection=typeof t.reflection==="string"?t.reflection:"";
+ return t;
+}
+function saveLearningField(domain,i,field,value){
+ const t=learningWorkspaceState(domain,i);
+ t[field]=value;
+ save();
+ const status=document.getElementById("learningSaveStatus");
+ if(status)status.textContent="Saved in this browser";
+}
+function toggleLearningCheckpoint(domain,i,index,checked){
+ const t=learningWorkspaceState(domain,i);
+ t.learningChecklist[String(index)]=!!checked;
+ const done=Object.values(t.learningChecklist).filter(Boolean).length;
+ const total=Number(document.getElementById("learningCheckpointTotal")?.dataset.total)||3;
+ const progress=Math.max(Number(t.progress)||0,Math.round(done/total*70));
+ updateTopic(domain,i,"progress",progress);
+ const summary=document.getElementById("learningCheckpointSummary");
+ if(summary)summary.textContent=done+" of "+total+" learning checkpoints complete";
+ const bar=document.getElementById("learningCheckpointBar");
+ if(bar)bar.style.width=Math.min(100,Math.round(done/total*100))+"%";
+}
 function openLearning(domain,i){
- // Explicitly record the selected learning target so the action is visible and consistent.
  state.v9=state.v9||{};
  state.v9.activeLearning={domain,index:Number(i),role:selectedRole(),openedAt:new Date().toISOString()};
  save();
  const t=getTopic(domain,i), d=CURRICULUM.domains.find(x=>x.name===domain), det=t.details||{}, role=selectedRole();
+ const saved=learningWorkspaceState(domain,i);
  const modal=document.createElement("div"); modal.className="learning-modal"; modal.id="learningModal";
  const baseCommands=det.commands||[];
  const commands=roleCommands(role,domain);
  const effectiveCommands=commands.length?commands:baseCommands;
  const showCommands=shouldShowCommandPanel(role,domain,effectiveCommands);
- const commandHtml=showCommands?`<div class="detail-box"><h3>⌨️ ${roleFamily(role)==='Data & AI'||domain==='28 Databases & SQL'?'Commands / queries':'Commands & tools'}</h3><div class="code-list">${effectiveCommands.map(x=>esc(x)).join("\n")||'No command-line work is required for this topic at your current role level.'}</div><p class="small" style="margin-top:8px">Shown specifically for <b>${esc(role)}</b>. Other roles may use different tools or may not need command-line practice for this topic.</p></div>`:'';
- const learn=(det.learn||[]).map(x=>`<li>${esc(x)}</li>`).join("");
- const interviews=(det.interview||[]).map((q,n)=>`<div class="interview-card"><b>Q${n+1}. ${esc(q)}</b><div class="small">Prepare a 2–3 minute answer with architecture, practical examples, failure modes and role-specific tools.</div></div>`).join("");
- const quizzes=(det.quiz||[]).map((q,n)=>`<div class="quiz-card" id="q${n}"><div class="quiz-q">Q${n+1}. ${esc(q)}</div><div class="answer"><b>How to answer:</b> Explain the concept, give one practical example and mention the role-appropriate tool or workflow.</div><div class="detail-actions"><button class="btn" onclick="this.parentElement.parentElement.classList.toggle('revealed')">Reveal guidance</button></div></div>`).join("");
+ const learnItems=(det.learn||[]).filter(Boolean);
+ const lessonPoints=learnItems.length?learnItems.slice(0,6):[t.topic,"Core concepts and terminology","Common workflows and practical use"];
+ const checkpoints=[
+  {title:"Understand the concept",desc:"Explain "+t.topic+" in your own words, without copying the definition."},
+  {title:"Connect it to the role",desc:"Describe where "+t.topic+" appears in a real "+role+" task or system."},
+  {title:"Apply it in practice",desc:"Complete the exercise below and record evidence or the result."}
+ ];
+ const learn=lessonPoints.map(x=>`<li>${esc(x)}</li>`).join("");
+ const checkpointsHtml=checkpoints.map((x,n)=>`<label class="learning-checkpoint"><input type="checkbox" ${saved.learningChecklist[String(n)]?"checked":""} onchange="toggleLearningCheckpoint(${esc(jsArg(domain))},${i},${n},this.checked)"><span><b>${esc(x.title)}</b><small>${esc(x.desc)}</small></span></label>`).join("");
+ const interviews=(det.interview||[]).map((q,n)=>`<div class="interview-card"><b>Q${n+1}. ${esc(q)}</b><textarea class="learning-answer" rows="3" placeholder="Write your answer, example and trade-offs..." onchange="saveLearningField(${esc(jsArg(domain))},${i},'reflection',this.value)">${n===0?esc(saved.reflection):""}</textarea><div class="small">Try answering without looking at notes first.</div></div>`).join("");
+ const quizzes=(det.quiz||[]).map((q,n)=>`<div class="quiz-card learning-quiz" id="learningQuiz${n}"><div class="quiz-q">Check ${n+1}. ${esc(q)}</div><textarea class="learning-answer" rows="2" placeholder="Write your answer before revealing the self-check..." id="learningQuizAnswer${n}"></textarea><div class="detail-actions"><button class="btn" onclick="document.getElementById('learningQuizGuide${n}').hidden=false">Show self-check guide</button></div><div class="learning-selfcheck" id="learningQuizGuide${n}" hidden><b>Self-check:</b> Did you define the concept, explain when it is useful, give a concrete example, and mention one limitation or common mistake? Revise your answer if any part is missing.</div></div>`).join("");
  const weight=roleWeights()[domain]||0;
+ const completed=Object.values(saved.learningChecklist).filter(Boolean).length;
+ const practiceText=det.lab||("Create a small practical exercise that demonstrates "+t.topic+". Record the steps, expected result, actual result, and what you learned.");
  modal.innerHTML=`<div class="learning-panel"><div class="learning-panel-scroll">
-  <div class="learning-head"><div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px"><button class="btn" onclick="closeLearning()">Back to ${esc(domain)}</button><span class="badge">${esc(domain)} · ${esc(role)} · ${weight}% role weight</span></div><h2 style="margin-top:8px">${esc(t.topic)}</h2><div class="small">${esc(t.learn)}</div></div><button class="close-x" onclick="closeLearning()">×</button></div>
-  <div class="detail-grid">
-   <div class="detail-box"><h3>Context — Why this matters for ${esc(role)}</h3><p>${esc(det.context)}</p></div>
-   <div class="detail-box"><h3>What you need to learn</h3><ul>${learn}</ul></div>
-   ${commandHtml}
-   <div class="detail-box"><h3>Hands-on lab</h3><p>${esc(det.lab)}</p><p><b>Proof:</b> Add a README, architecture/design evidence, screenshots/results and GitHub link.</p></div>
-   <div class="detail-box"><h3>Exam / certification relevance</h3><p>${esc(det.exam)}</p></div>
-   <div class="detail-box"><h3>Your progress</h3><p>Status: <b>${esc(t.status)}</b> · Progress: <b>${pct(t)}%</b> · Actual hours: <b>${Number(t.actualHours)||0}</b></p>
-    <div class="progress"><span style="width:${pct(t)}%"></span></div>
-    <div class="detail-actions"><button class="btn primary" onclick="quickComplete(${esc(jsArg(domain))},${i})">Mark Completed</button><button class="btn" onclick="quickProgress(${esc(jsArg(domain))},${i},50)">Set 50%</button><button class="btn" onclick="quickProgress(${esc(jsArg(domain))},${i},100)">Set 100%</button></div>
-   </div>
+  <div class="learning-head"><div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px"><button class="btn" onclick="closeLearning()">Back to ${esc(domain)}</button><span class="badge">${esc(domain)} · ${esc(role)} · ${weight}% role weight</span></div><h2 style="margin-top:8px">${esc(t.topic)}</h2><div class="small">${esc(t.learn||"Guided learning session")}</div></div><button class="close-x" onclick="closeLearning()">×</button></div>
+  <section class="learning-start-card">
+   <div class="learning-start-top"><div><div class="learning-eyebrow">GUIDED LEARNING SESSION</div><h3>Learn it, practise it, prove it</h3><p>Work through the checkpoints, try the exercise, then test whether you can explain the topic without help.</p></div><div class="learning-time-chip">Suggested: 30–45 min</div></div>
+   <div class="learning-session-steps"><span>1. Understand</span><span>2. Practise</span><span>3. Check yourself</span><span>4. Record learning</span></div>
+  </section>
+  <div class="learning-progress-card"><div><b>Your learning checkpoints</b><span id="learningCheckpointSummary">${completed} of 3 learning checkpoints complete</span></div><div class="progress"><span id="learningCheckpointBar" style="width:${Math.round(completed/3*100)}%"></span></div><span id="learningCheckpointTotal" data-total="3" hidden></span></div>
+  <div class="learning-curriculum-grid">
+   <section class="detail-box"><div class="learning-section-kicker">01 · UNDERSTAND</div><h3>Why this matters for ${esc(role)}</h3><p>${esc(det.context||roleContext(role,domain))}</p><h4>By the end, you should be able to</h4><ul><li>Explain ${esc(t.topic)} clearly in your own words.</li><li>Recognize when and why a ${esc(role)} uses it.</li><li>Apply it in a practical scenario and explain the result.</li></ul></section>
+   <section class="detail-box"><div class="learning-section-kicker">02 · LEARN THE CONCEPTS</div><h3>What to cover</h3><ul class="learning-topic-list">${learn}</ul><p class="small">Use these as a checklist, not just a reading list. Pause after each concept and explain it back in your own words.</p>${showCommands?`<h4>${roleFamily(role)==='Data & AI'||domain==='28 Databases & SQL'?'Commands / queries':'Tools to try'}</h4><div class="code-list">${effectiveCommands.map(x=>esc(x)).join("\n")||"No command-line practice required for this topic."}</div>`:""}</section>
+   <section class="detail-box"><div class="learning-section-kicker">03 · HANDS-ON PRACTICE</div><h3>Complete a practical exercise</h3><p>${esc(practiceText)}</p><ol><li>Write down the problem you are trying to solve.</li><li>Complete the task in a small, safe environment.</li><li>Capture the result and explain why it worked.</li><li>Record one issue you encountered and how you fixed it.</li></ol><div class="learning-proof-note"><b>Evidence to keep</b><span>Commands or steps, output/screenshots, a short README, and lessons learned. Add a GitHub link when appropriate.</span></div></section>
+   <section class="detail-box"><div class="learning-section-kicker">04 · CHECK YOUR UNDERSTANDING</div><h3>Mark each checkpoint as you complete it</h3><div class="learning-checkpoints">${checkpointsHtml}</div><div class="detail-actions"><button class="btn" onclick="quickProgress(${esc(jsArg(domain))},${i},50)">Save as in progress (50%)</button></div></section>
   </div>
-  <div class="section"><div class="section-title"><h2>Topic Quiz</h2><span class="small">Use before marking the topic completed</span></div><div class="detail-grid">${quizzes}</div></div>
-  <div class="section"><div class="section-title"><h2>Interview Preparation</h2><span class="small">Answer aloud; then write your best answer in Notes</span></div><div class="detail-grid">${interviews}</div></div>
+  <section class="detail-box learning-notes-box"><div class="learning-section-kicker">05 · PERSONAL LEARNING NOTES</div><h3>What did you learn today?</h3><p>Keep a short record so you can resume later without wondering what you already covered.</p><label for="learningNotes"><b>My notes</b></label><textarea id="learningNotes" class="learning-answer" rows="6" placeholder="Today I learned…
+An example I can explain…
+Something I still find confusing…
+Next thing to practise…" oninput="saveLearningField(${esc(jsArg(domain))},${i},'learningNotes',this.value)">${esc(saved.learningNotes)}</textarea><div class="learning-notes-footer"><span id="learningSaveStatus">Saved in this browser</span><button class="btn" onclick="saveLearningField(${esc(jsArg(domain))},${i},'learningNotes',document.getElementById('learningNotes').value)">Save notes</button></div></section>
+  <div class="section"><div class="section-title"><h2>Knowledge check</h2><span class="small">Answer first, then use the self-check guide</span></div><div class="detail-grid">${quizzes}</div></div>
+  <div class="section"><div class="section-title"><h2>Explain it like an interview</h2><span class="small">Practise explaining the topic, not memorizing a definition</span></div><div class="detail-grid">${interviews||'<div class="detail-box"><p>Explain the topic, give a real example, and describe one failure mode or trade-off.</p></div>'}</div></div>
+  <section class="learning-finish-card"><div><h3>Ready to record this learning session?</h3><p>Mark complete when you can explain the concept and have attempted the practical exercise. You can return to your notes any time.</p><p class="small">Current status: <b>${esc(t.status)}</b> · ${pct(t)}% complete · ${Number(t.actualHours)||0} actual hours</p></div><div class="detail-actions"><button class="btn" onclick="quickProgress(${esc(jsArg(domain))},${i},50)">Keep in progress</button><button class="btn primary" onclick="quickComplete(${esc(jsArg(domain))},${i})">I learned this topic</button></div></section>
  </div></div>`;
  document.body.appendChild(modal);
 }
+
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeLearning()});
 function closeLearning(){document.getElementById("learningModal")?.remove()}
 function quickComplete(domain,i){updateTopic(domain,i,"status","Completed");updateTopic(domain,i,"progress",100);closeLearning();renderCurrent()}
@@ -7400,6 +7444,50 @@ html body #content .recommendation-list .rec-row>.small{
  html body #content .recommendation-list .rec-row .rec-why{grid-column:2!important;grid-row:3!important}
  html body #content .recommendation-list .rec-row>.small{grid-column:2!important;grid-row:4!important}
 }
+</style>
+
+<style id="v14-37-guided-learning-workspace">
+html body .learning-start-card{padding:20px 22px;margin:0 0 16px;border:1px solid #d6e4f6;border-radius:16px;background:linear-gradient(120deg,#eaf2ff,#eaf8f5)}
+html body .learning-start-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+html body .learning-eyebrow,.learning-section-kicker{font-size:10px;font-weight:850;letter-spacing:.09em;color:#527bb6}
+html body .learning-start-card h3{margin:5px 0 7px;font-size:21px;line-height:1.3}
+html body .learning-start-card p{margin:0;max-width:720px;font-size:13px;line-height:1.6;color:#526984}
+html body .learning-time-chip{flex:0 0 auto;border-radius:999px;background:#fff;padding:8px 11px;font-size:11px;font-weight:750;color:#355c91}
+html body .learning-session-steps{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+html body .learning-session-steps span{padding:6px 9px;background:rgba(255,255,255,.8);border:1px solid #dce7f5;border-radius:8px;font-size:11px;font-weight:750;color:#355477}
+html body .learning-progress-card{padding:14px 16px;margin-bottom:16px;border:1px solid #e0e7f1;border-radius:13px;background:#fff}
+html body .learning-progress-card>div:first-child{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:9px}
+html body .learning-progress-card b{font-size:13px} html body .learning-progress-card span{font-size:11px;color:#61748e}
+html body .learning-progress-card .progress{height:7px;margin:0}
+html body .learning-curriculum-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+html body .learning-curriculum-grid .detail-box{min-width:0;padding:19px;border:1px solid #dfe7f1;border-radius:15px;background:#fff}
+html body .learning-curriculum-grid .learning-section-kicker{margin-bottom:8px}
+html body .learning-curriculum-grid .detail-box h3{margin:0 0 10px;font-size:17px;line-height:1.35}
+html body .learning-curriculum-grid .detail-box h4{margin:16px 0 7px;font-size:13px}
+html body .learning-curriculum-grid .detail-box p,html body .learning-curriculum-grid .detail-box li{font-size:13px;line-height:1.65;color:#52647e}
+html body .learning-curriculum-grid .detail-box ul,html body .learning-curriculum-grid .detail-box ol{padding-left:20px}
+html body .learning-topic-list li{margin-bottom:5px}
+html body .learning-proof-note{display:flex;flex-direction:column;gap:5px;margin-top:14px;padding:11px 12px;border-radius:10px;background:#f0f5fc;color:#3b5577;font-size:12px;line-height:1.55}
+html body .learning-checkpoints{display:grid;gap:9px}
+html body .learning-checkpoint{display:flex;align-items:flex-start;gap:10px;padding:11px;border:1px solid #e0e7f0;border-radius:10px;cursor:pointer}
+html body .learning-checkpoint input{width:17px;height:17px;flex:0 0 auto;margin-top:2px;accent-color:#527bc3}
+html body .learning-checkpoint span{display:flex;flex-direction:column;gap:4px}
+html body .learning-checkpoint b{font-size:12px}
+html body .learning-checkpoint small{font-size:11px;line-height:1.5;color:#63758d}
+html body .learning-notes-box{margin-top:15px;padding:19px;border:1px solid #dfe7f1;border-radius:15px;background:#fff}
+html body .learning-notes-box h3{margin:4px 0 7px}
+html body .learning-notes-box>p{font-size:12px;line-height:1.5;color:#60738c}
+html body .learning-answer{display:block;width:100%;box-sizing:border-box;min-width:0;margin:8px 0;padding:11px 12px;border:1px solid #d7e1ef;border-radius:10px;background:#fff;color:#243752;font:inherit;font-size:13px;line-height:1.6;resize:vertical}
+html body .learning-notes-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}
+html body .learning-notes-footer span{font-size:11px;color:#52775e}
+html body .learning-selfcheck{margin-top:10px;padding:11px;border-radius:9px;background:#edf5ff;color:#3c5779;font-size:12px;line-height:1.6}
+html body .learning-quiz .detail-actions{margin-top:8px}
+html body .learning-finish-card{display:flex;justify-content:space-between;align-items:center;gap:18px;margin:16px 0 5px;padding:19px;border:1px solid #d8e5f4;border-radius:15px;background:#f5f8fd}
+html body .learning-finish-card h3{margin:0 0 6px;font-size:16px}
+html body .learning-finish-card p{margin:0 0 6px;font-size:12px;line-height:1.55;color:#60738c}
+html body .learning-finish-card .detail-actions{flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:850px){html body .learning-curriculum-grid{grid-template-columns:minmax(0,1fr)}html body .learning-finish-card{align-items:stretch;flex-direction:column}html body .learning-finish-card .detail-actions{justify-content:flex-start}}
+@media(max-width:560px){html body .learning-start-top{flex-direction:column}html body .learning-time-chip{align-self:flex-start}html body .learning-progress-card>div:first-child{align-items:flex-start;flex-direction:column;gap:4px}html body .learning-notes-footer{align-items:stretch;flex-direction:column}}
 </style>
 </body>
 </html>
