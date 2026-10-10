@@ -6762,5 +6762,109 @@ html body .sidebar::-webkit-scrollbar-thumb{background:#cbd5e1!important;border:
 html body .sidebar::-webkit-scrollbar-thumb:hover{background:#98a6b8!important}
 </style>
 
+<style id="v14-24-home-about-design-system">
+/* Align the workspace with index.html and about.html: soft neutral canvas, white surfaces, navy type, coral-to-blue brand accents. */
+:root{
+  --bg:#f7f8fb!important;--card:#ffffff!important;--ink:#172747!important;--muted:#64748b!important;--line:#e2e8f0!important;
+  --brand:#172747!important;--brand2:#ff5b55!important;--brand3:#ffd900!important;--soft:#edf5ff!important;
+  --shadow:0 8px 25px rgba(16,24,40,.055)!important;--radius:16px!important;
+}
+html body{background:#f7f8fb!important;color:#172747!important}
+html body .main{background:transparent!important}
+html body .topbar{
+  background:rgba(255,255,255,.94)!important;border:1px solid #e2e8f0!important;
+  box-shadow:0 5px 18px rgba(16,24,40,.035)!important;backdrop-filter:blur(12px)!important;
+}
+html body h1,html body h2,html body h3{color:#172747}
+html body .subtitle,html body .small{color:#64748b}
+html body .btn{
+  border:1px solid #cbd5e1!important;background:#ffffff!important;color:#172747!important;
+  border-radius:12px!important;box-shadow:none!important;transition:transform .15s ease,box-shadow .15s ease,background .15s ease!important;
+}
+html body .btn:hover{transform:translateY(-1px);box-shadow:0 5px 14px rgba(23,39,71,.08)!important}
+html body .btn.primary,html body button.btn.primary,html body .cg-welcome-actions .btn.primary{
+  background:linear-gradient(135deg,#ff5b55 0%,#4e91d9 100%)!important;color:#ffffff!important;
+  border-color:transparent!important;box-shadow:0 8px 22px rgba(78,145,217,.16)!important;
+}
+html body .btn.danger{color:#b42318!important;background:#fff!important;border-color:#f2c7c4!important}
+html body .card,html body .cg-metric,html body .cg-panel,html body .cg-role-preview,
+html body .cg-skill-list,html body .table-wrap,html body .role-option,html body .quiz-card,
+html body .interview-card,html body .lab-card,html body .exam-card{
+  background:#ffffff!important;border-color:#e2e8f0!important;box-shadow:0 5px 20px rgba(16,24,40,.035)!important;
+}
+html body th{background:#f8fafc!important;color:#475569!important}
+html body td input,html body td select,html body td textarea,
+html body .controls input,html body .controls select,html body .role-select{
+  border-color:#d8e0eb!important;color:#172747!important;
+}
+html body .progress,html body .v6-progress,html body .cg-progress-track,html body .cg-mini-track{
+  background:#e7edf5!important;
+}
+html body .progress>span,html body .v6-progress>span,html body .v6-progress>div{
+  background:linear-gradient(90deg,#ff5b55 0%,#ffd900 52%,#4e91d9 100%)!important;
+}
+html body .badge{background:#e8f2ff!important;color:#245b91!important}
+html body .notice{background:#edf5ff!important;border-color:#d9e8f8!important;color:#24527c!important}
+html body .planner-hero{background:linear-gradient(115deg,#172747 0%,#244b77 68%,#4e91d9 100%)!important;box-shadow:0 12px 32px rgba(23,39,71,.12)!important}
+html body .planner-hero p,html body .planner-hero .field label{color:#e4eaf4!important}
+html body .planner-hero .btn.primary{background:linear-gradient(135deg,#ff5b55 0%,#4e91d9 100%)!important;color:#fff!important}
+
+/* Dashboard welcome panel uses the same subtle, light hero treatment as the public homepage. */
+html body .cg-welcome{
+  background:
+    radial-gradient(ellipse at 84% 22%,rgba(78,145,217,.10) 0,rgba(78,145,217,0) 34%),
+    radial-gradient(ellipse at 7% 72%,rgba(255,91,85,.065) 0,rgba(255,91,85,0) 32%),
+    linear-gradient(180deg,#ffffff 0%,#f8faff 48%,#f1f5fb 100%)!important;
+  border:1px solid #e2e8f0!important;box-shadow:0 10px 32px rgba(23,39,71,.045)!important;
+}
+html body .cg-eyebrow,html body .cg-section-kicker{color:#b93832!important}
+html body .cg-eyebrow-dot{background:#ff5b55!important;box-shadow:0 0 0 4px #fff0ee!important}
+html body .cg-welcome h2,html body .cg-section-heading h2,html body .cg-panel h2,
+html body .cg-bottom-path h2,html body .cg-role-preview h3{color:#172747!important}
+html body .cg-welcome h2 span,html body .cg-welcome h2 em{color:#ff5b55!important}
+html body .cg-welcome-copy>p,html body .cg-section-heading p,html body .cg-bottom-path p{color:#64748b!important}
+html body .cg-role-preview{border-color:#e2e8f0!important;background:rgba(255,255,255,.96)!important;box-shadow:0 5px 18px rgba(23,39,71,.04)!important}
+html body .cg-icon-action{border-color:#e2e8f0!important;color:#244b77!important}
+html body .cg-readiness-row strong,html body .cg-text-link{color:#245b91!important}
+html body .cg-progress-track span,html body .cg-mini-track span{background:linear-gradient(90deg,#ff5b55 0%,#ffd900 52%,#4e91d9 100%)!important}
+html body .cg-metric-value{color:#172747!important}
+html body .cg-purple{background:#fff0ee!important;color:#b93832!important}
+html body .cg-blue{background:#e8f2ff!important;color:#245b91!important}
+html body .cg-teal{background:#e3f8f4!important;color:#138a79!important}
+html body .cg-amber{background:#fff3df!important;color:#a66a13!important}
+html body .cg-journey-step{border-color:#e2e8f0!important;color:#172747!important}
+html body .cg-journey-step:hover{border-color:#b8d4f3!important;box-shadow:0 7px 18px rgba(36,75,119,.06)!important}
+html body .cg-journey-step.is-current{border-color:#c9dff7!important;background:#f4f8ff!important}
+html body .cg-step-number{background:#e8f2ff!important;color:#245b91!important}
+html body .cg-step-arrow{color:#4e91d9!important}
+html body .cg-panel-symbol,html body .cg-profile-icon,html body .cg-detail-icon{background:#e8f2ff!important;color:#245b91!important}
+html body .cg-action-detail{border-color:#e2e8f0!important;background:#f8fafc!important}
+html body .cg-skill-rank{color:#4e91d9!important}
+html body .cg-skill-open{border-color:#d9e8f8!important;background:#edf5ff!important;color:#245b91!important}
+html body .role-option.selected{border-color:#4e91d9!important;background:#f1f7ff!important;box-shadow:0 8px 20px rgba(78,145,217,.09)!important}
+html body .gap-chip{background:#fff3df!important;color:#92520b!important;border-color:#f8dfba!important}
+
+/* Sidebar matches the public pages' light navigation and brand palette. */
+html body .app>.sidebar,html body aside.sidebar,html body .sidebar{
+  background:#ffffff!important;background-image:none!important;background-color:#ffffff!important;
+  border-right:1px solid #e6eaf0!important;box-shadow:2px 0 12px rgba(23,39,71,.035)!important;color:#172747!important;
+}
+html body .sidebar .brand,html body .sidebar .brand .brand-name{color:#172747!important}
+html body .sidebar .brand small{color:#667085!important}
+html body .sidebar .mini{color:#7b8798!important}
+html body .sidebar .nav button,html body .sidebar .nav button .nav-icon{color:#475467!important}
+html body .sidebar .nav button{background:transparent!important;border:1px solid transparent!important;box-shadow:none!important}
+html body .sidebar .nav button:hover{background:#f3f6fb!important;border-color:#e9eef6!important;color:#172747!important}
+html body .sidebar .nav button.active{background:#edf4ff!important;background-image:none!important;border-color:#dce8fb!important;color:#172747!important;box-shadow:inset 3px 0 0 #ff5b55!important}
+html body .sidebar .nav button.active .nav-icon{color:#244b77!important}
+html body .sidebar .brand .brand-sidebar-toggle{background:linear-gradient(135deg,#ff5b55 0%,#4e91d9 100%)!important;border:1px solid rgba(23,39,71,.08)!important;color:#fff!important;box-shadow:0 2px 7px rgba(23,39,71,.13)!important}
+html body .sidebar .brand .brand-sidebar-toggle .hamburger-lines i{background:#fff!important}
+html body .sidebar::-webkit-scrollbar-thumb{background:#cbd5e1!important}
+@media(max-width:760px){
+  html body .topbar{border-radius:14px!important}
+  html body .cg-welcome{border-radius:17px!important}
+  html body .cg-welcome h2{font-size:28px}
+}
+</style>
 </body>
 </html>
