@@ -3909,7 +3909,7 @@ html body .v9-project > textarea { min-height:64px!important;border:1px solid #d
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
 <div class="app">
-<aside class="sidebar">
+<aside class="sidebar" id="appSidebar">
   <div class="brand"><button type="button" class="brand-mark brand-sidebar-toggle" onclick="toggleSidebar()" aria-label="Collapse sidebar" title="Collapse sidebar"><span class="hamburger-lines" aria-hidden="true"><i></i><i></i><i></i></span></button><span class="brand-name">MR.Career</span><small>Learn • Practice • Build • Get Hired</small></div>
   
   <div class="nav">
@@ -3927,6 +3927,7 @@ html body .v9-project > textarea { min-height:64px!important;border:1px solid #d
 <div id="mobileOverlay" onclick="closeMobileSidebar()"></div><main class="main">
   <div class="topbar">
     <div class="top-left">
+      <button type="button" class="mobile-menu-trigger" onclick="toggleSidebar()" aria-label="Open navigation" aria-expanded="false" aria-controls="appSidebar" title="Open navigation">☰</button>
       <div><h1 id="pageTitle">Dashboard</h1><div class="subtitle">Local-first career planner — your learning data stays in this browser.</div></div>
     </div>
     <div class="actions">
@@ -4405,14 +4406,14 @@ function applyTheme(){document.documentElement.removeAttribute("data-theme");}
 function decorateNav(){document.querySelectorAll(".nav button[data-view]").forEach(b=>{if(b.querySelector(".nav-icon, .nl"))return;const t=b.textContent.trim(),m=t.match(/^(\\S+)\\s+(.*)$/);if(!m)return;b.setAttribute("title",t);b.innerHTML=`<span class="ni" aria-hidden="true">${m[1]}</span><span class="nl">${m[2]}</span>`;});}
 try{applyTheme();decorateNav();}catch(e){}
 function syncSidebarToggle(){
-  /* Use the hamburger in the sidebar brand as the only toggle. */
   const btn=document.querySelector(".brand-sidebar-toggle");
+  const mobileBtn=document.querySelector(".mobile-menu-trigger");
   const sb=document.querySelector(".sidebar");
-  if(!btn||!sb)return;
+  if(!sb)return;
   const mobile=window.innerWidth<=760;
   const expanded=mobile?sb.classList.contains("mobile-open"):!document.body.classList.contains("sidebar-collapsed");
-  btn.setAttribute("aria-label",expanded?"Collapse sidebar":"Expand sidebar");
-  btn.title=expanded?"Collapse sidebar":"Expand sidebar";
+  if(btn){btn.setAttribute("aria-label",expanded?"Collapse sidebar":"Expand sidebar");btn.title=expanded?"Collapse sidebar":"Expand sidebar";}
+  if(mobileBtn){mobileBtn.setAttribute("aria-label",expanded?"Close navigation":"Open navigation");mobileBtn.title=expanded?"Close navigation":"Open navigation";mobileBtn.setAttribute("aria-expanded",String(expanded));mobileBtn.textContent=expanded?"×":"☰";}
 }
 function toggleSidebar(){
   const sb=document.querySelector(".sidebar");
@@ -4431,7 +4432,7 @@ function toggleSidebar(){
 }
 window.addEventListener("resize",syncSidebarToggle,{passive:true});
 window.addEventListener("DOMContentLoaded",syncSidebarToggle);
-function closeMobileSidebar(){document.querySelector(".sidebar").classList.remove("mobile-open");document.getElementById("mobileOverlay").style.display="none"}
+function closeMobileSidebar(){document.querySelector(".sidebar").classList.remove("mobile-open");document.getElementById("mobileOverlay").style.display="none";syncSidebarToggle();}
 
 function roleTopicRows(limit=12){
   const role=selectedRole(), weights=roleWeights();
@@ -7107,5 +7108,17 @@ html body .topbar .actions>.role-selector-label #headerRolePicker .header-role-t
 }
 </style>
 
+
+<style id="v14-30-mobile-navigation-accessibility">
+/* Mobile drawer needs an entry point outside the off-canvas sidebar. Desktop layout is unchanged. */
+.mobile-menu-trigger{display:none;}
+@media(max-width:760px){
+  html body .topbar .top-left{display:flex!important;align-items:center!important;gap:10px!important;width:100%!important;min-width:0!important;}
+  html body .mobile-menu-trigger{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 40px!important;width:40px!important;min-width:40px!important;height:40px!important;padding:0!important;border:1px solid #d7e1ee!important;border-radius:10px!important;background:#ffffff!important;color:#244b77!important;font-size:22px!important;font-weight:800!important;line-height:1!important;box-shadow:0 2px 7px rgba(23,39,71,.10)!important;}
+  html body .mobile-menu-trigger:focus-visible{outline:3px solid rgba(78,145,217,.45)!important;outline-offset:2px!important;}
+  html body .topbar .top-left>div{min-width:0!important;flex:1 1 auto!important;}
+  html body .topbar .top-left #pageTitle{overflow-wrap:anywhere!important;}
+}
+</style>
 </body>
 </html>
