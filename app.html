@@ -4171,7 +4171,6 @@ function handleRoleChange(role){
  const current=window.__itCareerCurrentView||"dashboard";
  state.settings={...(state.settings||{}),selectedRole:role};
  state.profile=state.profile||{};state.profile.targetRole=role;state.profile.updatedAt=new Date().toISOString();
- state.profile=state.profile||{};state.profile.targetRole=role;state.profile.updatedAt=new Date().toISOString();
  if(state.planner){state.planner.generated=false;state.planner.selected=state.planner.selected||{};state.planner.selectedRole=role;state.planner.dailyStatus=state.planner.dailyStatus||{};state.planner.recoveryTasks=state.planner.recoveryTasks||[];}
  if(state.v9?.switch)state.v9.switch.targetRole=role;
  save();updateRoleSelector();renderNav();renderRoute(current);
@@ -5224,6 +5223,14 @@ function formatDateMMDDYY(value){
  const match=String(value||"").trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
  return match?`${match[2]}/${match[3]}/${match[1].slice(-2)}`:"";
 }
+function isValidISODate(value){
+ const match=String(value||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+ if(!match)return false;
+ const year=Number(match[1]),month=Number(match[2]),day=Number(match[3]);
+ if(month<1||month>12||day<1||day>31)return false;
+ const date=new Date(0);date.setHours(0,0,0,0);date.setFullYear(year,month-1,day);
+ return date.getFullYear()===year&&date.getMonth()===month-1&&date.getDate()===day;
+}
 function parseDateMMDDYY(value){
  const raw=String(value||"").trim();
  if(!raw)return "";
@@ -5232,8 +5239,9 @@ function parseDateMMDDYY(value){
  const month=Number(m[1]),day=Number(m[2]);
  let year=Number(m[3]);
  if(m[3].length===2)year=year<70?2000+year:1900+year;
- const date=new Date(year,month-1,day);
- if(month<1||month>12||day<1||date.getFullYear()!==year||date.getMonth()!==month-1||date.getDate()!==day)return null;
+ if(month<1||month>12||day<1||day>31)return null;
+ const date=new Date(0);date.setHours(0,0,0,0);date.setFullYear(year,month-1,day);
+ if(date.getFullYear()!==year||date.getMonth()!==month-1||date.getDate()!==day)return null;
  return `${String(year).padStart(4,"0")}-${String(month).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
 }
 function dateInputHTML(value,action,extraAttrs=""){
@@ -5279,15 +5287,18 @@ function datePickerChanged(picker){
  commitDateInput(text);
 }
 function calculateEnd(start,duration,unit){
- if(!start||!duration)return "";
+ if(!isValidISODate(start)||!Number.isFinite(Number(duration))||Number(duration)<=0)return "";
  const d=new Date(start+"T00:00:00");
  if(unit==="days")return dateISO(addDays(d,Number(duration)-1));
  if(unit==="weeks")return dateISO(addDays(d,Number(duration)*7-1));
- return dateISO(addDays(addMonths(d,Number(duration)),-1));
+ if(unit==="months")return dateISO(addDays(addMonths(d,Number(duration)),-1));
+ return "";
 }
 function plannerDays(p){
- if(!p.startDate||!p.endDate)return 0;
- return Math.max(0,Math.floor((new Date(p.endDate)-new Date(p.startDate))/86400000)+1);
+ if(!p||!isValidISODate(p.startDate)||!isValidISODate(p.endDate)||p.endDate<p.startDate)return 0;
+ const start=Date.parse(p.startDate+"T00:00:00Z"),end=Date.parse(p.endDate+"T00:00:00Z");
+ if(!Number.isFinite(start)||!Number.isFinite(end))return 0;
+ return Math.floor((end-start)/86400000)+1;
 }
 function rolePriority(weight){const w=Number(weight)||0;return w>=14?"P0":w>=6?"P1":"P2";}
 function recommendedTopics(role){
@@ -5347,7 +5358,9 @@ function generatePlan(){
  const p=plannerState();
  if(!selectedRole()){alert("Choose a target role before generating a study plan.");return;}
  if(!p.startDate||!p.endDate){alert("Please select a start date and end date (or duration).");return;}
+ if(!isValidISODate(p.startDate)||!isValidISODate(p.endDate)){alert("Please choose valid start and end dates.");return;}
  if(p.endDate<p.startDate){alert("End date must be on or after the start date.");return;}
+ if(!plannerDays(p)){alert("The study plan dates are invalid. Please review the start and end dates.");return;}
  ensurePlannerSelections();
  if(!selectedPlannerTopics().length){alert("Select at least one learning domain for the study plan.");return;}
  p.selectedRole=selectedRole();p.generated=true;p.planCreatedAt=new Date().toISOString();
