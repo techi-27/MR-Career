@@ -3706,6 +3706,36 @@ html body .v6-timeline-item .v6-actions > button.btn {
 .career-quick-links button:hover,.career-journey-step:hover{border-color:#9db8ed;box-shadow:0 5px 16px rgba(25,50,90,.07)}
 @media(max-width:760px){.career-journey-steps,.career-quick-links{grid-template-columns:minmax(0,1fr)}}
 </style>
+<style id="v14-34-fix-project-completion-badge">
+/* Keep project checklist completion as a compact pill instead of a tall oval. */
+html body .v9-project > div:first-child {
+  align-items: flex-start !important;
+  min-width: 0 !important;
+}
+html body .v9-project .v9-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: max-content !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-width: 100% !important;
+  padding: 9px 13px !important;
+  border-radius: 999px !important;
+  white-space: nowrap !important;
+  writing-mode: horizontal-tb !important;
+  line-height: 1.3 !important;
+  box-sizing: border-box !important;
+}
+@media(max-width:600px) {
+  html body .v9-project .v9-badge {
+    padding: 7px 10px !important;
+    font-size: 12px !important;
+  }
+}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
