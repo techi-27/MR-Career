@@ -3796,6 +3796,14 @@ html body .v9-project .v9-badge {
 }
 </style>
 <style id="v14-36-career-paths-separate-feature">.career-paths-hero{margin-bottom:16px}.career-paths-current{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 18px;margin-bottom:20px}.career-paths-current h3{margin:4px 0}.career-paths-current p{margin:4px 0 0}.career-path-family{margin-top:20px}.career-path-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.career-path-card{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0;width:100%;min-height:112px;padding:14px;border:1px solid var(--line,#dce5f0);border-radius:14px;background:var(--card,#fff);color:var(--ink,#152747);text-align:left;cursor:pointer;box-sizing:border-box}.career-path-card.selected{border-color:#6b9df5;background:#f1f6ff;box-shadow:inset 0 0 0 1px #6b9df5}.career-path-name{font-size:14px;font-weight:750;line-height:1.35;overflow-wrap:anywhere}.career-path-meta{font-size:11px;color:var(--muted,#64748b)}.career-path-action{margin-top:auto;font-size:11px;font-weight:700;color:#3265bd}.career-path-card:hover{border-color:#8db3f4;transform:translateY(-1px)}@media(max-width:1000px){.career-path-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.career-path-grid{grid-template-columns:minmax(0,1fr)}.career-path-card{min-height:94px}.career-paths-current{align-items:flex-start;flex-direction:column}}</style>
+<style id="v14-37-simpler-deep-navigation">
+.workspace-tabs-simple{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 14px;margin:0 0 16px;border:1px solid var(--line,#dce5f0);border-radius:14px;background:var(--card,#fff)}
+.workspace-tabs-simple .workspace-tabs-label{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted,#64748b)}
+.workspace-tabs-simple .workspace-tabs-items{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.workspace-tabs-simple .workspace-tab{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:7px 11px;border:1px solid var(--line,#dce5f0);border-radius:9px;background:var(--card,#fff);color:var(--ink,#152747);font-size:12px;font-weight:650;cursor:pointer}
+.workspace-tabs-simple .workspace-tab:hover{border-color:#8db3f4;background:#f3f7ff}
+@media(max-width:600px){.workspace-tabs-simple{align-items:flex-start;flex-direction:column}.workspace-tabs-simple .workspace-tabs-items{width:100%}.workspace-tabs-simple .workspace-tab{max-width:100%;white-space:normal;text-align:left}}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -4900,39 +4908,28 @@ function stats(){
 }
 
 function renderWorkspaceTabs(view){
-  const groups = [
-    {name:"Explore IT Careers", views:[
-      {view:"careers",label:"Browse roles"},
-      {view:"discover",label:"Career discovery"},
-    ]},
-    {name:"My Career Plan", views:[
-      {view:"switch",label:"Switch plan"},
-      {view:"jobs",label:"Target role"},
-      {view:"planner",label:"Daily study calendar"}
-    ]},
-    {name:"Roadmap & Learning", views:[
-      {view:"roadmap",label:"Role roadmap"},
-      {view:"exams",label:"Certifications"}
-    ]},
-    {name:"Learn & Practice", views:[
-      {view:"labs",label:"Practice labs"},
-      {view:"interview",label:"Interview practice"}
-    ]},
-    {name:"Application Toolkit", views:[
-      {view:"resume",label:"Resume analyzer"},
-      {view:"jd",label:"Job description analyzer"}
-    ]},
-    {name:"Job Readiness", views:[
-      {view:"readiness",label:"Job readiness"}
-    ]},
-    {name:"My Progress", views:[
-      {view:"weekly",label:"Progress & next steps"}
-    ]}
-  ];  let current=String(view||"dashboard");
+  let current=String(view||"dashboard");
   if(current.startsWith("domain:"))current="roadmap";
-  const group=groups.find(g=>g.views.some(x=>x.view===current));
+  /* Keep only a couple of genuinely related destinations. The sidebar remains the main navigation. */
+  const related={
+    discover:{name:"Career discovery",items:[{view:"careerpaths",label:"Browse career paths"}]},
+    careerpaths:{name:"Career paths",items:[{view:"discover",label:"Not sure? Discover a role"}]},
+    roadmap:{name:"My journey",items:[{view:"planner",label:"Make a daily study plan"},{view:"labs",label:"Practise a skill"}]},
+    planner:{name:"Study plan",items:[{view:"roadmap",label:"View learning roadmap"}]},
+    switch:{name:"Career plan",items:[{view:"planner",label:"Create daily study plan"}]},
+    jobs:{name:"Target role",items:[{view:"careerpaths",label:"Choose a different role"}]},
+    labs:{name:"Learn & practise",items:[{view:"roadmap",label:"Back to learning roadmap"}]},
+    exams:{name:"Learning resources",items:[{view:"roadmap",label:"Back to learning roadmap"}]},
+    projects:{name:"Build proof",items:[{view:"interview",label:"Prepare for interviews"}]},
+    interview:{name:"Get hired",items:[{view:"projects",label:"Build project evidence"},{view:"jd",label:"Review a job description"}]},
+    resume:{name:"Application tools",items:[{view:"jd",label:"Analyse a job description"}]},
+    jd:{name:"Application tools",items:[{view:"resume",label:"Review your resume"}]},
+    readiness:{name:"Job readiness",items:[{view:"roadmap",label:"Improve a skill"},{view:"projects",label:"Build project proof"}]},
+    weekly:{name:"Your progress",items:[{view:"planner",label:"Open study calendar"}]}
+  };
+  const group=related[current];
   if(!group)return "";
-  return `<nav class="workspace-tabs" aria-label="${group.name}"><span class="workspace-tabs-label">${group.name}</span><div class="workspace-tabs-items">${group.views.map(item=>`<button type="button" class="workspace-tab ${current===item.view?"active":""}" ${current===item.view?'aria-current="page"':''} onclick="navigate('${item.view}')">${item.label}</button>`).join("")}</div></nav>`;
+  return `<nav class="workspace-tabs workspace-tabs-simple" aria-label="Related next steps"><span class="workspace-tabs-label">${group.name}</span><div class="workspace-tabs-items">${group.items.map(item=>`<button type="button" class="workspace-tab" onclick="navigate('${item.view}')">${item.label} <span aria-hidden="true">→</span></button>`).join("")}</div></nav>`;
 }
 
 function setPage(title,html){window.__itCareerRenderedOnce=true;
