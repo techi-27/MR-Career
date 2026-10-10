@@ -3736,6 +3736,65 @@ html body .v9-project .v9-badge {
   }
 }
 </style>
+<style id="v14-35-simplify-career-path-cards">
+/* Career Tools: make role selection scannable and remove repeated paragraphs/skill lists. */
+.v8-role-family-grid {
+  grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+  gap: 10px !important;
+}
+.v8-role-family-grid .v8-role-compact {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 9px !important;
+  min-width: 0 !important;
+  min-height: 112px !important;
+  width: 100% !important;
+  padding: 14px !important;
+  margin: 0 !important;
+  border: 1px solid var(--line,#dce5f0) !important;
+  border-radius: 14px !important;
+  background: var(--card,#fff) !important;
+  color: var(--ink,#152747) !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+}
+.v8-role-family-grid .v8-role-compact.selected {
+  border-color: #6b9df5 !important;
+  background: #f1f6ff !important;
+  box-shadow: inset 0 0 0 1px #6b9df5 !important;
+}
+.v8-role-compact-title {
+  font-size: 14px !important;
+  line-height: 1.35 !important;
+  font-weight: 750 !important;
+  overflow-wrap: anywhere !important;
+}
+.v8-role-compact-meta {
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+  color: var(--muted,#64748b) !important;
+}
+.v8-role-compact-action {
+  margin-top: auto !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #3265bd !important;
+}
+.v8-role-family-grid .v8-role-compact:hover {
+  border-color: #8db3f4 !important;
+  transform: translateY(-1px);
+}
+@media(max-width:1000px) {
+  .v8-role-family-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+}
+@media(max-width:600px) {
+  .v8-role-family-grid { grid-template-columns: minmax(0,1fr) !important; }
+  .v8-role-family-grid .v8-role-compact { min-height: 94px !important; }
+}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -5681,12 +5740,12 @@ function renderJobs(){
     h+=`<section class="v8-role-family"><div class="v8-label v8-role-family-title">${esc(family)}</div><div class="v8-role-family-grid">`;
     roles.forEach(r=>{
       const selected=r===role;
-      const preview=(ROLE_ORDER[r]||UNIVERSAL_ROLE_ORDER[r]||[]).slice(0,4).join(" · ");
-      h+=`<div class="role-option ${selected?"selected":""}" onclick="handleRoleChange(${esc(jsArg(r))})">
-        <h3>${esc(r)} ${selected?"✓":""}</h3>
-        <p>${esc(ROLE_CONFIG[r]?.description||"")}</p>
-        <div class="small v8-role-preview">${esc(preview)}</div>
-      </div>`;
+      const learningAreas=(ROLE_ORDER[r]||UNIVERSAL_ROLE_ORDER[r]||[]).length;
+      h+=`<button type="button" class="role-option v8-role-compact ${selected?"selected":""}" aria-pressed="${selected}" onclick="handleRoleChange(${esc(jsArg(r))})">
+        <span class="v8-role-compact-title">${esc(r)}</span>
+        <span class="v8-role-compact-meta">${selected?"Current role":learningAreas+" learning areas"}</span>
+        <span class="v8-role-compact-action">${selected?"Selected":"Choose role"} ${selected?"✓":"→"}</span>
+      </button>`;
     });
     h+=`</div></section>`;
   });
