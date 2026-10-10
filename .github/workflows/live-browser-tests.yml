@@ -1,0 +1,70 @@
+name: Live browser tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '17 2 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: live-browser-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  playwright:
+    name: Test deployed MR.Career app
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save @playwright/test
+          npx playwright install --with-deps chromium
+
+      - name: Wait for GitHub Pages deployment
+        env:
+          APP_URL: https://techi-27.github.io/MR-Career/app.html
+        run: |
+          for attempt in $(seq 1 18); do
+            status=$(curl -L -s -o /dev/null -w '%{http_code}' "$APP_URL" || true)
+            if [ "$status" = "200" ]; then
+              echo "App is reachable (HTTP $status)."
+              exit 0
+            fi
+            echo "Attempt $attempt: HTTP $status; waiting 10 seconds..."
+            sleep 10
+          done
+          echo "The deployed app did not return HTTP 200 in time."
+          exit 1
+
+      - name: Run live browser tests
+        env:
+          CI: true
+          APP_URL: https://techi-27.github.io/MR-Career/app.html
+        run: npx playwright test
+
+      - name: Upload Playwright report and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mr-career-playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 14
