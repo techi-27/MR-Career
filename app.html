@@ -2361,6 +2361,25 @@ html body button.sidebar-toggle-tab:after { content: none !important; display: n
 }
 </style>
 
+
+<style id="v13-61-sidebar-toggle-position-final">
+/* Final toggle placement; JavaScript sets the precise left coordinate for the current state. */
+html body button.sidebar-toggle-tab{
+ position:fixed!important;right:auto!important;top:132px!important;
+ width:30px!important;height:40px!important;min-width:30px!important;
+ padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;
+ box-sizing:border-box!important;border:1px solid #d7e1ef!important;
+ border-radius:0 9px 9px 0!important;background:#fff!important;color:#405577!important;
+ box-shadow:0 3px 10px rgba(30,50,80,.14)!important;
+ font-size:21px!important;line-height:1!important;z-index:1002!important;
+}
+html body button.sidebar-toggle-tab:before,html body button.sidebar-toggle-tab:after{content:none!important;display:none!important}
+@media(max-width:760px){
+ html body button.sidebar-toggle-tab{top:18px!important;width:36px!important;height:40px!important;min-width:36px!important}
+ html body:has(.sidebar.mobile-open) button.sidebar-toggle-tab{border-radius:9px 0 0 9px!important}
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -2880,13 +2899,18 @@ function syncSidebarToggle(){
   btn.textContent=expanded?"‹":"›";
   btn.setAttribute("aria-label",expanded?"Collapse sidebar":"Expand sidebar");
   btn.title=expanded?"Collapse sidebar":"Expand sidebar";
-  /* Measure the real sidebar instead of relying on conflicting fixed pixel widths. */
-  const rect=sb.getBoundingClientRect();
-  const width=mobile?36:30;
-  const left=mobile?(expanded?Math.max(8,Math.min(rect.right-width-8,window.innerWidth-width-8)):8):Math.min(rect.right+4,window.innerWidth-width-8);
-  btn.style.setProperty("left",Math.max(4,left)+"px","important");
+  /* Use the actual layout state; do not trust stale sidebar bounding boxes or old CSS widths. */
+  const handleWidth=mobile?36:30;
+  const sidebarWidth=mobile?Math.min(292,window.innerWidth*0.88):(document.body.classList.contains("sidebar-collapsed")?78:276);
+  const left=mobile?(expanded?Math.max(0,sidebarWidth-handleWidth):0):Math.max(0,sidebarWidth-handleWidth/2);
+  btn.style.setProperty("position","fixed","important");
+  btn.style.setProperty("left",left+"px","important");
   btn.style.setProperty("right","auto","important");
-  btn.style.setProperty("top",mobile?"112px":"138px","important");
+  btn.style.setProperty("top",mobile?"18px":"132px","important");
+  btn.style.setProperty("width",handleWidth+"px","important");
+  btn.style.setProperty("height","40px","important");
+  btn.style.setProperty("min-width",handleWidth+"px","important");
+  btn.style.setProperty("z-index","1002","important");
 }
 function toggleSidebar(){
   const sb=document.querySelector(".sidebar");
