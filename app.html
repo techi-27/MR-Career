@@ -3918,9 +3918,8 @@ html body .v9-project > textarea { min-height:64px!important;border:1px solid #d
     <button data-view="roadmap"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></svg></span><span class="nl">Learning Roadmap</span></button>
     <button data-view="planner"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h3M8 17h7"/></svg></span><span class="nl">Study Planner</span></button>
     <button data-view="discover"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg></span><span class="nl">Career Discovery</span></button>
-    <div class="mini">BUILD &amp; GET HIRED</div>
-    <button data-view="projects"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V4h8v3M3 12h18M10 12v2h4v-2"/></svg></span><span class="nl">Projects</span></button>
-    <button data-view="interview"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 3.9a8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg></span><span class="nl">Interview Prep</span></button>
+    <div class="mini">CAREER TOOLKIT</div>
+    <button data-view="toolkit"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 4V2h8v2M7 9h10M7 13h6M7 17h10"/></svg></span><span class="nl">Career Toolkit</span></button>
     <div class="mini">PERSONAL SETTINGS</div>
     <button data-view="profile"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span class="nl">Profile &amp; Settings</span></button>
   </div>
@@ -4827,10 +4826,11 @@ function renderGlobalSearchResults(){
 document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openGlobalSearch();}else if(e.key==="/"&&!["INPUT","TEXTAREA","SELECT"].includes(document.activeElement?.tagName)){e.preventDefault();openGlobalSearch();}else if(e.key==="Escape")closeGlobalSearch();});
 
 function routeRenderers(){
- return {dashboard:renderDashboard,planner:renderPlanner,roadmap:renderRoadmap,jobs:renderJobs,discover:renderCareerDiscovery,
- profile:renderProfile,careers:renderCareerDiscovery,careerpaths:renderCareerPaths,switch:renderSwitch,
- projects:renderProjects,resume:renderResume,labs:renderLabs,exams:renderExams,
- interview:renderInterview,readiness:renderReadiness,portfolio:renderPortfolio,jd:renderJD,weekly:renderWeekly};
+ return {dashboard:renderDashboard,planner:renderPlanner,roadmap:renderRoadmap,discover:renderCareerDiscovery,
+ profile:renderProfile,careers:renderCareerDiscovery,careerpaths:renderCareerDiscovery,compare:renderCareerDiscovery,
+ toolkit:renderCareerToolkit,projects:renderProjects,resume:renderResume,labs:renderLabs,exams:renderExams,
+ interview:renderInterview,readiness:renderReadiness,portfolio:renderProjects,jd:renderJD,weekly:renderDashboard,
+ jobs:renderCareerDiscovery,switch:renderCareerDiscovery};
 }
 function compactRolePickerHTML(id){
  const current=selectedRole();
@@ -4976,18 +4976,18 @@ function renderCurrent(){return renderRoute(window.__itCareerCurrentView||"dashb
 function navParentView(view){
  const v=String(view||"dashboard");
  if(v.startsWith("domain:"))return "roadmap";
- return ({discover:"discover",careers:"discover",compare:"discover",jobs:"switch",planner:"planner",tech:"roadmap",skills:"roadmap",exams:"roadmap",quizzes:"labs",interview:"interview",portfolio:"projects",jd:"resume",skillgap:"readiness",coach:"weekly"})[v]||v;
+ return ({discover:"discover",careers:"discover",careerpaths:"discover",compare:"discover",jobs:"discover",switch:"discover",planner:"planner",tech:"roadmap",skills:"roadmap",exams:"toolkit",quizzes:"toolkit",labs:"toolkit",projects:"toolkit",interview:"toolkit",resume:"toolkit",jd:"toolkit",readiness:"toolkit",weekly:"dashboard",portfolio:"toolkit",skillgap:"toolkit",coach:"dashboard"})[v]||v;
 }
 function navigate(view,opts={}){
  view=String(view||"dashboard"); const current=window.__itCareerCurrentView||"dashboard";
  if(view==="back")return goBack();
- if(view==="portfolio")view="projects"; // Portfolio is now a section inside Project Studio.
- // Consolidate duplicate or incomplete destinations into their supported core workspace.
- if(view==="tech"||view==="skills")view="roadmap";
- if(view==="quizzes")view="labs";
- if(view==="skillgap")view="readiness";
- if(view==="coach")view="weekly";
- if(view==="domains"||view==="study-domains")view="dashboard";
+ // Keep old links working while routing duplicate destinations to one canonical workspace.
+ if(["careers","careerpaths","compare","jobs","switch"].includes(view))view="discover";
+ if(view==="portfolio")view="projects";
+ if(["tech","skills","domains","study-domains"].includes(view))view="roadmap";
+ if(["quizzes","exams"].includes(view))view="toolkit";
+ if(["skillgap","readiness","resume","jd","labs","projects","interview"].includes(view) && view!=="toolkit" && view!=="projects" && view!=="interview")view="toolkit";
+ if(view==="coach"||view==="weekly")view="dashboard";
  if(!opts.fromBack&&view!==current){const history=window.__itCareerHistory||[];if(history[history.length-1]!==current)history.push(current);window.__itCareerHistory=history.slice(-30);}
  window.__itCareerCurrentView=view;
  if(window.innerWidth<=760)closeMobileSidebar();
@@ -5039,8 +5039,8 @@ function setPage(title,html){window.__itCareerRenderedOnce=true;
   const showBack=(window.__itCareerCurrentView||"dashboard")!=="dashboard";
   const backBar=showBack?`<div class="page-backbar"><div class="back-left"><button class="btn" onclick="navigate('back')">Back</button><span class="back-title">${esc(title)}</span></div><button class="btn" onclick="navigate('dashboard')">Home</button></div>`:"";
   const currentView=window.__itCareerCurrentView||"dashboard";
-  const compactCorePage=currentView==="roadmap";
-  document.getElementById("content").innerHTML=(compactCorePage?"":backBar+renderWorkspaceTabs(currentView))+html;
+  /* Sidebar is the single source of navigation; avoid duplicate back bars and related-tab strips. */
+  document.getElementById("content").innerHTML=html;
   // Domain IDs are internal ordering keys; hide numeric prefixes in user-facing text.
   const walker=document.createTreeWalker(document.getElementById("content"),NodeFilter.SHOW_TEXT);
   let node;while((node=walker.nextNode())){
@@ -5062,6 +5062,25 @@ function goBack(){
  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===navParentView(previous)));
  renderRoute(previous);window.scrollTo({top:0,behavior:"auto"});
 }
+
+function renderCareerToolkit(){
+ const role=selectedRole();
+ const items=[
+  {title:"Hands-on labs",desc:"Practise technical skills with guided tasks and record completed labs.",view:"labs",icon:"⌘"},
+  {title:"Projects & portfolio",desc:"Build role-specific projects and collect evidence of your skills.",view:"projects",icon:"◇"},
+  {title:"Interview preparation",desc:"Practise questions tied to the topics in your learning roadmap.",view:"interview",icon:"?"}, 
+  {title:"Resume analyzer",desc:"Review your resume against your selected target role.",view:"resume",icon:"▤"},
+  {title:"Job description analyzer",desc:"Compare a job description with your current skills and identify gaps.",view:"jd",icon:"≡"},
+  {title:"Job readiness",desc:"Review priority skill gaps and what to strengthen next.",view:"readiness",icon:"✓"},
+  {title:"Certifications",desc:"Explore certifications relevant to your target role.",view:"exams",icon:"☆"},
+  {title:"Weekly progress",desc:"Review recent study-plan follow-through and next-week priorities.",view:"weekly",icon:"◷"}
+ ];
+ let h=`<section class="toolkit-hero"><div class="v6-label">SUPPORTING CAREER TOOLS</div><h2>Your ${esc(role)} Career Toolkit</h2><p>Use these tools when you are ready to practise, prove your skills, or prepare for your next career move. Your main learning journey stays in Home, Learning Roadmap and Study Planner.</p></section><section class="toolkit-grid">`;
+ items.forEach(x=>{h+=`<button type="button" class="toolkit-card" onclick="navigate('${x.view}')"><span class="toolkit-icon" aria-hidden="true">${x.icon}</span><span class="toolkit-card-copy"><b>${x.title}</b><small>${x.desc}</small></span><span class="toolkit-arrow" aria-hidden="true">→</span></button>`;});
+ h+=`</section>`;
+ setPage("Career Toolkit",h);
+}
+
 function renderDashboard(){
   const s=stats(), role=selectedRole(), cfg=ROLE_CONFIG[role]||{};
   const topics=allTopics();
@@ -5093,19 +5112,15 @@ function renderDashboard(){
   } else {
     h+=`<section class="section"><div class="card"><h3>Learning journey complete</h3><p class="small">Keep your skills fresh with projects and interview practice.</p><div class="plan-actions"><button class="btn primary" onclick="navigate('projects')">Build a project</button><button class="btn" onclick="navigate('interview')">Practise interviews</button></div></div></section>`;
   }
-  h+=`<section class="section"><div class="section-title"><h2>Your five steps</h2><span class="small">Your progress updates as you work</span></div><div class="career-journey-steps">`;
+  h+=`<section class="section"><div class="section-title"><h2>Your four steps</h2><span class="small">Your progress updates as you work</span></div><div class="career-journey-steps">`;
   completedStages.forEach((stage,i)=>{
     h+=`<button type="button" class="career-journey-step ${stage.done?"is-done":i===nextStage?"is-current":""}" onclick="navigate('${stage.view}')"><span class="career-journey-number">${stage.done?"✓":i+1}</span><span class="career-journey-copy"><b>${stage.label}</b><small>${stage.done?"Completed":i===nextStage?"Your next milestone":"Up next"}</small></span><span class="career-journey-arrow" aria-hidden="true">›</span></button>`;
   });
   h+=`</div></section>`;
-  h+=`<section class="section"><div class="section-title"><h2>Continue your learning</h2><span class="small">Your core tools, always easy to find</span></div><div class="career-quick-links">
-    <button class="card" onclick="navigate('roadmap')"><b>Learning roadmap</b><span class="small">See role-specific topics and open a lesson</span></button>
-    <button class="card" onclick="navigate('planner')"><b>Study planner</b><span class="small">Choose topics, set dates, and track daily sessions</span></button>
-    <button class="card" onclick="navigate('discover')"><b>Explore IT roles</b><span class="small">Compare career options if your goal changes</span></button>
-  </div></section>
-  <section class="section"><div class="section-title"><h2>Build toward your next career step</h2><span class="small">Supporting tools</span></div><div class="career-quick-links">
-    <button class="card" onclick="navigate('projects')"><b>Build projects</b><span class="small">Turn learning into practical proof</span></button>
-    <button class="card" onclick="navigate('interview')"><b>Interview preparation</b><span class="small">Practise role-specific questions</span></button>
+  h+=`<section class="section"><div class="section-title"><h2>Continue your journey</h2><span class="small">Choose the next action you need</span></div><div class="career-quick-links">
+    <button class="card" onclick="navigate('roadmap')"><b>Learning roadmap</b><span class="small">Review skills and choose learning topics</span></button>
+    <button class="card" onclick="navigate('planner')"><b>Study planner</b><span class="small">Follow your daily learning schedule</span></button>
+    <button class="card" onclick="navigate('toolkit')"><b>Career toolkit</b><span class="small">Projects, practice, resume and interviews</span></button>
   </div></section>`;
   setPage("Home",h);
 }
@@ -5569,8 +5584,8 @@ function renderPlanner(){
  if(!role){setPage("Study Planner",`<div class="v8-hero"><h2>Build your study plan</h2><p>First choose your target role, or discover which role fits you. Then set a career-switch deadline and build a daily schedule.</p><div class="card"><label for="plannerFirstRole">Target role</label><select id="plannerFirstRole" style="width:100%;margin:10px 0">${roleSelectHTML()}</select><button class="btn primary" onclick="const r=document.getElementById('plannerFirstRole').value;if(!r){alert('Choose a role first.');return;}handleRoleChange(r)">Choose role</button><button class="btn" onclick="navigate('discover')">Discover suitable roles</button></div></div>`);return;}
  let h=`<div class="planner-hero"><h2>Build Your ${esc(role)} Study Plan</h2><p>Choose a start date and timeline. The selected role determines the learning sequence, and the daily calendar tracks completed sessions, missed days, and catch-up work.</p><div class="planner-form"><div class="field"><label>Target Role</label><select onchange="handleRoleChange(this.value)">${roleSelectHTML()}</select></div><div class="field"><label>Start Date</label>${dateInputHTML(p.startDate,"plannerStart")}</div><div class="field"><label>Duration</label><select onchange="setPlannerDuration(this.value)"><option value="3" ${p.duration==="3"?"selected":""}>${plannerDurationLabel("3",p.durationUnit)}</option><option value="6" ${p.duration==="6"?"selected":""}>${plannerDurationLabel("6",p.durationUnit)}</option><option value="9" ${p.duration==="9"?"selected":""}>${plannerDurationLabel("9",p.durationUnit)}</option><option value="12" ${p.duration==="12"?"selected":""}>${plannerDurationLabel("12",p.durationUnit)}</option><option value="custom" ${p.duration==="custom"?"selected":""}>Custom end date</option></select></div><div class="field"><label>Unit</label><select onchange="setPlannerUnit(this.value)"><option value="months" ${p.durationUnit==="months"?"selected":""}>Months</option><option value="weeks" ${p.durationUnit==="weeks"?"selected":""}>Weeks</option><option value="days" ${p.durationUnit==="days"?"selected":""}>Days</option></select></div><div class="field"><label>End Date</label>${dateInputHTML(p.endDate,"plannerEnd")}</div></div><div class="v8-muted" style="margin-top:8px">Tip: use Career Switch Planner to sync the target role, desired switch date, and available study hours.</div></div>`;
  h+=`<div class="plan-summary"><div class="plan-stat"><div class="l">Start</div><div class="v">${formatDate(p.startDate)}</div></div><div class="plan-stat"><div class="l">Target date</div><div class="v">${formatDate(p.endDate)}</div></div><div class="plan-stat"><div class="l">Calendar days</div><div class="v">${days||0}</div></div><div class="plan-stat"><div class="l">Selected domains</div><div class="v">${selectedCount}/${rec.length}</div></div></div>`;
- h+=`<div class="section"><div class="section-title"><h2>1. Recommended learning path</h2><span class="small">Order is role-specific; uncheck anything you do not want to study.</span></div><div class="card"><p class="order-note"><b>One connected plan:</b> Roadmap shows what to learn; this planner decides when to learn it and highlights overdue sessions.</p><p class="order-note">The numbered order is recommended for <b>${esc(role)}</b>, with foundations first and projects/interview proof later.</p><div class="recommendation-list">`;
- rec.forEach((x,i)=>{const checked=isPlannerSelected(x.domain);h+=`<label class="rec-row ${checked?"selected":""}"><input type="checkbox" ${checked?"checked":""} onchange="togglePlannerTopic(${esc(jsArg(x.domain))},this.checked)" style="width:18px;height:18px"><span class="rec-order">${i+1}</span><div class="rec-topic">${esc(x.domain)}<div class="small">Role weight: ${x.weight}%</div></div><div><span class="plan-chip">${rolePriority(x.weight)}</span></div><div class="rec-why">${esc(x.why)}</div><div class="small">${checked?"Included":"Excluded"}</div></label>`;});
+ h+=`<div class="section"><div class="section-title"><h2>1. Recommended learning path</h2><span class="small">Order is role-specific; uncheck anything you do not want to study.</span></div><div class="card"><p class="order-note"><b>Your roadmap selection:</b> This page schedules the learning areas you selected in Learning Roadmap. To change topics, use the Edit topics button.</p><p class="order-note">The numbered order is recommended for <b>${esc(role)}</b>, with foundations first and role-specific practice later.</p><div class="plan-actions" style="margin-bottom:12px"><button class="btn" onclick="navigate('roadmap')">Edit topics in Learning Roadmap</button></div><div class="recommendation-list">`;
+ rec.forEach((x,i)=>{const checked=isPlannerSelected(x.domain);h+=`<div class="rec-row ${checked?"selected":"not-selected"}"><span class="rec-order">${i+1}</span><div class="rec-topic">${esc(x.domain)}<div class="small">Role weight: ${x.weight}%</div></div><div><span class="plan-chip">${rolePriority(x.weight)}</span></div><div class="rec-why">${esc(x.why)}</div><div class="small">${checked?"Included from roadmap":"Not selected"}</div></div>`;});
  h+=`</div><div class="plan-actions"><button class="btn" onclick="resetPlannerSelection()">Reset to Recommended</button><button class="btn primary" onclick="generatePlan()">Generate Daily Study Plan</button></div></div></div>`;
  if(p.generated&&rows.length){
   const ps=plannerDailyStats(dailyEntries);
@@ -7208,6 +7223,23 @@ html body .roadmap-next-step p{margin:0!important;font-size:12px!important;line-
 html body .roadmap-next-step .v6-label{font-size:10px!important;font-weight:850!important;letter-spacing:.08em!important;color:#6684b3!important}
 @media(max-width:900px){html body .roadmap-topic-list{grid-template-columns:minmax(0,1fr)!important}}
 @media(max-width:650px){html body .roadmap-page-hero{padding:19px!important;border-radius:17px!important;margin-bottom:16px!important}html body .roadmap-topic-card{padding:14px!important}html body .roadmap-selection-footer,html body .roadmap-next-step{align-items:stretch!important;flex-direction:column!important}html body .roadmap-selection-footer .btn,html body .roadmap-next-step .btn{width:100%!important}html body .roadmap-section-heading{align-items:flex-start!important;flex-direction:column!important}}
+</style>
+
+<style id="v14-34-navigation-and-toolkit-cleanup">
+html body .toolkit-hero{padding:22px 25px;margin:0 0 18px;border:1px solid #dce7f4;border-radius:18px;background:linear-gradient(115deg,#e3edff,#e3f6f1)}
+html body .toolkit-hero .v6-label{font-size:10px;font-weight:850;letter-spacing:.09em;color:#5a7eb6}
+html body .toolkit-hero h2{margin:6px 0 8px;font-size:26px;line-height:1.25;color:#1c2d4c}
+html body .toolkit-hero p{margin:0;max-width:820px;color:#5a6f8b;font-size:13px;line-height:1.65}
+html body .toolkit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+html body .toolkit-card{display:flex;align-items:center;gap:13px;min-width:0;text-align:left;padding:16px;border:1px solid #dfe6f0;border-radius:14px;background:#fff;color:#1e2f4e;cursor:pointer;box-shadow:0 3px 12px rgba(24,45,76,.035);transition:border-color .15s,transform .15s}
+html body .toolkit-card:hover{border-color:#9ab5e5;transform:translateY(-1px)}
+html body .toolkit-icon{display:flex;align-items:center;justify-content:center;flex:0 0 40px;width:40px;height:40px;border-radius:11px;background:#eef3fc;color:#416cae;font-size:19px;font-weight:800}
+html body .toolkit-card-copy{display:flex;flex:1;flex-direction:column;gap:5px;min-width:0}
+html body .toolkit-card-copy b{font-size:14px;line-height:1.4}
+html body .toolkit-card-copy small{font-size:11px;line-height:1.5;color:#687a92}
+html body .toolkit-arrow{color:#5a7eb6;font-size:20px}
+html body .rec-row.not-selected{opacity:.68}
+@media(max-width:700px){html body .toolkit-grid{grid-template-columns:minmax(0,1fr)}html body .toolkit-hero{padding:18px}html body .toolkit-hero h2{font-size:23px}}
 </style>
 </body>
 </html>
