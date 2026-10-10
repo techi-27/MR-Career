@@ -4137,8 +4137,9 @@ function completedProjectProofCount(){
 function renderReadiness(){
   const role=selectedRole(), rs=roleStats();
   const labScore=Math.min(100,Math.round((state.v9?.doneLabs||[]).filter(k=>v9RoleDomains(role).includes(String(k).split("::")[0])).length*20));
-  updateQuizScore();updateInterviewScore();const quiz=Number(state.v9?.quizScore)||0, interview=Number(state.v9?.interviewScore)||0;
-  const readiness=Math.round(rs.progress*.55+labScore*.15+quiz*.15+interview*.15);
+  updateInterviewScore();const interview=Number(state.v9?.interviewScore)||0;
+  // Readiness uses supported, user-recorded signals only; the incomplete quiz bank is excluded.
+  const readiness=Math.round(rs.progress*.65+labScore*.20+interview*.15);
   let h=pageHero("CAREER READINESS",`💼 ${esc(role)} — Job Ready`,`See exactly how ready you are for your selected role and what is still missing.`);
   const projectProofCount=completedProjectProofCount();
   h+=`<div class="v6-grid-3">
@@ -4149,11 +4150,10 @@ function renderReadiness(){
   h+=`<div class="section"><div class="section-title"><h2>Readiness breakdown</h2><span class="small">Weighted for ${esc(role)}</span></div><div class="v6-card">
     <div class="v8-break-row"><b>Role skills</b><span style="flex:1"></span><b>${rs.progress}%</b></div>
     <div class="v8-break-row"><b>Hands-on labs</b><span style="flex:1"></span><b>${labScore}%</b></div>
-    <div class="v8-break-row"><b>Quiz knowledge</b><span style="flex:1"></span><b>${quiz}%</b></div>
     <div class="v8-break-row"><b>Interview readiness</b><span style="flex:1"></span><b>${interview}%</b></div>
   </div></div>`;
-  const gaps=Object.entries(roleWeights()).filter(([d,w])=>w>0&&domainProgress(d)<70).sort((a,b)=>domainProgress(a[0])-domainProgress(b[0])).slice(0,8);
-  h+=`<div class="section"><div class="section-title"><h2>What is stopping you?</h2></div><div class="v6-card">${gaps.length?gaps.map(([d,w])=>`<div class="v8-step"><div class="v8-stepnum">!</div><div><b>${esc(d)}</b><div class="v8-muted">${Math.round(domainProgress(d))}% complete · role weight ${w}%</div></div></div>`).join(""):`<div class="notice">No major skill gap below 70%. Focus on projects, interviews and job applications.</div>`}</div></div>`;
+  const gaps=v9GapItems(role).filter(x=>x.progress<70).slice(0,8);
+  h+=`<div class="section"><div class="section-title"><h2>Priority skill gaps</h2><span class="small">Ordered by remaining gap and role importance</span></div><div class="v6-card">${gaps.length?gaps.map((x,i)=>`<div class="v8-step"><div class="v8-stepnum">${i+1}</div><div style="flex:1"><b>${esc(x.domain)}</b><div class="v8-muted">${x.progress}% complete · role weight ${x.weight}% · priority ${x.priority}</div></div><button class="btn" onclick="navigate('domain:${CURRICULUM.domains.findIndex(d=>d.name===x.domain)}')">Learn</button></div>`).join(""):`<div class="notice">No major skill gap below 70%. Focus on projects, interviews and job applications.</div>`}</div></div>`;
   h+=`<div class="v6-actions"><button class="btn primary" onclick="navigate('roadmap')">Improve Skills</button><button class="btn" onclick="navigate('projects')">Build Proof</button><button class="btn" onclick="navigate('interview')">Practice Interview</button></div>`;
   setPage("Job Readiness",h);
 }
@@ -4183,19 +4183,6 @@ function toggleV9Lab(domain,idx,checked){
   if(!checked)state.v9.doneLabs=state.v9.doneLabs.filter(x=>x!==key);
   save(); renderLabs();
 }
-function quizAnswer(key,value){v9EnsureState();state.v9.quizAnswers=state.v9.quizAnswers||{};state.v9.quizAnswers[key]=Number(value);save();updateQuizScore();renderQuizzes();}
-function updateQuizScore(){const a=Object.entries(state.v9?.quizAnswers||{}).filter(([k])=>k.startsWith(selectedRole()+"::")).map(([,v])=>v),answered=a.filter(x=>Number(x)>=0);state.v9.quizScore=answered.length?Math.round(answered.reduce((s,x)=>s+Number(x),0)*100/answered.length):0;}
-function renderQuizzes(){
- const role=selectedRole(),rows=roleTopicRows(18);v9EnsureState();updateQuizScore();
- let h=pageHero("LEARN & PRACTICE",`🧠 ${esc(role)} Knowledge Self-Check`,`Score yourself topic-by-topic. Mark “Know it” only when you can explain the answer without notes.`);
- h+=`<div class="v6-card" style="margin-bottom:12px"><b>Quiz score</b><div class="v6-metric">${state.v9.quizScore||0}%</div><div class="progress"><span style="width:${state.v9.quizScore||0}%"></span></div></div>`;
- rows.forEach(r=>{const qs=r.data?.details?.quiz||[];h+=`<div class="v6-card" style="margin-bottom:10px"><span class="v6-label">${esc(r.domain)}</span><h3>${esc(r.topic.topic)}</h3>`;
- if(qs.length)qs.forEach((q,j)=>{const key=`${role}::${r.domain}::${r.idx}::${j}`,val=state.v9.quizAnswers?.[key];h+=`<div class="v8-step"><div class="v8-stepnum">${j+1}</div><div style="flex:1"><b>${esc(q)}</b><div class="small" style="margin:7px 0">Think first, then self-check:</div><button class="btn ${val===1?"primary":""}" onclick="quizAnswer(${esc(jsArg(key))},1)">✓ Know it</button> <button class="btn ${val===0?"danger":""}" onclick="quizAnswer(${esc(jsArg(key))},0)">Need practice</button><div class="v8-muted" style="margin-top:7px">${val===1?"Good — explain it aloud and connect it to a real example.":val===0?"Review the topic, do the lab, then retry.":"No score yet."}</div></div></div>`;});
- else h+=`<p class="v8-muted">No stored question bank for this topic yet. Create 3 questions from the topic and self-test.</p>`;
- h+=`</div>`;});
- setPage("Knowledge Self-Check",h);
-}
-
 function certificationRecommendations(role){
   const r=String(role||"").toLowerCase();
   const cert=(name,issuer,level,why,url)=>({name,issuer,level,why,url});
@@ -4304,13 +4291,6 @@ function renderInterview(){
  setPage("Interview Practice",h);
 }
 
-function renderSkillMap(){
-  const role=selectedRole(), order=ROLE_ORDER[role]||UNIVERSAL_ROLE_ORDER[role]||[];
-  let h=pageHero("LEARN & PRACTICE",`🧩 ${esc(role)} Skill Map`,`Understand the dependency chain: foundational skills unlock the next capabilities.`);
-  h+=`<div class="v6-card"><div class="v8-muted">Recommended dependency chain</div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">${order.map((d,i)=>`<span class="v6-tag">${i+1}. ${esc(d)}</span>`).join('<b> · </b>')}</div></div>`;
-  order.forEach((d,i)=>h+=`<div class="v6-card" style="margin:8px 0"><b>${i+1}. ${esc(d)}</b><p class="v8-muted">${esc(roleContext(role,d))}</p></div>`);
-  setPage("Skill Map",h);
-}
 function renderJDAnalysisHtml(){
   const data=state.v9?.jdAnalysis;
   if(!data || typeof data!=="object")return "";
@@ -4496,18 +4476,13 @@ const GLOBAL_SEARCH_ITEMS=[
  {label:"My Career Profile",type:"Page",view:"profile",terms:"profile experience goal"},
  {label:"Explore IT Careers",type:"Page",view:"careers",terms:"career jobs roles"},
  {label:"Compare Careers",type:"Page",view:"compare",terms:"compare roles career paths"},
- {label:"Skill Gap",type:"Page",view:"skillgap",terms:"skills missing gaps"},
- {label:"Career Switch",type:"Page",view:"switch",terms:"switch transition"},
- {label:"Daily Career Coach",type:"Page",view:"coach",terms:"next action coach"},
+ {label:"Career Switch Plan",type:"Page",view:"switch",terms:"switch transition target date"},
  {label:"Project Studio",type:"Page",view:"projects",terms:"projects hands on proof portfolio"},
  {label:"Resume Analyzer",type:"Page",view:"resume",terms:"resume cv"},
- {label:"Technology Explorer",type:"Page",view:"tech",terms:"technology tools"},
  {label:"Practice Labs",type:"Page",view:"labs",terms:"labs exercises practice"},
- {label:"Quiz Center",type:"Page",view:"quizzes",terms:"quiz assessment knowledge"},
  {label:"Certifications",type:"Page",view:"exams",terms:"certification exam"},
- {label:"Interview Simulator",type:"Page",view:"interview",terms:"interview questions mock"},
- {label:"Skill Map",type:"Page",view:"skills",terms:"skill dependencies"},
- {label:"Job Ready",type:"Page",view:"readiness",terms:"readiness job"},
+ {label:"Interview Practice",type:"Page",view:"interview",terms:"interview questions mock"},
+ {label:"Job Readiness",type:"Page",view:"readiness",terms:"readiness skills missing gaps"},
  {label:"JD Analyzer",type:"Page",view:"jd",terms:"job description jd analyzer"},
  {label:"Weekly Review",type:"Page",view:"weekly",terms:"weekly review progress"}
 ];
@@ -4532,9 +4507,9 @@ document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLower
 
 function routeRenderers(){
  return {dashboard:renderDashboard,planner:renderPlanner,roadmap:renderRoadmap,jobs:renderJobs,discover:renderCareerDiscovery,
- profile:renderProfile,careers:renderCareers,compare:renderCompare,skillgap:renderSkillGap,switch:renderSwitch,coach:renderCoach,
- projects:renderProjects,resume:renderResume,tech:renderTech,labs:renderLabs,quizzes:renderQuizzes,exams:renderExams,
- interview:renderInterview,skills:renderSkillMap,readiness:renderReadiness,portfolio:renderPortfolio,jd:renderJD,weekly:renderWeekly};
+ profile:renderProfile,careers:renderCareers,switch:renderSwitch,
+ projects:renderProjects,resume:renderResume,labs:renderLabs,exams:renderExams,
+ interview:renderInterview,readiness:renderReadiness,portfolio:renderPortfolio,jd:renderJD,weekly:renderWeekly};
 }
 function compactRolePickerHTML(id){
  const current=selectedRole();
@@ -4686,6 +4661,11 @@ function navigate(view,opts={}){
  view=String(view||"dashboard"); const current=window.__itCareerCurrentView||"dashboard";
  if(view==="back")return goBack();
  if(view==="portfolio")view="projects"; // Portfolio is now a section inside Project Studio.
+ // Consolidate duplicate or incomplete destinations into their supported core workspace.
+ if(view==="tech"||view==="skills")view="roadmap";
+ if(view==="quizzes")view="labs";
+ if(view==="skillgap")view="readiness";
+ if(view==="coach")view="weekly";
  if(view==="domains"||view==="study-domains")view="dashboard";
  if(!opts.fromBack&&view!==current){const history=window.__itCareerHistory||[];if(history[history.length-1]!==current)history.push(current);window.__itCareerHistory=history.slice(-30);}
  window.__itCareerCurrentView=view;
@@ -4722,29 +4702,23 @@ function renderWorkspaceTabs(view){
     ]},
     {name:"Roadmap & Learning", views:[
       {view:"roadmap",label:"Role roadmap"},
-      {view:"tech",label:"Technology explorer"},
-      {view:"skills",label:"Skill dependencies"},
       {view:"exams",label:"Certifications"}
     ]},
     {name:"Learn & Practice", views:[
       {view:"labs",label:"Practice labs"},
-      {view:"quizzes",label:"Knowledge self-check"},
       {view:"interview",label:"Interview practice"}
     ]},
     {name:"Application Toolkit", views:[
       {view:"resume",label:"Resume analyzer"},
       {view:"jd",label:"Job description analyzer"}
     ]},
-    {name:"Readiness & Skill Gaps", views:[
-      {view:"readiness",label:"Job readiness"},
-      {view:"skillgap",label:"Skill gap priorities"}
+    {name:"Job Readiness", views:[
+      {view:"readiness",label:"Job readiness"}
     ]},
     {name:"My Progress", views:[
-      {view:"weekly",label:"Weekly review"},
-      {view:"coach",label:"Daily career coach"}
+      {view:"weekly",label:"Progress & next steps"}
     ]}
-  ];
-  let current=String(view||"dashboard");
+  ];  let current=String(view||"dashboard");
   if(current.startsWith("domain:"))current="roadmap";
   const group=groups.find(g=>g.views.some(x=>x.view===current));
   if(!group)return "";
@@ -5353,7 +5327,7 @@ function renderRoadmap(){
     </div>
   </div>`;
 
-  h+=`<div class="card section"><div class="section-title"><h2>Roadmap tools</h2><span class="small">Related learning resources for this role</span></div><div class="plan-actions"><button class="btn" onclick="navigate('tech')">Explore technologies</button><button class="btn" onclick="navigate('skills')">Skill dependencies</button><button class="btn" onclick="navigate('exams')">Certification guidance</button><button class="btn" onclick="navigate('labs')">Practice labs</button><button class="btn" onclick="navigate('quizzes')">Knowledge self-check</button><button class="btn" onclick="navigate('interview')">Interview practice</button><button class="btn primary" onclick="navigate('planner')">Create study schedule</button></div></div>`;
+  h+=`<div class="card section"><div class="section-title"><h2>Roadmap tools</h2><span class="small">Related learning resources for this role</span></div><div class="plan-actions"><button class="btn" onclick="navigate('tech')">Explore technologies</button><button class="btn" onclick="navigate('skills')">Skill dependencies</button><button class="btn" onclick="navigate('exams')">Certification guidance</button><button class="btn" onclick="navigate('labs')">Practice labs</button><button class="btn" onclick="navigate('labs')">Knowledge self-check</button><button class="btn" onclick="navigate('interview')">Interview practice</button><button class="btn primary" onclick="navigate('planner')">Create study schedule</button></div></div>`;
   h+=`<div class="v6-grid-3">
     <div class="v6-card"><div class="v6-label">Target role</div><div class="v6-metric">${esc(role)}</div><div class="v6-muted">${esc(roleFamily(role))}</div></div>
     <div class="v6-card"><div class="v6-label">Role skills</div><div class="v6-metric">${rec.length}</div><div class="v6-muted">Role-specific capabilities</div></div>
@@ -5935,16 +5909,6 @@ function renderCompare(){
   setPage("Compare Careers",h);
 }
 
-function renderSkillGap(){
-  const role=selectedRole(), gaps=v9GapItems(role), progress=v9RoleProgress(role);
-  let h=`<div class="v9-hero2"><h2>📊 Skill Gap Analyzer</h2><p>See exactly what is holding back your selected ${esc(role)} path. Higher-weight and lower-progress skills rise to the top.</p></div>`;
-  h+=`<div class="v9-statgrid"><div class="v9-stat"><div class="num">${progress}%</div><div class="lbl">Overall role progress</div></div><div class="v9-stat"><div class="num">${gaps.filter(x=>x.progress<50).length}</div><div class="lbl">Major gaps</div></div><div class="v9-stat"><div class="num">${gaps.filter(x=>x.progress>=70).length}</div><div class="lbl">Strong areas</div></div><div class="v9-stat"><div class="num">${v9PriorityDomains(role,3).length}</div><div class="lbl">Top priorities</div></div></div>`;
-  h+=`<div class="section card"><h3>Priority skill gaps</h3><p class="small">How this works: each skill has a role weight (importance) and a progress percentage based on the topics you mark complete. Priority = remaining gap × role weight. Higher scores appear first; this is a learning guide, not an employer assessment.</p>`;
-  gaps.forEach(x=>h+=`<div class="v9-gap"><div><b>${esc(x.domain)}</b><div class="small">Role weight ${x.weight}% · gap ${x.gap}%</div></div><div><b>${x.progress}%</b><div class="v9-level"><span style="width:${x.progress}%"></span></div></div><div><span class="v9-badge">${x.progress<40?"P0 Critical":x.progress<70?"P1 High":"P2 Maintain"}</span> <button class="btn" onclick="navigate('domain:${CURRICULUM.domains.findIndex(d=>d.name===x.domain)}')">Learn</button></div></div>`);
-  h+=`</div><div class="v9-smallgrid section"><div class="card"><h3>Recommended next 3</h3>${gaps.slice(0,3).map((x,i)=>`<div class="v9-timeline"><div class="item"><div class="v9-dot">${i+1}</div><div><b>${esc(x.domain)}</b><p class="small">Close this gap before spending time on low-weight topics.</p></div></div></div>`).join("")}</div><div class="card"><h3>How to improve</h3><div class="v9-note">Study the concept, complete a lab, create GitHub proof, answer an interview question, and update your progress.</div></div></div>`;
-  setPage("Skill Gap",h);
-}
-
 function v9ResumeAnalyze(){
   const text=(state.v9?.resumeText||"").toLowerCase();
   if(!text.trim()){state.v9.resumeScore=0;save();return renderResume();}
@@ -6038,16 +6002,6 @@ function v9StartExperiment(role,name){
 function v9ToggleProject(id,k,v){v9ProjectState(id).checks[k]=v;save();renderProjects()}
 function v9ProjectNote(id,v){v9ProjectState(id).notes=v;save()}
 
-function renderTech(){
-  const role=selectedRole(), q=(state.v9?.techSearch||"").toLowerCase();
-  const domains=CURRICULUM.domains.filter(d=>(roleWeights()[d.name]||0)>0 && (!q||(`${d.name} ${d.topics.map(t=>t.topic).join(" ")}`).toLowerCase().includes(q))).sort((a,b)=>(roleWeights()[b.name]||0)-(roleWeights()[a.name]||0));
-  let h=`<div class="v9-hero2"><h2>🛠️ Technology Explorer</h2><p>Explore technologies through the lens of your selected ${esc(role)} role. Unrelated command-heavy areas stay out of the main path.</p></div>`;
-  h+=`<div class="card"><input style="width:100%" placeholder="Search technologies, skills or topics..." id="techSearch" value="${esc(state.v9?.techSearch||"")}" oninput="searchAndRender('tech',this.value)"></div><div class="section v9-smallgrid">`;
-  domains.forEach(d=>{const p=domainProgress(d.name), w=roleWeights()[d.name]||0;h+=`<div class="card"><div class="v13-tech-headrow"><div><div class="v9-label">ROLE WEIGHT ${w}%</div><h3>${esc(d.name.replace(/^\d+\s*/, ""))}</h3></div><span class="v13-tech-progress" aria-label="${p}% complete">${p}%</span></div><p class="small">${esc(d.topics.slice(0,4).map(t=>t.topic).join(" · "))}</p><button class="btn" onclick="navigate('domain:${CURRICULUM.domains.indexOf(d)}')">Explore</button></div>`});
-  h+=`</div>`;
-  setPage("Technology Explorer",h);
-}
-
 function renderSwitchRolePicker(field,selected,options){
  const label=selected||"Select "+(field==="currentRole"?"current":"target")+" role";
  const safeField=field==="currentRole"?"currentRole":"targetRole";
@@ -6125,23 +6079,6 @@ function renderSwitch(){
  h+=`<div class="card section switch-plan-callout"><div><div class="v9-label">YOUR CAREER-SWITCH COMMITMENT</div><h3>${esc(target)}${targetDate?` by ${esc(formatDate(targetDate))}`:""}</h3><p class="small">${targetDate?`${daysLeft} calendar days, around ${weeksLeft} weeks, remain until your target date.`:"No switch date selected. A three-month timeline will be suggested when you create the plan."} Study availability: ${hours} hours per week.</p><p class="small">This is a planning aid, not a guarantee of employment. The app will schedule learning sessions; progress depends on completed practice and evidence.</p></div><div class="plan-actions"><button class="btn" onclick="v9SelectRole(${esc(jsArg(target))})">Set target role</button><button class="btn primary" onclick="applySwitchPlan()">Create my daily study plan</button></div></div>`;
  setPage("My Career Plan",h);
 }
-function renderCoach(){
-  v9MarkActive();
-  const role=selectedRole(), n=v8NextAction(), gaps=v9GapItems(role), xp=v9XP(), today=new Date().toLocaleDateString();
-  let h=`<div class="v9-hero2"><h2>⚡ Daily Career Coach</h2><p>${today} · Your coach reduces decision fatigue: one next skill, one practice action, one proof action and one interview action.</p></div>`;
-  h+=`<div class="v9-statgrid"><div class="v9-stat"><div class="num">${xp}</div><div class="lbl">Career XP</div></div><div class="v9-stat"><div class="num">${state.v9.streak||0}</div><div class="lbl">Active Days</div></div><div class="v9-stat"><div class="num">${v9RoleProgress(role)}%</div><div class="lbl">Role Progress</div></div><div class="v9-stat"><div class="num">${gaps[0]?.progress||0}%</div><div class="lbl">Top Gap Progress</div></div></div>`;
-  const planned=plannerDailyEntries(),plannedToday=planned.find(e=>e.date===localTodayISO()),overdue=planned.filter(e=>e.status==="missed");
-  if(plannerState().generated){const focus=plannedToday||planned.find(e=>e.status==="planned");h+=`<div class="card section ${overdue.length?"study-home-plan has-missed":"study-home-plan"}"><div class="v9-label">YOUR STUDY COMMITMENT</div><h3>${focus?esc(focus.activity+": "+focus.topic):"No upcoming session is left in this plan"}</h3><p class="small">${focus?`${esc(formatDate(focus.date))} · ${esc(focus.domain.replace(/^\d+\s*/,""))}`:"Continue with projects, portfolio and interviews."}</p>${overdue.length?`<div class="study-missed-alert"><b>${overdue.length} missed session${overdue.length===1?"":"s"} need attention.</b><button class="btn" onclick="openPlannerMissedDays()">Review missed sessions</button></div>`:""}<div class="plan-actions"><button class="btn primary" onclick="navigate('planner')">Open daily calendar</button>${focus?`<button class="btn" onclick="startStudySession(${esc(jsArg(focus.id))})">Start planned session</button>`:""}</div></div>`;}
-  if(n){
-    const t=n.topic, det=t.details||{};
-    h+=`<div class="card section v9-today"><div class="v9-label">1 · LEARN</div><h2>${esc(t.topic)}</h2><p class="small">${esc(det.context||t.learn)}</p><button class="btn primary v8-start-learning" type="button" onclick="event.stopPropagation();openLearning(${esc(jsArg(n.domain))},${n.index})">Start learning</button></div>`;
-  }
-  if(!n)h+=`<div class="card section"><h3>Choose your next learning action</h3><p class="small">No incomplete topic was found for this role. Review your roadmap or select a topic to continue.</p><button class="btn primary" onclick="navigate('roadmap')">Open roadmap</button></div>`;
-  h+=`<div class="v9-smallgrid section"><div class="card"><div class="v9-label">2 · PRACTICE</div><h3>${esc(gaps[0]?.domain||"Your next role skill")}</h3><p class="small">Complete one hands-on exercise or lab connected to this skill.</p><button class="btn" onclick="navigate('labs')">Open labs</button></div><div class="card"><div class="v9-label">3 · PROVE</div><h3>Update your project evidence</h3><p class="small">Add README, architecture, screenshots, tests and GitHub proof.</p><button class="btn" onclick="navigate('projects')">Open Project Studio</button></div></div>`;
-  h+=`<div class="card section"><div class="v9-label">4 · INTERVIEW</div><h3>Answer one role-specific question</h3><p class="small">Do not wait until the end of your preparation. Practice explaining what you build while you learn it.</p><button class="btn" onclick="navigate('interview')">Practice interview</button></div>`;
-  setPage("Daily Career Coach",h);
-}
-
 function renderCareerDashboardV9(){
   /* Kept as a reusable hook for future expansion; Home remains the existing universal dashboard. */
   return renderUniversalHome();
