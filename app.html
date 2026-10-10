@@ -3869,6 +3869,31 @@ html body .rec-row.selected input[type="checkbox"] {
   accent-color:#657bd0 !important;
 }
 </style>
+<style id="v14-41-project-studio-clean-overview-and-actions">
+html body .plan-table th:last-child, html body .plan-table td:last-child { min-width:158px!important;width:158px!important;padding-left:12px!important;padding-right:18px!important;box-sizing:border-box!important; }
+html body .plan-table .plan-start-btn { display:inline-flex!important;align-items:center!important;justify-content:center!important;width:132px!important;max-width:100%!important;min-width:0!important;white-space:nowrap!important;word-break:normal!important;overflow-wrap:normal!important;padding:10px 8px!important;line-height:1.2!important;box-sizing:border-box!important; }
+html body .v9-hero2 h2 { margin:0 0 7px!important; }
+html body .v9-project-guide { display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:12px 14px;margin:0 0 18px;border:1px solid #dce6f4;border-radius:13px;background:#fff;color:#334766;font-size:12px; }
+html body .v9-project-guide b { margin-right:8px;color:#172747; }
+html body .v9-project-guide span { padding:6px 10px;border-radius:999px;background:#f0f5ff;color:#365b9b;font-weight:650; }
+html body .v9-project { padding:18px!important; }
+html body .v9-project-heading { display:flex;align-items:flex-start;justify-content:space-between;gap:18px; }
+html body .v9-project-heading h3 { font-size:18px!important;line-height:1.35;margin:5px 0 7px!important; }
+html body .v9-project-heading .small { font-size:12px!important;line-height:1.55; }
+html body .v9-skill-line { display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:11px;color:#526782; }
+html body .v9-skill-line b { color:#344b69; }
+html body .v9-project-progress { flex:0 0 104px;text-align:right;color:#61738d; }
+html body .v9-project-progress strong { display:block;color:#365b9b;font-size:22px;line-height:1.2; }
+html body .v9-project-progress span { font-size:10px;white-space:nowrap; }
+html body .v9-project-progress-track { height:6px;background:#edf1f7;border-radius:99px;overflow:hidden;margin:14px 0 10px; }
+html body .v9-project-progress-track span { display:block;height:100%;background:linear-gradient(90deg,#6889d8,#56b6c2);border-radius:99px;transition:width .2s; }
+html body .v9-project-details { border-top:1px solid #edf1f7;padding-top:10px; }
+html body .v9-project-details summary { cursor:pointer;color:#355b99;font-size:12px;font-weight:750; }
+html body .v9-project-details .v9-checks { margin-top:12px; }
+html body .v9-notes-label { display:block;margin-top:12px;color:#526782;font-size:11px;font-weight:700; }
+html body .v9-notes-label textarea { display:block;width:100%;min-height:68px;margin-top:6px;padding:10px;border:1px solid #dce4ee;border-radius:10px;box-sizing:border-box; }
+@media(max-width:650px){html body .v9-project-heading{flex-direction:column;gap:10px}html body .v9-project-progress{flex-basis:auto;text-align:left}html body .v9-project-guide{align-items:flex-start}html body .plan-table td:last-child{padding-right:12px!important}}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -5822,7 +5847,7 @@ function renderCareerPaths(){
 
 function renderCareerDiscovery(){
  const answers=state.discovery?.answers||{}, rec=v8DiscoveryRecommendations(), answered=V8_DISCOVERY_QUESTIONS.filter(q=>Boolean(answers[q.id])).length;
- let h=`<div class="v8-hero"><div class="v8-label" style="color:#b9dcff">CAREER DISCOVERY ENGINE</div><h2>🧭 I don't know which IT career to choose</h2><p>Answer a few simple questions. Review the role recommendations, choose a target, plan your career switch, then generate a daily study schedule. You can change the role later.</p></div>`;
+ let h=`<div class="v8-hero"><div class="v8-label" style="color:#b9dcff">CAREER DISCOVERY ENGINE</div><h2>I don't know which IT career to choose</h2><p>Answer a few simple questions. Review the role recommendations, choose a target, plan your career switch, then generate a daily study schedule. You can change the role later.</p></div>`;
  h+=`<div class="v8-two"><div><div class="section-title"><h2>Find your direction</h2><span class="small">${answered}/${V8_DISCOVERY_QUESTIONS.length} answered</span></div>`;
  V8_DISCOVERY_QUESTIONS.forEach((q,qi)=>{h+=`<div class="v8-question"><b>${qi+1}. ${esc(q.q)}</b><div class="v8-answers">${q.a.map(([label,val])=>`<button class="v8-answer ${answers[q.id]===val?'selected':''}" onclick="v8SetDiscovery('${q.id}','${val}')">${esc(label)}</button>`).join('')}</div></div>`});
  h+=`</div><div><div class="v8-card v8-today"><div class="v8-label">YOUR MATCH</div><h3 style="font-size:19px">Recommended careers</h3><p class="v8-muted">These are guidance, not a test. Scores show aligned preferences across all 8 questions; more answers give a fuller picture. Related roles can share scores.</p>`;
@@ -6231,7 +6256,7 @@ function v9ProjectState(id){
 function renderProjects(){
   const role=selectedRole(), ideas=V9_ROLE_EXPERIMENTS[role]||["Build a practical role-specific project","Document the architecture/process","Publish proof in GitHub"];
   const existing=projectsForRole(role);
-  let h=`<div class="v9-hero2"><h2>🏗️ Project Studio</h2><p>Build evidence, not just certificates. Every project should prove the skills your target role requires.</p></div>`;
+  let h=`<div class="v9-hero2"><h2>Project Studio</h2><p>Build evidence, not just certificates. Every project should prove the skills your target role requires.</p></div>`;
   if(existing.length){
     existing.forEach((x,i)=>{
       const st=v9ProjectState(x.id), checks=["Requirements defined","Implementation complete","Tests / validation","README + architecture","Screenshots / evidence","GitHub published"];
@@ -6245,12 +6270,12 @@ function renderProjects(){
     ["Interview proof project","Prepare architecture, screenshots, trade-offs and a short demo"]
   ];
   const portfolioDone=state.v9?.doneProjects||[];
-  h+=`<div class="card section"><div class="section-title"><h3>Portfolio proof checklist</h3><span class="small">Integrated into Project Studio</span></div><p class="small">Track the minimum evidence that turns learning into a presentable portfolio. Link repositories and notes in the project cards above.</p><div class="v9-checks">${portfolioMilestones.map((m,i)=>`<label class="v9-check"><input type="checkbox" ${portfolioDone.includes(i)?"checked":""} onchange="toggleV9PortfolioProof(${i},this.checked)"> <b>${esc(m[0])}</b><br>${esc(m[1])}</label>`).join("")}</div></div>`;
+
   const active=state.v9?.activeExperiment, activeState=active?state.v9.projects?.[active]:null;
   if(activeState){const steps=["Define the smallest useful scope","Build a working proof","Test and capture evidence","Write a README and lessons learned"];
     h+=`<div class="card section v9-project"><div class="v9-label">ACTIVE QUICK EXPERIMENT</div><h3>${esc(active.split("::experiment::").slice(1).join("::"))}</h3><p class="small">Use this mini-workbench to turn the experiment into visible evidence.</p><div class="v9-checks">${steps.map(c=>`<label class="v9-check"><input type="checkbox" ${activeState.checks?.[c]?"checked":""} onchange="v9ToggleProject(${esc(jsArg(active))},${esc(jsArg(c))},this.checked)"> ${esc(c)}</label>`).join("")}</div><textarea style="width:100%;margin-top:10px" placeholder="Notes, commands, test results, GitHub link..." onchange="v9ProjectNote(${esc(jsArg(active))},this.value)">${esc(activeState.notes||"")}</textarea><button class="btn" onclick="state.v9.activeExperiment='';save();renderProjects()">Close experiment</button></div>`;
   }
-  h+=`<div class="card section"><h3>🧪 Quick project experiments</h3><div class="v9-timeline">${ideas.map((x,i)=>`<div class="item"><div class="v9-dot">${i+1}</div><div><b>${esc(x)}</b><p class="small">Finish this as a small proof before attempting a large portfolio project.</p><button class="btn" onclick="v9StartExperiment(${esc(jsArg(role))},${esc(jsArg(x))})">Start experiment</button></div></div>`).join("")}</div></div>`;
+
   setPage("Project Studio",h);
 }
 function toggleV9PortfolioProof(i,checked){
