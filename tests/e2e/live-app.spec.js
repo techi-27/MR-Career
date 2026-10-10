@@ -130,8 +130,8 @@ test('simplified navigation hides incomplete and duplicate destinations while le
   expect(visibleTabs).not.toContain('Daily career coach');
 
   const legacyRoutes = [
-    ['tech', 'My journey', 'Roadmap & Learning'],
-    ['skills', 'My journey', 'Roadmap & Learning'],
+    ['tech', 'My journey', 'Roadmap'],
+    ['skills', 'My journey', 'Roadmap'],
     ['quizzes', 'Learn & practise', 'Practice Labs'],
     ['skillgap', 'Job readiness', 'Job Readiness'],
     ['coach', 'Your progress', 'Weekly Review'],
