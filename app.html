@@ -35,7 +35,7 @@ h1{font-size:25px;margin:0 0 4px}
 .subtitle{color:var(--muted);font-size:13px}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
 .btn{border:1px solid var(--line);background:#fff;padding:9px 13px;border-radius:9px;font-weight:650;color:#344054}
-.btn.primary{background:var(--brand2);color:#fff;border-color:var(--brand2)}
+.btn.primary{background:linear-gradient(110deg,var(--brand2),#4e91d9);color:#fff;border-color:var(--brand2)}
 .btn.danger{color:var(--red)}
 .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
@@ -43,7 +43,7 @@ h1{font-size:25px;margin:0 0 4px}
 .kpi .value{font-size:28px;font-weight:850;margin-top:7px}
 .kpi .hint{font-size:11px;color:var(--muted);margin-top:5px}
 .progress{height:9px;background:#edf1f5;border-radius:99px;overflow:hidden}
-.progress>span{display:block;height:100%;background:var(--brand2);border-radius:99px}
+.progress>span{display:block;height:100%;background:linear-gradient(90deg,#ff5b55 0%,#ffd900 52%,#4e91d9 100%);border-radius:99px}
 .section{margin-top:18px}
 .section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .section-title h2{font-size:17px;margin:0}
@@ -76,8 +76,8 @@ footer{padding:25px 0 10px;color:var(--muted);font-size:11px;text-align:center}
 
 /* ===== V2 visual system ===== */
 :root{
-  --bg:#f4f7fb;--card:#fff;--ink:#172033;--muted:#667085;--line:#e4e7ec;
-  --brand:#123b66;--brand2:#2f80ed;--brand3:#00a884;--soft:#edf5ff;
+  --bg:#f7f8fb;--card:#fff;--ink:#172747;--muted:#667085;--line:#e4e7ec;
+  --brand:#172747;--brand2:#ff5b55;--brand3:#ffd900;--soft:#edf5ff;
   --shadow:0 10px 30px rgba(16,24,40,.07);--radius:16px;
 }
 body{background:linear-gradient(180deg,#f7f9fc 0,#f2f5fa 100%);color:var(--ink)}
@@ -103,7 +103,7 @@ body.sidebar-collapsed #domainNav button::first-letter{font-size:15px}
 .brand{font-size:20px;font-weight:850;padding:10px 12px 20px;line-height:1.12;letter-spacing:-.3px}
 .brand small{display:block;color:#9fc0df;font-weight:550;font-size:11px;margin-top:7px;line-height:1.4}
 .nav button{width:100%;border:0;background:transparent;color:#dbe8f5;text-align:left;padding:10px 12px;border-radius:10px;margin:2px 0;font-weight:600;transition:.15s}
-.nav button:hover,.nav button.active{background:rgba(69,143,216,.20);color:#fff}
+.nav button:hover,.nav button.active{background:linear-gradient(110deg,rgba(255,91,85,.24),rgba(78,145,217,.22));color:#fff}
 .mini{margin:20px 9px 7px;color:#7fa5c8;font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:800}
 .topbar{
  display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px;
