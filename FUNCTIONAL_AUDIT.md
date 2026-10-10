@@ -1,6 +1,6 @@
 # MR.Career Functional Audit & Product Recommendations
 
-**Review date:** 10 October 2026  
+**Review date:** 10 October 2026 (updated after navigation and guidance refinements)  
 **Application:** https://techi-27.github.io/MR-Career/app.html  
 **Repository:** https://github.com/techi-27/MR-Career
 
@@ -10,7 +10,7 @@ MR.Career is a local-first career-planning application. The main journey is:
 
 **Discover a suitable role → choose a target role → plan a career switch → generate a study plan → practise and prove skills → prepare job applications.**
 
-The navigation has been simplified to focus on that journey. Incomplete or overlapping destinations have been consolidated into core workspaces rather than deleting user progress or changing the local-storage schema.
+The navigation is simplified around that journey. Incomplete or overlapping destinations have been consolidated into core workspaces rather than deleting user progress or changing the local-storage schema. This update also removes duplicate roadmap shortcuts, makes interview self-assessment criteria explicit, and explains the readiness score formula.
 
 ## Navigation and feature decisions
 
@@ -43,7 +43,7 @@ Old internal links for consolidated pages redirect to the closest supported core
 9. **Readiness & Skill Gaps** — readiness breakdown and weighted skill gaps in one place.
 10. **My Progress** — weekly study review, missed sessions and next priorities.
 
-Workspace sub-tabs have been reduced too; the goal is fewer choices at each step, not merely hiding links from the sidebar.
+Workspace sub-tabs have been reduced too; the goal is fewer choices at each step, not merely hiding links from the sidebar. The Roadmap now offers direct actions for the Study Planner, Practice Labs, and certification guidance rather than duplicate Technology Explorer and Skill Dependencies pages.
 
 ## Functional checks
 
@@ -61,8 +61,11 @@ The automated Playwright suite checks the live app and includes coverage for:
 - Desktop, tablet and narrow-mobile horizontal overflow.
 - Public information pages.
 - Simplified navigation and safe redirects from consolidated legacy routes.
+- Roadmap no longer exposes duplicate technology/dependency shortcuts; the Study Planner, labs, and certifications remain reachable.
+- Interview Practice explains its self-rating rubric and provides an answer outline.
+- Job Readiness states the 65% role-skill + 20% lab + 15% interview self-assessment weighting.
 
-Latest successful pre-change run: [14 tests passed](https://github.com/techi-27/MR-Career/actions/runs/38045579215). The new navigation consolidation tests must pass before treating this change as validated.
+The previous successful live run passed 14 tests: [view run](https://github.com/techi-27/MR-Career/actions/runs/38045579215). A new regression test now checks the simplified roadmap, interview rubric, and readiness formula; the latest workflow must pass before this update is considered validated.
 
 ## Recommended remaining work
 
@@ -74,10 +77,11 @@ Latest successful pre-change run: [14 tests passed](https://github.com/techi-27/
 - Verify every important learning topic has clear instructions, prerequisites, and credible references.
 
 ### Priority 2 — Improve learning outcomes
-- Add sample answer outlines and transparent rubrics to Interview Practice; keep its current self-rating nature clearly stated until real evaluation exists.
-- Explain readiness, career-match and resume/JD scoring methods in plain language.
-- Connect gaps to a learning topic, hands-on lab, project evidence and interview prompt.
-- Add exportable project-evidence summaries if users need to share their work.
+- **Completed in this update:** add an answer outline and self-rating rubric to Interview Practice; clearly state it is not an AI evaluator.
+- **Completed in this update:** explain the Job Readiness weighting in plain language.
+- Next: explain Career Discovery match scoring and Resume/JD analyzer scoring methodology.
+- Next: connect each gap to a learning topic, hands-on lab, project evidence and interview prompt.
+- Optional: add exportable project-evidence summaries if users need to share their work.
 
 ### Priority 3 — Maintainability
 The application remains a large single-file app with accumulated CSS overrides. Refactor only in small, tested steps. Keep regression checks for role selection, navigation, planner persistence, import/export, sidebar/header, and mobile layout.
