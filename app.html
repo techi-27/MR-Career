@@ -4894,7 +4894,7 @@ function renderDashboard(){
   h+=`<section class="section career-home-progress"><div class="section-title"><h2>Your progress</h2><span class="small">${s.completed} of ${s.total} topics completed</span></div>
     <div class="card"><div class="top"><div><div class="label">TARGET ROLE</div><h3>${esc(role)}</h3><p class="small">${esc(cfg.description||"Your personalised career path")}</p></div><span class="pct">${s.progress}%</span></div><div class="progress"><span style="width:${s.progress}%"></span></div></div></section>`;
   if(next){
-    const domain=next.domain||CURRICULUM.domains.find(d=>d.topics.includes(next.topic))?.name||CURRICULUM.domains[0]?.name||"";
+    const domain=next.domain||CURRICULUM.domains.find(d=>d.topics.some(t=>t.topic===(next.topic||next.name)))?.name||CURRICULUM.domains[0]?.name||"";
     const d=CURRICULUM.domains.find(x=>x.name===domain);
     const index=Number.isInteger(next.index)?next.index:Math.max(0,d?d.topics.findIndex(t=>t.topic===(next.topic||next.name)):-1);
     h+=`<section class="section"><div class="section-title"><h2>Today's next step</h2><span class="small">One task at a time</span></div><div class="card career-next-card">
