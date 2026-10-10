@@ -111,17 +111,32 @@ test('study planner generates a dated plan and shows the daily calendar', async 
   await chooseRole(page, 'Platform Engineer');
   await page.evaluate(() => window.navigate('planner'));
 
+  const dates = await page.evaluate(() => {
+    const startDate = new Date();
+    startDate.setHours(12, 0, 0, 0);
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 14);
+    const fmt = d => `${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}/${String(d.getFullYear()).slice(-2)}`;
+    return { start: fmt(startDate), end: fmt(endDate) };
+  });
   const start = page.locator('input[data-date-action="plannerStart"]');
   const end = page.locator('input[data-date-action="plannerEnd"]');
-  await start.fill('10/10/26');
+  await start.fill(dates.start);
   await start.press('Tab');
-  await end.fill('10/24/26');
+  await end.fill(dates.end);
   await end.press('Tab');
 
   await page.getByRole('button', { name: 'Generate Daily Study Plan' }).click();
   await expect(page.locator('.plan-table')).toBeVisible();
   await expect(page.getByText('Follow your daily commitment')).toBeVisible();
-  await expect(page.locator('.study-day-cell').first()).toBeVisible();
+  const todayCell = page.locator('.study-day-cell.status-today').first();
+  await expect(todayCell).toBeVisible();
+  await todayCell.click();
+  await page.getByRole('button', { name: 'Mark session complete' }).click();
+  await expect(page.locator('.study-day-cell.status-completed').first()).toBeVisible();
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await page.evaluate(() => window.navigate('planner'));
+  await expect(page.locator('.study-day-cell.status-completed').first()).toBeVisible();
 });
 
 test('project checklist changes are saved locally', async ({ page }) => {
@@ -144,6 +159,36 @@ test('export downloads a backup file', async ({ page }) => {
     page.getByRole('button', { name: 'Export' }).click(),
   ]);
   expect(download.suggestedFilename()).toMatch(/^MR-Career-backup-.*\.json$/);
+});
+
+
+test('exported backup can be imported after confirmation', async ({ page }) => {
+  await openApp(page);
+  await chooseRole(page, 'Platform Engineer');
+  const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    page.getByRole('button', { name: 'Export' }).click(),
+  ]);
+  const filePath = await download.path();
+  expect(filePath).toBeTruthy();
+
+  await chooseRole(page, 'Full Stack Developer');
+  page.on('dialog', dialog => dialog.accept());
+  await page.locator('#filePicker').setInputFiles(filePath);
+  await expect(page.locator('#headerRolePicker .header-role-value')).toContainText('Platform Engineer');
+});
+
+test('Reset asks for confirmation and returns to first-run role setup', async ({ page }) => {
+  await openApp(page);
+  await chooseRole(page, 'Platform Engineer');
+  page.on('dialog', dialog => dialog.accept());
+  await page.getByRole('button', { name: 'Reset' }).click();
+  await expect(page.locator('#welcomeRoleTrigger')).toBeVisible({ timeout: 15_000 });
+  const storedRole = await page.evaluate(() => {
+    const state = JSON.parse(localStorage.getItem('itCareerOS_v10') || '{}');
+    return state.settings?.selectedRole || '';
+  });
+  expect(storedRole).toBe('');
 });
 
 test('public information pages load and navigation CTA is visible', async ({ page }) => {
