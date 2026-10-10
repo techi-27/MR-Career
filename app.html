@@ -3427,6 +3427,49 @@ html body .sidebar::-webkit-scrollbar-thumb:hover{background:rgba(219,234,254,.4
 html body .sidebar::-webkit-scrollbar-corner{background:transparent!important}
 </style>
 
+
+<style id="v14-19-golden-yellow-sidebar">
+/* Yellow and warm-gold sidebar variation, keeping text and navigation high contrast. */
+html body .app > .sidebar,
+html body aside.sidebar,
+html body .sidebar{
+  background:#f4c928!important;
+  background-image:linear-gradient(155deg,#ffe66d 0%,#f6cf3c 48%,#eebd24 100%)!important;
+  background-color:#f6cf3c!important;
+  border-right:1px solid rgba(112,79,0,.18)!important;
+  box-shadow:3px 0 18px rgba(112,79,0,.09)!important;
+  color:#172747!important;
+  scrollbar-color:rgba(112,79,0,.25) transparent!important;
+}
+html body .app .sidebar .brand,
+html body aside.sidebar .brand,
+html body .sidebar .brand,
+html body .sidebar .brand .brand-name{color:#172747!important}
+html body .sidebar .brand small{color:#4b3b08!important}
+html body .sidebar .mini{color:#5d490b!important}
+html body .sidebar .nav button,
+html body .sidebar .nav button .nav-icon{color:#26364e!important}
+html body .sidebar .nav button{background:transparent!important;border-color:transparent!important}
+html body .sidebar .nav button:hover{
+  background:rgba(255,255,255,.42)!important;border-color:rgba(112,79,0,.10)!important;color:#172747!important;
+}
+html body .sidebar .nav button:hover .nav-icon{color:#172747!important}
+html body .sidebar .nav button.active{
+  background:linear-gradient(105deg,#fff4b8 0%,#ffffff 100%)!important;
+  background-color:#fff4b8!important;
+  border-color:rgba(112,79,0,.18)!important;color:#172747!important;
+  box-shadow:inset 4px 0 0 #ff5b55,0 4px 12px rgba(112,79,0,.10)!important;
+}
+html body .sidebar .nav button.active .nav-icon{color:#b84a35!important}
+html body .sidebar .brand .brand-sidebar-toggle{
+  background:rgba(255,255,255,.5)!important;border-color:rgba(112,79,0,.22)!important;color:#172747!important;
+}
+html body .sidebar .brand .brand-sidebar-toggle:hover{background:rgba(255,255,255,.75)!important}
+html body .sidebar::-webkit-scrollbar{width:5px!important;background:transparent!important}
+html body .sidebar::-webkit-scrollbar-track{background:transparent!important}
+html body .sidebar::-webkit-scrollbar-thumb{background:rgba(112,79,0,.25)!important;border:0!important;border-radius:99px!important}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
