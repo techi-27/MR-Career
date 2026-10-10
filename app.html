@@ -2899,10 +2899,10 @@ function syncSidebarToggle(){
   btn.textContent=expanded?"‹":"›";
   btn.setAttribute("aria-label",expanded?"Collapse sidebar":"Expand sidebar");
   btn.title=expanded?"Collapse sidebar":"Expand sidebar";
-  /* Use the actual layout state; do not trust stale sidebar bounding boxes or old CSS widths. */
+  /* Center the handle on the sidebar's real visible edge, including the compact icon rail. */
+  const rect=sb.getBoundingClientRect();
   const handleWidth=mobile?36:30;
-  const sidebarWidth=mobile?Math.min(292,window.innerWidth*0.88):(document.body.classList.contains("sidebar-collapsed")?78:276);
-  const left=mobile?(expanded?Math.max(0,sidebarWidth-handleWidth):0):Math.max(0,sidebarWidth-handleWidth/2);
+  const left=mobile?(expanded?Math.max(0,rect.right-handleWidth):0):Math.max(0,rect.right-handleWidth/2);
   btn.style.setProperty("position","fixed","important");
   btn.style.setProperty("left",left+"px","important");
   btn.style.setProperty("right","auto","important");
