@@ -5720,6 +5720,35 @@ function renderRoadmap(){
 }
 
 
+/* Career Discovery questionnaire and role-family scoring. Keep these definitions
+   adjacent to the scoring functions so the discovery page cannot load without them. */
+const V8_DISCOVERY_QUESTIONS = [
+ {id:"interest",q:"Which kind of work sounds most interesting to you?",a:[
+  ["Building applications and software","software"],["Cloud platforms, automation and infrastructure","cloud"],["Data, analytics and AI","data"],["Security and risk reduction","security"],["Testing and improving quality","quality"],["Designing user experiences or products","design"],["Enterprise systems and business platforms","enterprise"],["Architecture, technical strategy or leadership","architecture"]]},
+ {id:"strength",q:"What are your current strengths or interests?",a:[
+  ["Coding and problem solving","software"],["Systems, Linux or networking","cloud"],["Numbers, analysis or Python","data"],["Investigation and attention to detail","security"],["Finding defects and edge cases","quality"],["Creativity and understanding users","design"],["Business processes and enterprise tools","enterprise"],["Planning, communication and big-picture thinking","architecture"]]},
+ {id:"environment",q:"Which work environment appeals to you most?",a:[
+  ["A software team shipping features","software"],["Operating reliable platforms","cloud"],["Exploring data and building models","data"],["Protecting systems and investigating alerts","security"],["Validating releases and preventing defects","quality"],["Working with users and product teams","design"],["Implementing business applications","enterprise"],["Guiding technical decisions across teams","architecture"]]},
+ {id:"learning",q:"Which topic would you most like to learn first?",a:[
+  ["Programming and APIs","software"],["Cloud, containers and automation","cloud"],["SQL, analytics and machine learning","data"],["Threats, identity and security controls","security"],["Test automation and quality engineering","quality"],["UX research and product design","design"],["ERP, CRM or enterprise platforms","enterprise"],["System design and technical strategy","architecture"]]},
+ {id:"motivation",q:"What kind of problem do you enjoy solving?",a:[
+  ["Creating a useful feature","software"],["Making systems faster and more reliable","cloud"],["Finding patterns and insights","data"],["Finding vulnerabilities and reducing risk","security"],["Making products dependable","quality"],["Making products easier to use","design"],["Improving business workflows","enterprise"],["Balancing trade-offs across a system","architecture"]]},
+ {id:"experience",q:"Which experience best describes you today?",a:[
+  ["Beginner or student interested in coding","software"],["IT support, operations or infrastructure","cloud"],["Spreadsheets, reporting, maths or research","data"],["Networking, audit or security fundamentals","security"],["Manual testing or process checking","quality"],["Visual work, research or customer understanding","design"],["Business operations or enterprise applications","enterprise"],["Senior technical work or team coordination","architecture"]]},
+ {id:"goal",q:"What would you most like your next role to offer?",a:[
+  ["Build and ship software","software"],["Work with cloud and automation","cloud"],["Work with data or AI","data"],["Protect organizations and systems","security"],["Improve software quality","quality"],["Shape product experiences","design"],["Connect technology with business processes","enterprise"],["Influence architecture and technical direction","architecture"]]},
+ {id:"practice",q:"Which practical project would you prefer to try?",a:[
+  ["Build a web app or API","software"],["Deploy and automate a cloud service","cloud"],["Analyze a dataset or train a model","data"],["Review a system for security risks","security"],["Create an automated test suite","quality"],["Prototype and test a user experience","design"],["Configure an enterprise workflow","enterprise"],["Design a system and explain its trade-offs","architecture"]]}
+];
+const V8_TAG_ROLES = (() => {
+ const families = ["Software & Development","Cloud & Infrastructure","Data & AI","Cybersecurity","Quality Engineering","Design & Product","Enterprise Technology","Architecture & Leadership"];
+ const tags = {software:families[0],cloud:families[1],data:families[2],security:families[3],quality:families[4],design:families[5],enterprise:families[6],architecture:families[7]};
+ const result={};
+ Object.entries(tags).forEach(([tag,family])=>{
+   result[tag]=Object.keys(ROLE_CONFIG).filter(role=>roleFamily(role)===family);
+ });
+ return result;
+})();
 function v8SetDiscovery(id,val){
  state.discovery=state.discovery||{answers:{},completed:false};
  state.discovery.answers=state.discovery.answers||{};
