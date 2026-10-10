@@ -3294,7 +3294,7 @@ html body .brand .brand-sidebar-toggle:hover{
     <div class="mini">Progress</div>
     <button data-view="weekly"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 3h8M9 3v3h6V3M6 6H4v15h16V6h-2"/><path d="m8 13 2 2 5-5M8 18h8"/></svg></span><span class="nl">My Progress</span></button>
   </div>
-</aside><button class="sidebar-toggle-tab" type="button" onclick="toggleSidebar()" aria-label="Collapse sidebar" title="Collapse sidebar">‹</button>
+</aside>
 <div id="mobileOverlay" onclick="closeMobileSidebar()"></div><main class="main">
   <div class="topbar">
     <div class="top-left">
@@ -3777,36 +3777,14 @@ function applyTheme(){document.documentElement.removeAttribute("data-theme");}
 function decorateNav(){document.querySelectorAll(".nav button[data-view]").forEach(b=>{if(b.querySelector(".nav-icon, .nl"))return;const t=b.textContent.trim(),m=t.match(/^(\\S+)\\s+(.*)$/);if(!m)return;b.setAttribute("title",t);b.innerHTML=`<span class="ni" aria-hidden="true">${m[1]}</span><span class="nl">${m[2]}</span>`;});}
 try{applyTheme();decorateNav();}catch(e){}
 function syncSidebarToggle(){
-  const btn=document.querySelector(".sidebar-toggle-tab");
+  /* Use the hamburger in the sidebar brand as the only toggle. */
+  const btn=document.querySelector(".brand-sidebar-toggle");
   const sb=document.querySelector(".sidebar");
   if(!btn||!sb)return;
   const mobile=window.innerWidth<=760;
   const expanded=mobile?sb.classList.contains("mobile-open"):!document.body.classList.contains("sidebar-collapsed");
-  /* On mobile the header hamburger closes an open drawer; keep the floating opener only while closed. */
-  if(mobile){
-    btn.style.setProperty("display",expanded?"none":"flex","important");
-    btn.textContent="☰";
-    btn.setAttribute("aria-label","Open sidebar");
-    btn.title="Open sidebar";
-  }else{
-    btn.style.setProperty("display","flex","important");
-    btn.textContent=expanded?"‹":"›";
-    btn.setAttribute("aria-label",expanded?"Collapse sidebar":"Expand sidebar");
-    btn.title=expanded?"Collapse sidebar":"Expand sidebar";
-  }
-  /* Deterministic coordinates avoid stale/transformed sidebar measurements and conflicting legacy CSS. */
-  const handleWidth=mobile?40:34;
-  /* Match the compact sidebar dimensions used by the current purple theme. */
-  const sidebarWidth=mobile?Math.min(260,window.innerWidth*0.88):(expanded?214:66);
-  const left=mobile?8:Math.max(0,sidebarWidth-handleWidth/2);
-  btn.style.setProperty("position","fixed","important");
-  btn.style.setProperty("left",left+"px","important");
-  btn.style.setProperty("right","auto","important");
-  btn.style.setProperty("top",mobile?"18px":"132px","important");
-  btn.style.setProperty("width",handleWidth+"px","important");
-  btn.style.setProperty("height","40px","important");
-  btn.style.setProperty("min-width",handleWidth+"px","important");
-  btn.style.setProperty("z-index","1002","important");
+  btn.setAttribute("aria-label",expanded?"Collapse sidebar":"Expand sidebar");
+  btn.title=expanded?"Collapse sidebar":"Expand sidebar";
 }
 function toggleSidebar(){
   const sb=document.querySelector(".sidebar");
@@ -6515,6 +6493,13 @@ html body .sidebar-toggle-tab {
   opacity: 0 !important;
   pointer-events: none !important;
 }
+</style>
+
+
+<style id="v14-15-single-sidebar-toggle-only">
+/* The in-brand hamburger is the only sidebar toggle; remove legacy floating-tab behavior. */
+html body button.sidebar-toggle-tab,
+html body .sidebar-toggle-tab { display:none !important; visibility:hidden !important; pointer-events:none !important; }
 </style>
 
 </body>
