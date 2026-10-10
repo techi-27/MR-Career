@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Plan your IT career with role-based roadmaps, a personalized study planner, hands-on labs, quizzes, interview practice, projects, and job-readiness tools.">
+<meta name="description" content="Explore IT careers, plan learning, practise hands-on skills, build projects, and prepare for job applications with MR.Career.">
 <meta name="theme-color" content="#312e81">
 <meta name="color-scheme" content="light">
 <meta property="og:type" content="website">
@@ -5327,7 +5327,7 @@ function renderRoadmap(){
     </div>
   </div>`;
 
-  h+=`<div class="card section"><div class="section-title"><h2>Roadmap tools</h2><span class="small">Related learning resources for this role</span></div><div class="plan-actions"><button class="btn" onclick="navigate('tech')">Explore technologies</button><button class="btn" onclick="navigate('skills')">Skill dependencies</button><button class="btn" onclick="navigate('exams')">Certification guidance</button><button class="btn" onclick="navigate('labs')">Practice labs</button><button class="btn" onclick="navigate('labs')">Knowledge self-check</button><button class="btn" onclick="navigate('interview')">Interview practice</button><button class="btn primary" onclick="navigate('planner')">Create study schedule</button></div></div>`;
+  h+=`<div class="card section"><div class="section-title"><h2>Roadmap tools</h2><span class="small">Related learning resources for this role</span></div><div class="plan-actions"><button class="btn" onclick="navigate('tech')">Explore technologies</button><button class="btn" onclick="navigate('skills')">Skill dependencies</button><button class="btn" onclick="navigate('exams')">Certification guidance</button><button class="btn" onclick="navigate('labs')">Practice labs</button><button class="btn" onclick="navigate('roadmap')">Review roadmap</button><button class="btn" onclick="navigate('interview')">Interview practice</button><button class="btn primary" onclick="navigate('planner')">Create study schedule</button></div></div>`;
   h+=`<div class="v6-grid-3">
     <div class="v6-card"><div class="v6-label">Target role</div><div class="v6-metric">${esc(role)}</div><div class="v6-muted">${esc(roleFamily(role))}</div></div>
     <div class="v6-card"><div class="v6-label">Role skills</div><div class="v6-metric">${rec.length}</div><div class="v6-muted">Role-specific capabilities</div></div>
@@ -5862,7 +5862,7 @@ function renderProfile(){
     <div><span>Target salary</span><b id="summaryTargetSalary">${Number(p.targetSalary)>0?esc(Number(p.targetSalary).toLocaleString()):"Not set"}</b></div>
     <div class="profile-summary-updated"><span>Last saved</span><b id="summaryUpdated">${esc(p.updatedAt?new Date(p.updatedAt).toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}):"Existing saved profile")}</b></div>
   </div></div>`;
-  h+=`<div class="section card"><h3>Career operating rules</h3><div class="v9-note">Your target role controls learning, labs, projects, certifications, interviews and Skill Gap. Change the role anytime; your saved progress remains in this browser. Use Export regularly for a backup.</div></div>`;
+  h+=`<div class="section card"><h3>Career operating rules</h3><div class="v9-note">Your target role controls learning, labs, projects, certifications, interviews and job-readiness guidance. Change the role anytime; your saved progress remains in this browser. Use Export regularly for a backup.</div></div>`;
   setPage("My Career Profile",h);
 }
 function searchAndRender(kind,value){
