@@ -3839,6 +3839,21 @@ html body #headerRolePicker > .header-role-trigger[aria-expanded="true"] > .head
   transform:rotate(180deg) !important;
 }
 </style>
+<style id="v14-39-keep-open-domain-on-one-line">
+/* Keep the study-plan action label on one line. */
+html body .plan-table .plan-start-btn {
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  min-width: 124px !important;
+  width: auto !important;
+  padding: 10px 14px !important;
+  line-height: 1.2 !important;
+}
+html body .plan-table td:last-child {
+  min-width: 145px !important;
+}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -5490,7 +5505,7 @@ function renderPlanner(){
   const ps=plannerDailyStats(dailyEntries);
   h+=`<div class="section"><div class="section-title"><h2>2. Study plan overview</h2><span class="small">${formatDate(p.startDate)} to ${formatDate(p.endDate)}</span></div><div class="plan-saved-note">Study plan saved automatically in this browser. Your progress is stored locally; export a backup before clearing browser data.</div><div class="study-plan-stats"><div><b>${ps.completed}</b><span>Completed sessions</span></div><div class="missed ${ps.missed?"has-missed":""}"><b>${ps.missed}</b><span>Missed sessions</span></div><div><b>${ps.today}</b><span>Today's session</span></div><div><b>${ps.upcoming}</b><span>Upcoming sessions</span></div><div><b>${ps.recoveries}</b><span>Catch-up sessions</span></div></div>`;
   h+=`<div class="table-wrap"><table class="plan-table"><thead><tr><th>#</th><th>Domain</th><th>Role priority</th><th>Study from</th><th>Study until</th><th>Days</th><th>What to do</th><th>Session status</th><th>Action</th></tr></thead><tbody>`;
-  rows.forEach(r=>{const domainEntries=dailyEntries.filter(e=>!e.isRecovery&&e.domain===r.domain&&e.date>=r.start&&e.date<=r.end);const done=domainEntries.filter(e=>e.status==="completed").length;const missed=domainEntries.filter(e=>e.status==="missed").length;h+=`<tr><td><b>${r.seq}</b></td><td><b>${esc(r.domain)}</b></td><td>${r.weight}%</td><td>${formatDate(r.start)}</td><td>${formatDate(r.end)}</td><td>${r.days}</td><td>Daily learning, practice, a small lab, revision, and interview explanation.</td><td><span class="plan-chip">${done}/${domainEntries.length} complete</span>${missed?` <span class="study-status-pill status-missed">${missed} missed</span>`:""}</td><td><button class="btn primary plan-start-btn" onclick="startPlannedDomain(${esc(jsArg(r.domain))})">Open domain</button></td></tr>`;});
+  rows.forEach(r=>{const domainEntries=dailyEntries.filter(e=>!e.isRecovery&&e.domain===r.domain&&e.date>=r.start&&e.date<=r.end);const done=domainEntries.filter(e=>e.status==="completed").length;const missed=domainEntries.filter(e=>e.status==="missed").length;h+=`<tr><td><b>${r.seq}</b></td><td><b>${esc(r.domain)}</b></td><td>${r.weight}%</td><td>${formatDate(r.start)}</td><td>${formatDate(r.end)}</td><td>${r.days}</td><td>Daily learning, practice, a small lab, revision, and interview explanation.</td><td><span class="plan-chip">${done}/${domainEntries.length} complete</span>${missed?` <span class="study-status-pill status-missed">${missed} missed</span>`:""}</td><td><button class="btn primary plan-start-btn" onclick="startPlannedDomain(${esc(jsArg(r.domain))})">Open Domain</button></td></tr>`;});
   h+=`</tbody></table></div></div>`;
   h+=`<div class="section"><div class="section-title"><h2>3. Follow your daily commitment</h2><span class="small">Mark sessions complete when finished. Reschedule missed work instead of abandoning the plan.</span></div>${renderPlannerCalendar(dailyEntries)}</div>`;
  }
