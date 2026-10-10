@@ -6499,5 +6499,17 @@ html body.sidebar-collapsed .sidebar .nav button{
 }
 </style>
 
+
+<style id="v14-14-remove-duplicate-floating-sidebar-toggle">
+/* Keep the hamburger inside the sidebar brand as the only sidebar toggle. */
+html body button.sidebar-toggle-tab,
+html body .sidebar-toggle-tab {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+</style>
+
 </body>
 </html>
