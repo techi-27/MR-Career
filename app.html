@@ -6351,5 +6351,50 @@ html body.sidebar-collapsed .sidebar .nav button{
 }
 </style>
 
+
+<style id="v14-11-center-hamburger-on-collapsed-rail">
+/* Match the hamburger button's center to the navigation icon column. */
+@media(min-width:761px){
+  html body.sidebar-collapsed .sidebar .brand{
+    box-sizing:border-box !important;
+    width:66px !important;
+    min-width:66px !important;
+    max-width:66px !important;
+    padding:10px 0 14px !important;
+    margin:0 !important;
+    display:flex !important;
+    flex-direction:row !important;
+    justify-content:flex-start !important;
+    align-items:center !important;
+  }
+  html body.sidebar-collapsed .sidebar .brand .brand-sidebar-toggle{
+    position:relative !important;
+    left:-4px !important;
+    right:auto !important;
+    transform:none !important;
+    margin:0 auto !important;
+    width:34px !important;
+    min-width:34px !important;
+    height:34px !important;
+    flex:0 0 34px !important;
+  }
+  html body.sidebar-collapsed .sidebar .nav button{
+    width:100% !important;
+    min-width:0 !important;
+    justify-content:center !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
+  html body.sidebar-collapsed .sidebar .nav button .nav-icon{
+    margin:0 auto !important;
+  }
+  html body.sidebar-collapsed .sidebar-toggle-tab{
+    display:none !important;
+    visibility:hidden !important;
+    pointer-events:none !important;
+  }
+}
+</style>
+
 </body>
 </html>
