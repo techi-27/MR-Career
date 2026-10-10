@@ -2317,6 +2317,50 @@ html body .sidebar-toggle-tab:before,html body .sidebar-toggle-tab:after {conten
 }
 </style>
 
+
+<style id="v13-60-sidebar-toggle-position-hotfix">
+/* Final override: align the toggle to the actual sidebar edge, not an old viewport coordinate. */
+html body button.sidebar-toggle-tab {
+  position: fixed !important;
+  left: 261px !important;
+  right: auto !important;
+  top: 132px !important;
+  width: 30px !important;
+  height: 40px !important;
+  min-width: 30px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1px solid #d7e1ef !important;
+  border-radius: 0 9px 9px 0 !important;
+  background: #fff !important;
+  color: #405577 !important;
+  box-shadow: 0 3px 10px rgba(30,50,80,.14) !important;
+  font-size: 21px !important;
+  line-height: 1 !important;
+  z-index: 1001 !important;
+}
+html body.sidebar-collapsed button.sidebar-toggle-tab {
+  left: 63px !important;
+  border-radius: 0 9px 9px 0 !important;
+}
+html body button.sidebar-toggle-tab:after { content: none !important; display: none !important; }
+@media (max-width: 760px) {
+  html body button.sidebar-toggle-tab {
+    left: 0 !important;
+    top: 18px !important;
+    width: 36px !important;
+    height: 40px !important;
+    border-radius: 0 9px 9px 0 !important;
+  }
+  html body:has(.sidebar.mobile-open) button.sidebar-toggle-tab {
+    left: calc(min(292px, 88vw) - 36px) !important;
+    border-radius: 9px 0 0 9px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
