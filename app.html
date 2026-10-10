@@ -5419,5 +5419,46 @@ resetData = function(){ __v10BaseResetData(); };
 }
 </style>
 
+
+<style id="v13-68-fix-visible-custom-role-picker">
+/* The visible role control is #headerRolePicker .header-role-trigger; #roleSelector is intentionally visually hidden. */
+html body #headerRolePicker {
+  width: clamp(220px, 22vw, 290px) !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+html body #headerRolePicker > .header-role-trigger {
+  gap: 12px !important;
+  padding-right: 10px !important;
+  min-height: 46px !important;
+}
+html body #headerRolePicker > .header-role-trigger > span[aria-hidden="true"] {
+  display: inline-flex !important;
+  flex: 0 0 30px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 8px !important;
+  background: #efedff !important;
+  color: #4f46e5 !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 21px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  overflow: visible !important;
+}
+html body #headerRolePicker > .header-role-trigger:hover > span[aria-hidden="true"] {
+  background: #e3deff !important;
+}
+html body #headerRolePicker > .header-role-trigger:focus-visible {
+  outline: 3px solid rgba(79,70,229,.28) !important;
+  outline-offset: 2px !important;
+}
+@media(max-width:760px) {
+  html body #headerRolePicker { width: 100% !important; max-width: 100% !important; }
+}
+</style>
+
 </body>
 </html>
