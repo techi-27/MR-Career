@@ -4461,7 +4461,7 @@ function renderReadiness(){
   updateInterviewScore();const interview=Number(state.v9?.interviewScore)||0;
   // Readiness uses supported, user-recorded signals only; the incomplete quiz bank is excluded.
   const readiness=Math.round(rs.progress*.65+labScore*.20+interview*.15);
-  let h=pageHero("CAREER READINESS",`💼 ${esc(role)} — Job Ready`,`See exactly how ready you are for your selected role and what is still missing.`);
+  let h=pageHero("CAREER READINESS",`${esc(role)} — Job Ready`,`See exactly how ready you are for your selected role and what is still missing.`);
   const projectProofCount=completedProjectProofCount();
   h+=`<div class="v6-grid-3">
     <div class="v6-card"><div class="v6-label">Role skill readiness</div><div class="v6-metric">${rs.progress}%</div></div>
@@ -4586,7 +4586,7 @@ function renderExams(){
   const role=selectedRole();
   const curated=certificationRecommendations(role);
   const rows=roleTopicRows(12), seen=new Set();
-  let h=pageHero("LEARN & PRACTICE",`🏆 ${esc(role)} Certifications & Exams`,`Role-specific certification references from official providers. Certifications are optional; choose based on your target jobs, hands-on experience and budget.`);
+  let h=pageHero("LEARN & PRACTICE",`${esc(role)} Certifications & Exams`,`Role-specific certification references from official providers. Certifications are optional; choose based on your target jobs, hands-on experience and budget.`);
   h+=`<div class="v6-note" style="margin:12px 0;padding:12px 14px"><b>Suggested path:</b> Start with one relevant credential, build a practical project, then consider an advanced certification. Exam names and availability can change, so verify details on the official provider page before booking.</div>`;
   h+=`<div class="section-title"><h2>Recommended for ${esc(role)}</h2><span class="small">${curated.length} suggested credentials and learning certificates</span></div>`;
   curated.forEach((c,i)=>{
@@ -5144,16 +5144,16 @@ function openLearning(domain,i){
   <div class="learning-head"><div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px"><button class="btn" onclick="closeLearning()">Back to ${esc(domain)}</button><span class="badge">${esc(domain)} · ${esc(role)} · ${weight}% role weight</span></div><h2 style="margin-top:8px">${esc(t.topic)}</h2><div class="small">${esc(t.learn)}</div></div><button class="close-x" onclick="closeLearning()">×</button></div>
   <div class="detail-grid">
    <div class="detail-box"><h3>Context — Why this matters for ${esc(role)}</h3><p>${esc(det.context)}</p></div>
-   <div class="detail-box"><h3>📚 What you need to learn</h3><ul>${learn}</ul></div>
+   <div class="detail-box"><h3>What you need to learn</h3><ul>${learn}</ul></div>
    ${commandHtml}
    <div class="detail-box"><h3>Hands-on lab</h3><p>${esc(det.lab)}</p><p><b>Proof:</b> Add a README, architecture/design evidence, screenshots/results and GitHub link.</p></div>
-   <div class="detail-box"><h3>🏆 Exam / certification relevance</h3><p>${esc(det.exam)}</p></div>
-   <div class="detail-box"><h3>📈 Your progress</h3><p>Status: <b>${esc(t.status)}</b> · Progress: <b>${pct(t)}%</b> · Actual hours: <b>${Number(t.actualHours)||0}</b></p>
+   <div class="detail-box"><h3>Exam / certification relevance</h3><p>${esc(det.exam)}</p></div>
+   <div class="detail-box"><h3>Your progress</h3><p>Status: <b>${esc(t.status)}</b> · Progress: <b>${pct(t)}%</b> · Actual hours: <b>${Number(t.actualHours)||0}</b></p>
     <div class="progress"><span style="width:${pct(t)}%"></span></div>
     <div class="detail-actions"><button class="btn primary" onclick="quickComplete(${esc(jsArg(domain))},${i})">Mark Completed</button><button class="btn" onclick="quickProgress(${esc(jsArg(domain))},${i},50)">Set 50%</button><button class="btn" onclick="quickProgress(${esc(jsArg(domain))},${i},100)">Set 100%</button></div>
    </div>
   </div>
-  <div class="section"><div class="section-title"><h2>🧠 Topic Quiz</h2><span class="small">Use before marking the topic completed</span></div><div class="detail-grid">${quizzes}</div></div>
+  <div class="section"><div class="section-title"><h2>Topic Quiz</h2><span class="small">Use before marking the topic completed</span></div><div class="detail-grid">${quizzes}</div></div>
   <div class="section"><div class="section-title"><h2>Interview Preparation</h2><span class="small">Answer aloud; then write your best answer in Notes</span></div><div class="detail-grid">${interviews}</div></div>
  </div></div>`;
  document.body.appendChild(modal);
@@ -5688,7 +5688,7 @@ function renderRoadmap(){
   });
 
   h+=`</div></div></div>`;
-  h+=`<div class="section"><div class="section-title"><h2>🔗 How the sequence works</h2></div><div class="v6-two">
+  h+=`<div class="section"><div class="section-title"><h2>How the sequence works</h2></div><div class="v6-two">
     <div class="v6-card"><b>Earlier skills unlock later skills</b><p class="v6-muted">The role order starts with prerequisites and moves toward role-specific professional capabilities.</p></div>
     <div class="v6-card"><b>Dates belong in Study Planner</b><p class="v6-muted">Roadmap = what to learn. Study Planner = when to learn it.</p></div>
   </div></div>`;
@@ -5809,10 +5809,10 @@ function renderJobs(){
     <div class="v8-card">
       <div class="v8-label">YOUR SELECTED ROLE</div>
       <h3>${esc(role)}</h3>
-      <p class="v8-muted">${esc(roleFamily(role))} · ${esc(state.profile?.experience||"Fresher")} · ${esc(state.profile?.goal||"Get job")}</p>
+      <p class="v8-muted">${esc(roleFamily(role))} · ${esc(state.profile?.experience||"Not set")} · ${esc(state.profile?.goal||"Not set")}</p>
       <div class="v8-chip">${statsRole.progress}% role readiness</div>
       <div class="v8-chip">${order.length} core learning areas</div>
-      <div class="v8-chip">${Number(state.profile?.weeklyHours)||10} hrs/week</div>
+      <div class="v8-chip">${Number(state.profile?.weeklyHours)>0?Number(state.profile.weeklyHours)+" hrs/week":"Study time not set"}</div>
     </div>
     <div class="v8-card">
       <div class="v8-label">ROLE ACTIONS</div>
@@ -5881,12 +5881,12 @@ function v8NextAction(){
  return null;
 }
 function v8RenderToday(){
- const n=v8NextAction();if(!n)return `<div class="v8-card v8-today"><div class="v8-label">TODAY</div><h3>🎉 Your selected learning path is complete</h3><p class="v8-muted">Now focus on portfolio proof, interview practice and real job descriptions.</p><button class="btn primary" onclick="navigate('jd')">Analyze a JD</button></div>`;
+ const n=v8NextAction();if(!n)return `<div class="v8-card v8-today"><div class="v8-label">TODAY</div><h3>Your selected learning path is complete</h3><p class="v8-muted">Now focus on portfolio proof, interview practice and real job descriptions.</p><button class="btn primary" onclick="navigate('jd')">Analyze a JD</button></div>`;
  const t=n.topic, det=t.details||{};
  return `<div class="v8-card v8-today"><div class="v8-label">YOUR NEXT ACTION · ${esc(selectedRole())}</div><h3>${esc(t.topic)}</h3><p class="v8-muted">${esc(det.context||t.learn||'Build the skill through understanding, practice and proof.')}</p><div class="v8-chip">1. Understand</div><div class="v8-chip">2. Practice</div><div class="v8-chip">3. Lab</div><div class="v8-chip">4. Reflect</div><div class="v8-chip">5. Interview</div><div class="v8-actions"><button class="btn primary v8-start-learning" type="button" onclick="event.stopPropagation();openLearning(${esc(jsArg(n.domain))},${n.index})">Start learning</button><button class="btn" onclick="navigate('domain:${CURRICULUM.domains.findIndex(x=>x.name===n.domain)}')">Open topic page</button></div></div>`;
 }
 function renderUniversalHome(){
- const role=selectedRole(),exp=state.profile?.experience||"Fresher",goal=state.profile?.goal||"Get job";
+ const role=selectedRole(),exp=state.profile?.experience||"Not set",goal=state.profile?.goal||"Not set";
  const rec=(ROLE_ORDER[role]||UNIVERSAL_ROLE_ORDER[role]||[]).slice(0,5),s=stats(),p=plannerState(),sw=state.v9?.switch||{};
  if(!role)return renderFirstRun();
  const daily=p.generated?plannerDailyEntries():[];
@@ -5935,7 +5935,7 @@ function renderUniversalHome(){
    ${missed.length?`<div class="cg-alert"><span aria-hidden="true">!</span><span><strong>${missed.length} missed session${missed.length===1?"":"s"}</strong><small>Review and reschedule unfinished work.</small></span><button class="cg-text-link" onclick="openPlannerMissedDays()">Review →</button></div>`:""}
    </div>
    <div class="cg-panel cg-role-details"><div class="cg-panel-head"><div><div class="cg-section-kicker">YOUR CAREER PROFILE</div><h2>${esc(role)}</h2></div><span class="cg-profile-icon">✦</span></div>
-     <div class="cg-profile-list"><div><span>Experience level</span><strong>${esc(exp)}</strong></div><div><span>Current goal</span><strong>${esc(goal)}</strong></div><div><span>Weekly study time</span><strong>${Number(state.profile?.weeklyHours)||10} hrs</strong></div><div><span>Target date</span><strong>${esc(targetLabel)}</strong></div></div>
+     <div class="cg-profile-list"><div><span>Experience level</span><strong>${esc(exp)}</strong></div><div><span>Current goal</span><strong>${esc(goal)}</strong></div><div><span>Weekly study time</span><strong>${Number(state.profile?.weeklyHours)>0?Number(state.profile.weeklyHours)+" hrs":"Not set"}</strong></div><div><span>Target date</span><strong>${esc(targetLabel)}</strong></div></div>
      <div class="cg-panel-actions"><button class="btn" onclick="navigate('jobs')">Change target role</button><button class="btn" onclick="navigate('readiness')">Explore skill gaps</button></div>
    </div>
  </section>`;
@@ -5999,7 +5999,7 @@ Object.assign(V9_ROLE_EXPERIMENTS,{
 });
 
 function v9EnsureState(){
-  state.profile=state.profile||{experience:"Fresher",goal:"Get job",weeklyHours:10,targetDate:"",targetSalary:"",education:"",currentRole:"",currentSkills:""};
+  state.profile=state.profile||{experience:"",goal:"",weeklyHours:"",targetDate:"",targetSalary:"",education:"",currentRole:"",currentSkills:"",profileConfigured:false};
   state.v9=state.v9||{xp:0,streak:0,lastActive:"",daily:{},projects:{},compare:[],switch:{currentRole:"",targetRole:""},resumeText:"",resumeScore:0};
   state.v9.daily=state.v9.daily||{};
   state.v9.projects=state.v9.projects&&typeof state.v9.projects==="object"&&!Array.isArray(state.v9.projects)?state.v9.projects:{};
@@ -6048,6 +6048,7 @@ function profileSavedLabel(){
 }
 function v9SaveProfile(k,v){
   v9EnsureState();
+  state.profile.profileConfigured=true;
   state.profile[k]=k==="weeklyHours"||k==="targetSalary"?Number(v)||0:v;
   state.profile.updatedAt=new Date().toISOString();
   window.__profileSaveStatus=save()?"saved":"error";
@@ -6068,9 +6069,9 @@ function saveProfileFromForm(){
   const targetDateInput=document.querySelector('[data-date-action="profileTarget"]');
   const date=parseDateMMDDYY(targetDateInput?.value||"");
   if((targetDateInput?.value||"").trim() && date===null){alert("Please enter a valid target date as MM/DD/YY (for example, 01/30/27).");targetDateInput?.focus();return;}
-  const experience=value("profileExperience"),education=value("profileEducation").trim(),currentRole=value("profileCurrentRole").trim(),currentSkills=value("profileCurrentSkills").trim(),goal=value("profileGoal"),hours=Math.max(1,Math.min(60,Number(value("profileWeeklyHours"))||10)),salary=Math.max(0,Number(value("profileTargetSalary"))||0),targetRole=value("profileTargetRole");
+  const experience=value("profileExperience"),education=value("profileEducation").trim(),currentRole=value("profileCurrentRole").trim(),currentSkills=value("profileCurrentSkills").trim(),goal=value("profileGoal"),rawHours=value("profileWeeklyHours").trim(),hours=rawHours?Math.max(1,Math.min(60,Number(rawHours)||1)):"",salary=Math.max(0,Number(value("profileTargetSalary"))||0),targetRole=value("profileTargetRole");
   const roleChanged=!!targetRole&&targetRole!==selectedRole();
-  Object.assign(state.profile,{experience,education,currentRole,currentSkills,goal,weeklyHours:hours,targetSalary:salary,targetDate:date||"",targetRole:targetRole||"",updatedAt:new Date().toISOString()});
+  Object.assign(state.profile,{experience,education,currentRole,currentSkills,goal,weeklyHours:hours,targetSalary:salary,targetDate:date||"",targetRole:targetRole||"",profileConfigured:true,updatedAt:new Date().toISOString()});
   if(targetRole&&ROLE_CONFIG[targetRole]){
     state.settings=state.settings||{};state.settings.selectedRole=targetRole;
     if(state.planner){state.planner.selectedRole=targetRole;if(roleChanged)state.planner.generated=false;}
@@ -6090,7 +6091,8 @@ function v9MarkActive(){
   }
 }
 function v9CareerStage(){
-  const e=state.profile?.experience||"Fresher";
+  const e=state.profile?.experience||"";
+  if(!e)return "Not set";
   if(e==="College Student")return "Explorer";
   if(e==="Fresher")return "Entry-level";
   if(e==="0–2 years")return "Junior";
@@ -6129,9 +6131,11 @@ function v9SelectRole(role){
 function renderProfile(){
   v9EnsureState();
   const p=state.profile, role=selectedRole();
-  if(p.experience==="College Student"&&!p.education&&!p.currentRole&&!p.currentSkills)p.experience="";
-  if(p.goal==="Explore careers"&&!p.education&&!p.currentRole&&!p.currentSkills)p.goal="";
-  if(Number(p.weeklyHours)===10&&!p.education&&!p.currentRole&&!p.currentSkills)p.weeklyHours="";
+  if(!p.profileConfigured&&!p.education&&!p.currentRole&&!p.currentSkills){
+    if(p.experience==="College Student")p.experience="";
+    if(p.goal==="Explore careers")p.goal="";
+    if(Number(p.weeklyHours)===10)p.weeklyHours="";
+  }
   const xp=v9XP();
   const saveStatus=window.__profileSaveStatus==="error"?"The browser could not save this profile. Check storage permissions and export a backup.":profileSavedLabel();
   const saveStatusClass=window.__profileSaveStatus==="error"?"profile-save-error":"profile-save-ok";
@@ -6151,7 +6155,7 @@ function renderProfile(){
       <label class="small" for="profileCurrentSkills">Current skills</label><textarea id="profileCurrentSkills" style="width:100%;min-height:80px;margin:5px 0" placeholder="Java, SQL, Linux..." onchange="v9SaveProfile('currentSkills',this.value)">${esc(p.currentSkills||"")}</textarea>
     </div>
     <div class="v9-card card"><h3>Where do you want to go?</h3>
-      <label class="small" for="profileTargetRole">Target role</label><select id="profileTargetRole" style="width:100%;margin:5px 0 10px" onchange="handleRoleChange(this.value)"><option value="" ${role?"":"selected"}>Select a target role</option>${v9RoleOptions(role)}</select>
+      <label class="small" for="profileTargetRole">Target role</label><select id="profileTargetRole" style="width:100%;margin:5px 0 10px" onchange="handleRoleChange(this.value)"><option value="" disabled ${role?"":"selected"}>Select a target role</option>${v9RoleOptions(role)}</select>
       <label class="small" for="profileGoal">Career goal</label><select id="profileGoal" style="width:100%;margin:5px 0 10px" onchange="v9SaveProfile('goal',this.value)"><option value="" ${p.goal?"":"selected"} disabled>Choose your career goal</option>${["Explore careers","Get job","Switch job","Get promoted","Become a specialist","Prepare for interviews","Build a portfolio"].map(x=>`<option ${p.goal===x?"selected":""}>${x}</option>`).join("")}</select>
       <label class="small" for="profileWeeklyHours">Hours available per week</label><input id="profileWeeklyHours" type="number" min="1" max="60" style="width:100%;margin:5px 0 10px" value="${Number(p.weeklyHours)||""}" placeholder="e.g. 8" onchange="v9SaveProfile('weeklyHours',this.value)">
       <label class="small" for="profileTargetDateInput">Target date</label>${dateInputHTML(p.targetDate||"","profileTarget",'id="profileTargetDateInput" style="width:100%;margin:5px 0 10px"')}
@@ -6166,7 +6170,7 @@ function renderProfile(){
     <div><span>Current skills</span><b id="summaryCurrentSkills">${esc(p.currentSkills||"Not set")}</b></div>
     <div><span>Target role</span><b id="summaryTargetRole">${esc(role||"Not selected")}</b></div>
     <div><span>Career goal</span><b id="summaryGoal">${esc(p.goal||"Not set")}</b></div>
-    <div><span>Study availability</span><b id="summaryWeeklyHours">${Number(p.weeklyHours)||10} hours per week</b></div>
+    <div><span>Study availability</span><b id="summaryWeeklyHours">${Number(p.weeklyHours)>0?Number(p.weeklyHours)+" hours per week":"Not set"}</b></div>
     <div><span>Target date</span><b id="summaryTargetDate">${esc(p.targetDate?formatDate(p.targetDate):"Not set")}</b></div>
     <div><span>Target salary</span><b id="summaryTargetSalary">${Number(p.targetSalary)>0?esc(Number(p.targetSalary).toLocaleString()):"Not set"}</b></div>
     <div class="profile-summary-updated"><span>Last saved</span><b id="summaryUpdated">${esc(p.updatedAt?new Date(p.updatedAt).toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}):"Existing saved profile")}</b></div>
