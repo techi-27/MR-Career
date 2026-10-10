@@ -6215,5 +6215,87 @@ html body .sidebar .brand .brand-sidebar-toggle .hamburger-lines i{
 }
 </style>
 
+
+<style id="v14-9-enforce-narrow-sidebar-width">
+/* Final width override: align the expanded sidebar to the compact width marked by the user. */
+html body .app > .sidebar,
+html body aside.sidebar,
+html body .sidebar{
+  box-sizing:border-box !important;
+  width:214px !important;
+  min-width:214px !important;
+  max-width:214px !important;
+}
+html body .main{
+  box-sizing:border-box !important;
+  margin-left:214px !important;
+  width:calc(100% - 214px) !important;
+  min-width:0 !important;
+}
+html body.sidebar-collapsed .app > .sidebar,
+html body.sidebar-collapsed aside.sidebar,
+html body.sidebar-collapsed .sidebar{
+  width:66px !important;
+  min-width:66px !important;
+  max-width:66px !important;
+}
+html body.sidebar-collapsed .main{
+  margin-left:66px !important;
+  width:calc(100% - 66px) !important;
+}
+html body .sidebar .brand{
+  gap:7px !important;
+  padding-left:7px !important;
+  padding-right:7px !important;
+}
+html body .sidebar .brand .brand-name{
+  font-size:15px !important;
+  letter-spacing:-.35px !important;
+  white-space:nowrap !important;
+}
+html body .sidebar .brand small{
+  margin-left:0 !important;
+  font-size:9px !important;
+  white-space:normal !important;
+}
+html body .sidebar .nav button{
+  gap:8px !important;
+  padding-left:8px !important;
+  padding-right:7px !important;
+}
+html body .sidebar .nav button .nav-icon{
+  flex-basis:30px !important;
+  width:30px !important;
+  height:30px !important;
+}
+html body .sidebar .nav button .nav-icon svg{
+  width:17px !important;
+  height:17px !important;
+}
+@media(max-width:1000px) and (min-width:761px){
+  html body .app > .sidebar,
+  html body aside.sidebar,
+  html body .sidebar{
+    width:214px !important;
+    min-width:214px !important;
+    max-width:214px !important;
+  }
+  html body .main{margin-left:214px !important;width:calc(100% - 214px) !important}
+  html body.sidebar-collapsed .sidebar{width:66px !important;min-width:66px !important;max-width:66px !important}
+  html body.sidebar-collapsed .main{margin-left:66px !important;width:calc(100% - 66px) !important}
+}
+@media(max-width:760px){
+  html body .app > .sidebar,
+  html body aside.sidebar,
+  html body .sidebar{
+    width:260px !important;
+    min-width:260px !important;
+    max-width:260px !important;
+  }
+  html body .main{margin-left:0 !important;width:100% !important}
+  html body.sidebar-collapsed .main{margin-left:0 !important;width:100% !important}
+}
+</style>
+
 </body>
 </html>
