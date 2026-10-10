@@ -3894,6 +3894,17 @@ html body .v9-notes-label { display:block;margin-top:12px;color:#526782;font-siz
 html body .v9-notes-label textarea { display:block;width:100%;min-height:68px;margin-top:6px;padding:10px;border:1px solid #dce4ee;border-radius:10px;box-sizing:border-box; }
 @media(max-width:650px){html body .v9-project-heading{flex-direction:column;gap:10px}html body .v9-project-progress{flex-basis:auto;text-align:left}html body .v9-project-guide{align-items:flex-start}html body .plan-table td:last-child{padding-right:12px!important}}
 </style>
+<style id="v14-42-project-card-overview-polish">
+html body .v9-project > div:first-child { align-items:flex-start!important; padding-bottom:12px!important; border-bottom:1px solid #edf1f7!important; }
+html body .v9-project > div:first-child > div:first-child { min-width:0!important;flex:1 1 auto!important; }
+html body .v9-project > div:first-child h3 { font-size:18px!important;line-height:1.35!important;margin:5px 0 7px!important; }
+html body .v9-project > div:first-child .small { font-size:12px!important;line-height:1.55!important; }
+html body .v9-project > div:first-child .v9-label { letter-spacing:.07em!important;color:#5b6f8c!important; }
+html body .v9-project > div:first-child .v9-badge { flex:0 0 auto!important;align-self:flex-start!important;padding:8px 10px!important;font-size:11px!important;background:#eef4ff!important;color:#355b99!important; }
+html body .v9-project .v9-checks { gap:8px!important; }
+html body .v9-project .v9-check { min-height:42px!important;display:flex!important;align-items:center!important;gap:8px!important;line-height:1.4!important; }
+html body .v9-project > textarea { min-height:64px!important;border:1px solid #dce4ee!important;border-radius:10px!important;padding:10px!important; }
+</style>
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -6256,7 +6267,7 @@ function v9ProjectState(id){
 function renderProjects(){
   const role=selectedRole(), ideas=V9_ROLE_EXPERIMENTS[role]||["Build a practical role-specific project","Document the architecture/process","Publish proof in GitHub"];
   const existing=projectsForRole(role);
-  let h=`<div class="v9-hero2"><h2>Project Studio</h2><p>Build evidence, not just certificates. Every project should prove the skills your target role requires.</p></div>`;
+  let h=`<div class="v9-hero2"><h2>Project Studio</h2><p>Build practical projects that demonstrate your ${esc(role)} skills. Start with one project, track progress, and publish your proof.</p></div><div class="v9-project-guide"><b>Your workflow</b><span>1. Build</span><span>2. Test</span><span>3. Document</span><span>4. Publish</span></div>`;
   if(existing.length){
     existing.forEach((x,i)=>{
       const st=v9ProjectState(x.id), checks=["Requirements defined","Implementation complete","Tests / validation","README + architecture","Screenshots / evidence","GitHub published"];
