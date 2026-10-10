@@ -2456,6 +2456,141 @@ html body button.sidebar-toggle-tab:before,html body button.sidebar-toggle-tab:a
 }
 </style>
 
+
+<style id="v13-63-career-growth-experience">
+/* Career-growth home: intentional hierarchy, meaningful progress and reusable card styling. */
+html body .cg-welcome,html body .cg-metrics,html body .cg-section,
+html body .cg-focus-grid,html body .cg-bottom-path{min-width:0}
+html body .cg-welcome{
+ display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.85fr);gap:24px;
+ align-items:center;padding:30px;border:1px solid #e4e8f3;border-radius:22px;
+ background:radial-gradient(ellipse at 88% 8%,rgba(111,91,249,.11),transparent 42%),linear-gradient(125deg,#fff 0%,#fbfaff 100%);
+ box-shadow:0 10px 32px rgba(37,48,82,.055);margin-bottom:20px
+}
+html body .cg-welcome-copy{min-width:0}
+html body .cg-eyebrow,html body .cg-section-kicker{
+ display:flex;align-items:center;gap:8px;color:#6350dc;font-size:10px;
+ font-weight:850;letter-spacing:.11em;line-height:1.4
+}
+html body .cg-eyebrow-dot{width:7px;height:7px;background:#6b56f5;border-radius:50%;box-shadow:0 0 0 4px #eeeaff}
+html body .cg-welcome h2{font-size:clamp(26px,2.7vw,36px);line-height:1.12;letter-spacing:-.045em;color:#17233b;margin:14px 0 10px;max-width:600px}
+html body .cg-welcome-copy>p{font-size:14px;line-height:1.7;color:#64738c;max-width:570px;margin:0}
+html body .cg-welcome-actions,html body .cg-panel-actions,html body .cg-bottom-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:20px}
+html body .cg-welcome-actions .btn,html body .cg-panel-actions .btn,html body .cg-bottom-actions .btn{min-height:40px}
+html body .cg-role-preview{padding:21px;border:1px solid #e7e3ff;border-radius:17px;background:rgba(255,255,255,.92);box-shadow:0 5px 18px rgba(62,48,130,.055);min-width:0}
+html body .cg-role-preview-top,html body .cg-readiness-row,html body .cg-role-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+html body .cg-role-preview-top{font-size:10px;letter-spacing:.1em;font-weight:850;color:#78839a}
+html body .cg-icon-action{width:30px;height:30px;border:1px solid #e7e8f1;border-radius:9px;background:#fff;color:#5b43f3;cursor:pointer}
+html body .cg-role-preview h3{font-size:21px;line-height:1.3;letter-spacing:-.025em;color:#17233b;margin:8px 0 23px;overflow-wrap:anywhere}
+html body .cg-readiness-row{font-size:12px;color:#65738b;margin-bottom:9px}
+html body .cg-readiness-row strong{font-size:19px;color:#5b43f3}
+html body .cg-progress-track,html body .cg-mini-track{height:7px;overflow:hidden;border-radius:99px;background:#eceaf8}
+html body .cg-progress-track span,html body .cg-mini-track span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#6550ef,#8b78ff);transition:width .25s ease}
+html body .cg-role-foot{margin-top:11px;align-items:flex-start;font-size:10px;color:#77849a;flex-wrap:wrap}
+html body .cg-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:0 0 30px}
+html body .cg-metric{min-width:0;padding:17px;border:1px solid #e4e8f1;border-radius:16px;background:#fff;box-shadow:0 4px 15px rgba(37,48,82,.035)}
+html body .cg-metric-top{display:flex;align-items:center;gap:9px;min-width:0}
+html body .cg-metric-label{font-size:9px;line-height:1.4;letter-spacing:.075em;font-weight:850;color:#77839a}
+html body .cg-metric-icon{width:31px;height:31px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:17px;font-weight:800;flex:none}
+html body .cg-purple{background:#efecff;color:#624af0}html body .cg-blue{background:#e9f2ff;color:#3977d8}html body .cg-teal{background:#e3f8f4;color:#138a79}html body .cg-amber{background:#fff3df;color:#b8791e}
+html body .cg-metric-value{font-size:29px;line-height:1.2;letter-spacing:-.045em;font-weight:850;color:#18243a;margin:14px 0 5px;overflow-wrap:anywhere}
+html body .cg-metric-value small{font-size:14px;letter-spacing:0;color:#77839a;font-weight:650}
+html body .cg-metric-note{font-size:11px;line-height:1.5;color:#7a879c;min-height:32px}
+html body .cg-metric .cg-mini-track{margin-top:12px;height:5px}
+html body .cg-text-link{padding:4px 0;border:0;background:transparent;color:#5b43f3;font-size:11px;font-weight:800;cursor:pointer;text-align:left}
+html body .cg-metric .cg-text-link{margin-top:10px}
+html body .cg-section{margin:0 0 30px}
+html body .cg-section-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px;min-width:0}
+html body .cg-section-heading>div{min-width:0}
+html body .cg-section-heading h2,html body .cg-panel h2,html body .cg-bottom-path h2{font-size:20px;line-height:1.3;letter-spacing:-.03em;color:#17233b;margin:5px 0}
+html body .cg-section-heading p,html body .cg-bottom-path p{font-size:12px;line-height:1.55;color:#758198;margin:0}
+html body .cg-section-heading>.btn{flex:none}
+html body .cg-journey{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+html body .cg-journey-step{position:relative;display:flex;align-items:flex-start;gap:11px;text-align:left;min-width:0;min-height:112px;padding:16px 13px;border:1px solid #e2e7f0;border-radius:15px;background:#fff;color:#17233b;cursor:pointer;transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease}
+html body .cg-journey-step:hover{transform:translateY(-2px);border-color:#c9c1ff;box-shadow:0 7px 18px rgba(49,43,100,.06)}
+html body .cg-journey-step.is-current{border-color:#b7aaff;background:#faf9ff}
+html body .cg-journey-step.is-done .cg-step-number{background:#e3f7ed;color:#178458}
+html body .cg-step-number{display:flex;align-items:center;justify-content:center;width:29px;height:29px;flex:none;border-radius:10px;background:#efedff;color:#6550e8;font-size:10px;font-weight:900}
+html body .cg-step-copy{display:flex;flex-direction:column;gap:7px;min-width:0;padding-top:2px}
+html body .cg-step-copy strong{font-size:12px;line-height:1.4}
+html body .cg-step-copy small{font-size:10px;line-height:1.5;color:#7a879b;overflow-wrap:anywhere}
+html body .cg-step-arrow{position:absolute;right:11px;bottom:10px;color:#9a8bec;font-size:14px}
+html body .cg-focus-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:14px;margin:0 0 30px}
+html body .cg-panel{min-width:0;padding:22px;border:1px solid #e2e7f0;border-radius:18px;background:#fff;box-shadow:0 5px 18px rgba(37,48,82,.035)}
+html body .cg-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+html body .cg-panel-head>div{min-width:0}
+html body .cg-panel h2{font-size:18px;margin:6px 0 0;overflow-wrap:anywhere}
+html body .cg-panel>p{font-size:12px;line-height:1.65;color:#748198;margin:12px 0 16px}
+html body .cg-panel-symbol,html body .cg-profile-icon{display:flex;align-items:center;justify-content:center;width:36px;height:36px;flex:none;border-radius:11px;background:#efedff;color:#624cf0;font-size:18px}
+html body .cg-action-detail{display:flex;align-items:center;gap:11px;padding:12px;border:1px solid #e9e8f4;border-radius:12px;background:#fbfaff;min-width:0}
+html body .cg-detail-icon{width:31px;height:31px;display:flex;align-items:center;justify-content:center;flex:none;border-radius:9px;background:#eeeaff;color:#6049ef;font-size:17px}
+html body .cg-action-detail>span:last-child{display:flex;flex-direction:column;gap:4px;min-width:0}
+html body .cg-action-detail strong{font-size:12px;line-height:1.4;color:#26334a;overflow-wrap:anywhere}
+html body .cg-action-detail small{font-size:10px;line-height:1.5;color:#77839a;overflow-wrap:anywhere}
+html body .cg-alert{display:flex;align-items:center;gap:9px;margin-top:14px;padding:10px;border:1px solid #f1d5ac;border-radius:11px;background:#fff9ed}
+html body .cg-alert>span:first-child{width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex:none;border-radius:8px;background:#ffedce;color:#9b6419;font-weight:900}
+html body .cg-alert>span:nth-child(2){display:flex;flex:1;flex-direction:column;gap:3px;min-width:0}
+html body .cg-alert strong{font-size:11px;color:#875b20}html body .cg-alert small{font-size:10px;color:#987a52;line-height:1.4}
+html body .cg-alert .cg-text-link{flex:none}
+html body .cg-profile-list{margin-top:17px}
+html body .cg-profile-list>div{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid #eef0f5}
+html body .cg-profile-list>div:last-child{border-bottom:0}
+html body .cg-profile-list span{font-size:11px;color:#7a879b}
+html body .cg-profile-list strong{font-size:11px;color:#26334a;text-align:right;overflow-wrap:anywhere}
+html body .cg-skill-list{overflow:hidden;border:1px solid #e2e7f0;border-radius:16px;background:#fff}
+html body .cg-skill-row{display:grid;grid-template-columns:34px minmax(0,1fr) minmax(115px,.45fr) 30px;align-items:center;gap:14px;padding:14px 17px;border-bottom:1px solid #edf0f5;min-width:0}
+html body .cg-skill-row:last-child{border-bottom:0}
+html body .cg-skill-rank{font-size:11px;font-weight:850;color:#9a91dc}
+html body .cg-skill-name{display:flex;flex-direction:column;gap:4px;min-width:0}
+html body .cg-skill-name strong{font-size:12px;color:#243149;line-height:1.4;overflow-wrap:anywhere}
+html body .cg-skill-name small{font-size:10px;color:#7a879b;line-height:1.4;overflow-wrap:anywhere}
+html body .cg-skill-progress{min-width:0}
+html body .cg-skill-progress small{display:block;margin-top:5px;font-size:9px;color:#7a879b}
+html body .cg-skill-open{width:29px;height:29px;border:1px solid #e8e6f8;border-radius:9px;background:#faf9ff;color:#624cf0;font-size:16px;cursor:pointer}
+html body .cg-bottom-path{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:23px;border:1px solid #e3e0fa;border-radius:18px;background:linear-gradient(110deg,#f9f8ff,#f2f6ff);margin-bottom:24px}
+html body .cg-bottom-path>div:first-child{min-width:0}
+html body .cg-bottom-path h2{font-size:19px}
+html body .cg-bottom-actions{justify-content:flex-end;margin-top:0}
+@media(max-width:1100px){
+ html body .cg-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+ html body .cg-journey{grid-template-columns:repeat(2,minmax(0,1fr))}
+ html body .cg-bottom-path{align-items:flex-start;flex-direction:column}
+ html body .cg-bottom-actions{justify-content:flex-start}
+}
+@media(max-width:760px){
+ html body .cg-welcome{grid-template-columns:minmax(0,1fr);padding:20px;gap:20px;border-radius:17px}
+ html body .cg-welcome h2{font-size:28px}
+ html body .cg-welcome-actions{display:grid;grid-template-columns:minmax(0,1fr);align-items:stretch}
+ html body .cg-welcome-actions .btn{width:100%;justify-content:center}
+ html body .cg-metrics{gap:9px;margin-bottom:25px}
+ html body .cg-metric{padding:13px;border-radius:13px}
+ html body .cg-metric-label{font-size:8px;letter-spacing:.045em}
+ html body .cg-metric-value{font-size:25px;margin-top:12px}
+ html body .cg-metric-note{font-size:10px;min-height:30px}
+ html body .cg-section-heading{align-items:flex-start}
+ html body .cg-section-heading>.btn{font-size:10px;padding:8px}
+ html body .cg-journey{grid-template-columns:minmax(0,1fr);gap:8px}
+ html body .cg-journey-step{min-height:76px;align-items:center;padding:12px}
+ html body .cg-step-copy{gap:3px}
+ html body .cg-step-arrow{top:50%;bottom:auto;transform:translateY(-50%)}
+ html body .cg-focus-grid{grid-template-columns:minmax(0,1fr);gap:11px}
+ html body .cg-panel{padding:17px}
+ html body .cg-panel-actions .btn{flex:1 1 auto}
+ html body .cg-skill-row{grid-template-columns:25px minmax(0,1fr) 29px;gap:9px;padding:13px 11px}
+ html body .cg-skill-progress{grid-column:2;grid-row:2}
+ html body .cg-skill-open{grid-column:3;grid-row:1}
+ html body .cg-skill-progress small{font-size:9px}
+ html body .cg-bottom-path{padding:18px}
+ html body .cg-bottom-actions{display:grid;grid-template-columns:minmax(0,1fr);width:100%}
+ html body .cg-bottom-actions .btn{width:100%;justify-content:center}
+}
+@media(max-width:380px){
+ html body .cg-metric-top{align-items:flex-start;flex-direction:column;gap:7px}
+ html body .cg-metric-value{font-size:23px}
+ html body .cg-section-heading{flex-direction:column}
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
@@ -4495,21 +4630,68 @@ function v8RenderToday(){
  return `<div class="v8-card v8-today"><div class="v8-label">YOUR NEXT ACTION · ${esc(selectedRole())}</div><h3>${esc(t.topic)}</h3><p class="v8-muted">${esc(det.context||t.learn||'Build the skill through understanding, practice and proof.')}</p><div class="v8-chip">1. Understand</div><div class="v8-chip">2. Practice</div><div class="v8-chip">3. Lab</div><div class="v8-chip">4. Quiz</div><div class="v8-chip">5. Interview</div><div class="v8-actions"><button class="btn primary v8-start-learning" type="button" onclick="event.stopPropagation();openLearning(${esc(jsArg(n.domain))},${n.index})">Start learning</button><button class="btn" onclick="navigate('domain:${CURRICULUM.domains.findIndex(x=>x.name===n.domain)}')">Open topic page</button></div></div>`;
 }
 function renderUniversalHome(){
- const role=selectedRole(),exp=state.profile?.experience||'Fresher',goal=state.profile?.goal||'Get job',rec=(ROLE_ORDER[role]||UNIVERSAL_ROLE_ORDER[role]||[]).slice(0,6),s=stats();
+ const role=selectedRole(),exp=state.profile?.experience||"Fresher",goal=state.profile?.goal||"Get job";
+ const rec=(ROLE_ORDER[role]||UNIVERSAL_ROLE_ORDER[role]||[]).slice(0,5),s=stats(),p=plannerState(),sw=state.v9?.switch||{};
  if(!role)return renderFirstRun();
- let h=`<div class="v8-hero"><div class="v8-label" style="color:#b9dcff">YOUR CAREER JOURNEY</div><h2>Build the right career, one step at a time.</h2><p>Discover a suitable role, plan your transition, follow a daily study schedule, build project evidence and prepare for interviews.</p><div class="v6-actions"><button class="btn primary" onclick="navigate('discover')">Find my career</button><button class="btn" onclick="navigate('switch')">Plan my switch</button><button class="btn" onclick="navigate('planner')">Study planner</button><button class="btn" onclick="navigate('jd')">Analyze a job</button></div></div>`;
- const sw=state.v9?.switch||{},p=plannerState(),journey=[{n:"Discover",d:"Understand which roles fit",done:!!state.discovery?.chosenRole,go:"discover"},{n:"Choose role",d:role,done:!!role,go:"jobs"},{n:"Plan switch",d:sw.targetDate?`Target ${formatDate(sw.targetDate)}`:"Set role, date and weekly hours",done:!!(sw.targetRole===role&&sw.targetDate),go:"switch"},{n:"Study daily",d:p.generated?`${plannerDailyStats().completed} sessions complete`:"Generate a dated study plan",done:!!p.generated,go:"planner"}];
- h+=`<div class="section"><div class="section-title"><h2>Your career-switch journey</h2><span class="small">One connected workflow</span></div><div class="career-journey-grid">${journey.map((x,i)=>`<button class="career-journey-step ${x.done?"done":""}" onclick="navigate(${esc(jsArg(x.go))})"><span class="career-journey-index">${x.done?"Done":i+1}</span><b>${esc(x.n)}</b><small>${esc(x.d)}</small></button>`).join("")}</div></div>`;
- h+=`<div class="v8-two home-summary-grid"><div>${v8RenderToday()}</div><div class="v8-card"><div class="v8-label">MY TARGET ROLE</div><h3>${esc(role)}</h3><p class="v8-muted">${esc(exp)} · ${esc(goal)} · ${Number(state.profile?.weeklyHours)||10} hrs/week</p><div class="v8-chip">${s.progress}% role progress</div><div class="v8-chip">${s.completed} topics complete</div><div class="v8-chip">${plannerDays(p)||0} planned days</div><div class="v6-actions"><button class="btn" onclick="navigate('jobs')">Change role</button><button class="btn" onclick="navigate('readiness')">Job readiness</button></div></div></div>`;
- h+=plannerJourneyCard();
- const homeDaily=p.generated?plannerDailyEntries():[], homeToday=homeDaily.find(e=>e.date===localTodayISO()), homeMissed=homeDaily.filter(e=>e.status==="missed");
- h+=`<div class="section"><div class="section-title"><h2>Daily focus and recovery</h2><span class="small">One next action, with catch-up support</span></div><div class="v8-two"><div class="v8-card"><div class="v8-label">TODAY'S FOCUS</div><h3>${homeToday?esc(homeToday.topic):p.generated?"No session scheduled today":"Create your daily plan"}</h3><p class="v8-muted">${homeToday?`${esc(homeToday.domain.replace(/^\d+\s*/,""))} · ${esc(homeToday.activity||"Learn and practise")}`:p.generated?"Use your roadmap or continue the next incomplete topic.":"Set your start date and target date to create daily study sessions."}</p><div class="plan-actions"><button class="btn primary" onclick="navigate('planner')">Open daily calendar</button>${homeToday?`<button class="btn" onclick="startStudySession(${esc(jsArg(homeToday.id))})">Start today's session</button>`:""}<button class="btn" onclick="navigate('coach')">More coaching actions</button></div></div><div class="v8-card"><div class="v8-label">CATCH-UP AND REVIEW</div><h3>${homeMissed.length?`${homeMissed.length} missed session${homeMissed.length===1?"":"s"} need attention`:"Stay on track"}</h3><p class="v8-muted">${homeMissed.length?"Move unfinished work to catch-up dates without losing completed sessions.":"Check your weekly progress and adjust priorities before you fall behind."}</p><div class="plan-actions"><button class="btn ${homeMissed.length?"primary":""}" onclick="${homeMissed.length?"openPlannerMissedDays()":"navigate('weekly')"}">${homeMissed.length?"Review missed sessions":"Open weekly review"}</button><button class="btn" onclick="navigate('readiness')">Check job readiness</button></div></div></div></div>`;
- h+=`<div class="section"><div class="section-title"><h2>Recommended path for ${esc(role)}</h2><span class="small">The role determines the order</span></div><div class="v8-card">${rec.map((d,i)=>`<div class="v8-step"><div class="v8-stepnum">${i+1}</div><div><b>${esc(d)}</b><div class="v8-muted">${esc(roleContext(role,d))}</div></div></div>`).join('')}</div></div>`;
- h+=`<div class="section"><div class="section-title"><h2>From learning to getting hired</h2></div><div class="v8-card"><div class="v8-path"><span>Discover</span><span>Choose role</span><span>Plan switch</span><span>Study daily</span><span>Practice</span><span>Build proof</span><span>Interview</span><span>Apply</span></div></div></div>`;
- setPage('Home',h);
+ const daily=p.generated?plannerDailyEntries():[];
+ const todayEntry=daily.find(e=>e.date===localTodayISO());
+ const missed=daily.filter(e=>e.status==="missed");
+ const targetDate=sw.targetDate||state.profile?.targetDate||"";
+ const targetLabel=targetDate?formatDate(targetDate):"Not set yet";
+ const readiness=Math.max(0,Math.min(100,Number(s.progress)||0));
+ let h=`<section class="cg-welcome">
+   <div class="cg-welcome-copy">
+     <div class="cg-eyebrow"><span class="cg-eyebrow-dot"></span> YOUR CAREER GROWTH</div>
+     <h2>Build your next career chapter.</h2>
+     <p>A focused workspace for your target role, skill development, practical projects and interview readiness.</p>
+     <div class="cg-welcome-actions">
+       <button class="btn primary" onclick="navigate('readiness')">View role readiness <span aria-hidden="true">→</span></button>
+       <button class="btn" onclick="navigate('switch')">Plan my transition</button>
+     </div>
+   </div>
+   <div class="cg-role-preview">
+     <div class="cg-role-preview-top"><span>YOUR TARGET ROLE</span><button class="cg-icon-action" aria-label="Change target role" title="Change target role" onclick="navigate('jobs')">↗</button></div>
+     <h3>${esc(role)}</h3>
+     <div class="cg-readiness-row"><span>Role readiness</span><strong>${readiness}%</strong></div>
+     <div class="cg-progress-track"><span style="width:${readiness}%"></span></div>
+     <div class="cg-role-foot"><span>${s.completed} of ${s.total} topics complete</span><span>${esc(exp)}</span></div>
+   </div>
+ </section>`;
+ h+=`<section class="cg-metrics" aria-label="Career progress summary">
+   <article class="cg-metric"><div class="cg-metric-top"><span class="cg-metric-icon cg-purple">◉</span><span class="cg-metric-label">ROLE READINESS</span></div><div class="cg-metric-value">${readiness}<small>%</small></div><div class="cg-metric-note">Based on your recorded progress</div><div class="cg-mini-track"><span style="width:${readiness}%"></span></div></article>
+   <article class="cg-metric"><div class="cg-metric-top"><span class="cg-metric-icon cg-blue">✓</span><span class="cg-metric-label">SKILLS COMPLETED</span></div><div class="cg-metric-value">${s.completed}<small> / ${s.total}</small></div><div class="cg-metric-note">Topics marked as complete</div><button class="cg-text-link" onclick="navigate('roadmap')">Continue roadmap <span aria-hidden="true">→</span></button></article>
+   <article class="cg-metric"><div class="cg-metric-top"><span class="cg-metric-icon cg-teal">▦</span><span class="cg-metric-label">PLANNED STUDY DAYS</span></div><div class="cg-metric-value">${plannerDays(p)||0}</div><div class="cg-metric-note">${p.generated?"Your schedule is ready":"Create a dated learning schedule"}</div><button class="cg-text-link" onclick="navigate('planner')">${p.generated?"Open calendar":"Build my study plan"} <span aria-hidden="true">→</span></button></article>
+   <article class="cg-metric"><div class="cg-metric-top"><span class="cg-metric-icon cg-amber">◷</span><span class="cg-metric-label">STUDY HOURS</span></div><div class="cg-metric-value">${Number(s.hours||0).toFixed(1)}<small> hrs</small></div><div class="cg-metric-note">Actual hours you've recorded</div><button class="cg-text-link" onclick="navigate('weekly')">Review progress <span aria-hidden="true">→</span></button></article>
+ </section>`;
+ h+=`<section class="cg-section">
+   <div class="cg-section-heading"><div><div class="cg-section-kicker">YOUR ROADMAP</div><h2>Career growth plan</h2><p>Small, consistent steps toward your next role.</p></div><button class="btn" onclick="navigate('switch')">Edit plan</button></div>
+   <div class="cg-journey">`;
+ const journey=[{n:"01",title:"Choose your direction",desc:"Select a role that fits your goals",done:!!(state.discovery?.chosenRole),go:"discover"},{n:"02",title:"Set your target role",desc:role,done:!!role,go:"jobs"},{n:"03",title:"Set your timeline",desc:targetDate?"Target date · "+targetLabel:"Choose a target date",done:!!targetDate,go:"switch"},{n:"04",title:"Build skills daily",desc:p.generated?"Your study calendar is created":"Generate your daily study plan",done:!!p.generated,go:"planner"}];
+ h+=journey.map((x,i)=>`<button class="cg-journey-step ${x.done?"is-done":""} ${i===journey.findIndex(y=>!y.done)?"is-current":""}" onclick="navigate(${esc(jsArg(x.go))})">
+   <span class="cg-step-number">${x.done?"✓":x.n}</span><span class="cg-step-copy"><strong>${esc(x.title)}</strong><small>${esc(x.desc)}</small></span><span class="cg-step-arrow" aria-hidden="true">→</span>
+ </button>`).join("");
+ h+=`</div></section>`;
+ h+=`<section class="cg-focus-grid">
+   <div class="cg-panel cg-next-action"><div class="cg-panel-head"><div><div class="cg-section-kicker">RECOMMENDED NEXT STEP</div><h2>${todayEntry?"Today's study session":p.generated?"Keep your learning moving":"Create your study plan"}</h2></div><span class="cg-panel-symbol">↗</span></div>
+   <p>${todayEntry?"Your planned session is ready. Open it to continue learning and record your progress.":p.generated?"Open your calendar to review upcoming tasks, update progress or recover missed sessions.":"Turn your target role into a dated schedule with daily tasks and completion tracking."}</p>
+   <div class="cg-action-detail">${todayEntry?`<span class="cg-detail-icon">▣</span><span><strong>${esc(todayEntry.topic)}</strong><small>${esc(todayEntry.domain.replace(/^\\d+\\s*/,""))} · ${esc(todayEntry.activity||"Learn and practise")}</small></span>`: `<span class="cg-detail-icon">◎</span><span><strong>${esc(role)}</strong><small>${targetDate?"Target date · "+esc(targetLabel):"Choose your target date and weekly study hours"}</small></span>`}</div>
+   <div class="cg-panel-actions"><button class="btn primary" onclick="navigate('planner')">${p.generated?"Open study calendar":"Create daily plan"} <span aria-hidden="true">→</span></button>${todayEntry?`<button class="btn" onclick="startStudySession(${esc(jsArg(todayEntry.id))})">Start session</button>`:""}</div>
+   ${missed.length?`<div class="cg-alert"><span aria-hidden="true">!</span><span><strong>${missed.length} missed session${missed.length===1?"":"s"}</strong><small>Review and reschedule unfinished work.</small></span><button class="cg-text-link" onclick="openPlannerMissedDays()">Review →</button></div>`:""}
+   </div>
+   <div class="cg-panel cg-role-details"><div class="cg-panel-head"><div><div class="cg-section-kicker">YOUR CAREER PROFILE</div><h2>${esc(role)}</h2></div><span class="cg-profile-icon">✦</span></div>
+     <div class="cg-profile-list"><div><span>Experience level</span><strong>${esc(exp)}</strong></div><div><span>Current goal</span><strong>${esc(goal)}</strong></div><div><span>Weekly study time</span><strong>${Number(state.profile?.weeklyHours)||10} hrs</strong></div><div><span>Target date</span><strong>${esc(targetLabel)}</strong></div></div>
+     <div class="cg-panel-actions"><button class="btn" onclick="navigate('jobs')">Change target role</button><button class="btn" onclick="navigate('readiness')">Explore skill gaps</button></div>
+   </div>
+ </section>`;
+ h+=`<section class="cg-section">
+   <div class="cg-section-heading"><div><div class="cg-section-kicker">SKILLS THAT MOVE YOU FORWARD</div><h2>Your role roadmap</h2><p>Focus on the skills and domains connected to ${esc(role)}.</p></div><button class="btn" onclick="navigate('roadmap')">View full roadmap <span aria-hidden="true">→</span></button></div>
+   <div class="cg-skill-list">`;
+ h+=rec.map((d,i)=>{const progress=Math.max(0,Math.min(100,Number(domainProgress(d))||0));const idx=CURRICULUM.domains.findIndex(x=>x.name===d);return `<div class="cg-skill-row"><span class="cg-skill-rank">${String(i+1).padStart(2,"0")}</span><div class="cg-skill-name"><strong>${esc(d)}</strong><small>${esc(roleContext(role,d))}</small></div><div class="cg-skill-progress"><div class="cg-mini-track"><span style="width:${progress}%"></span></div><small>${progress}% complete</small></div><button class="cg-skill-open" aria-label="Open ${esc(d)}" title="Open learning domain" onclick="navigate('domain:${idx}')">→</button></div>`}).join("");
+ h+=`</div></section>`;
+ h+=`<section class="cg-bottom-path"><div><div class="cg-section-kicker">FROM LEARNING TO GETTING HIRED</div><h2>Turn knowledge into evidence.</h2><p>Build practical projects, practise explaining your decisions, and prepare for real job descriptions.</p></div><div class="cg-bottom-actions"><button class="btn" onclick="navigate('projects')">Build projects</button><button class="btn" onclick="navigate('interview')">Interview practice</button><button class="btn primary" onclick="navigate('jd')">Analyze a job</button></div></section>`;
+ setPage("Home",h);
 }
-// V8 replaces the dashboard home while preserving the existing detailed modules.
-renderDashboard = renderUniversalHome;
+// V8 replaces the dashboard home while preserving the existing detailed modules.renderDashboard = renderUniversalHome;
 
 /* V6 dashboard override */
 renderDashboard = renderUniversalHome;
