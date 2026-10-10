@@ -7120,5 +7120,68 @@ html body .topbar .actions>.role-selector-label #headerRolePicker .header-role-t
   html body .topbar .top-left #pageTitle{overflow-wrap:anywhere!important;}
 }
 </style>
+
+<style id="v14-31-remove-red-selection-accent-and-polish-dropdowns">
+/* Keep selected navigation clear without the distracting red edge marker. */
+html body .app aside.sidebar .nav button.active,
+html body aside.sidebar .nav button.active,
+html body .sidebar .nav button.active {
+  box-shadow: none !important;
+  border-left-color: transparent !important;
+}
+/* Use a consistent, compact chevron treatment across native dropdowns. */
+html body select:not(#roleSelector) {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231d8068' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 13px center !important;
+  background-size: 16px 16px !important;
+  padding-right: 38px !important;
+}
+/* Welcome role picker: replace the tiny text triangle with the same polished
+   rounded chevron button used in the header role selector. */
+html body #welcomeRoleTrigger > span[aria-hidden="true"] {
+  display: inline-flex !important;
+  flex: 0 0 36px !important;
+  width: 36px !important;
+  height: 36px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 10px !important;
+  background: #efedff !important;
+  color: #4f46e5 !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 0 !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+}
+html body #welcomeRoleTrigger > span[aria-hidden="true"]::before {
+  content: "" !important;
+  width: 9px !important;
+  height: 9px !important;
+  border-right: 2.5px solid currentColor !important;
+  border-bottom: 2.5px solid currentColor !important;
+  transform: translateY(-2px) rotate(45deg) !important;
+  transition: transform .18s ease !important;
+}
+html body #welcomeRoleTrigger[aria-expanded="true"] > span[aria-hidden="true"]::before {
+  transform: translateY(2px) rotate(225deg) !important;
+}
+html body #welcomeRoleTrigger:hover > span[aria-hidden="true"] {
+  background: #e3deff !important;
+}
+html body #welcomeRoleTrigger:focus-visible {
+  outline: 3px solid rgba(79,70,229,.24) !important;
+  outline-offset: 2px !important;
+}
+@media(max-width:600px) {
+  html body select:not(#roleSelector) {
+    background-position: right 11px center !important;
+  }
+}
+</style>
+
 </body>
 </html>
