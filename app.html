@@ -4981,13 +4981,13 @@ function navParentView(view){
 function navigate(view,opts={}){
  view=String(view||"dashboard"); const current=window.__itCareerCurrentView||"dashboard";
  if(view==="back")return goBack();
- // Keep old links working while routing duplicate destinations to one canonical workspace.
+ // Keep legacy links working while consolidating only genuinely duplicate destinations.
  if(["careers","careerpaths","compare","jobs","switch"].includes(view))view="discover";
  if(view==="portfolio")view="projects";
  if(["tech","skills","domains","study-domains"].includes(view))view="roadmap";
- if(["quizzes","exams"].includes(view))view="toolkit";
- if(["skillgap","readiness","resume","jd","labs","projects","interview"].includes(view) && view!=="toolkit" && view!=="projects" && view!=="interview")view="toolkit";
- if(view==="coach"||view==="weekly")view="dashboard";
+ if(view==="quizzes")view="labs";
+ if(view==="skillgap")view="readiness";
+ if(view==="coach")view="weekly";
  if(!opts.fromBack&&view!==current){const history=window.__itCareerHistory||[];if(history[history.length-1]!==current)history.push(current);window.__itCareerHistory=history.slice(-30);}
  window.__itCareerCurrentView=view;
  if(window.innerWidth<=760)closeMobileSidebar();
