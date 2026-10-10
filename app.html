@@ -2830,6 +2830,132 @@ html body .cg-bottom-actions{justify-content:flex-end;margin-top:0}
 }
 </style>
 
+
+<style id="v14-1-purple-reference-sidebar">
+/* Purple sidebar inspired by the supplied reference; navigation and routes remain unchanged. */
+.sidebar{
+  background:linear-gradient(180deg,#56399e 0%,#503593 55%,#493087 100%) !important;
+  color:#f8f6ff !important;
+  border-right:1px solid rgba(255,255,255,.14) !important;
+  box-shadow:3px 0 18px rgba(42,24,88,.12) !important;
+  padding:18px 12px 20px !important;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  flex-wrap:wrap;
+  color:#fff !important;
+  padding:8px 9px 18px !important;
+  font-size:18px !important;
+  font-weight:700 !important;
+  letter-spacing:-.35px !important;
+}
+.brand .brand-mark{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 34px;
+  width:34px;height:34px;
+  border-radius:10px;
+  color:#5a3ca2;
+  background:linear-gradient(145deg,#fff 0%,#e8e2ff 100%);
+  box-shadow:0 2px 8px rgba(28,15,68,.2);
+  font-size:12px;
+  font-weight:850;
+  letter-spacing:-.3px;
+}
+.brand .brand-name{color:#fff}
+.brand small{
+  flex:0 0 100%;
+  color:#ded5fb !important;
+  font-size:10px !important;
+  font-weight:450 !important;
+  letter-spacing:.05px !important;
+  margin:2px 0 0 43px !important;
+  line-height:1.45;
+}
+.sidebar .mini,.sidebar .mini{
+  color:#c9b9f3 !important;
+  font-size:10px !important;
+  font-weight:700 !important;
+  letter-spacing:.1em !important;
+  margin:18px 10px 7px !important;
+}
+.sidebar .nav button{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  width:100%;
+  min-height:39px;
+  padding:9px 10px !important;
+  margin:3px 0 !important;
+  border:1px solid transparent !important;
+  border-radius:8px !important;
+  background:transparent !important;
+  color:#f0eaff !important;
+  font-size:12px !important;
+  font-weight:520 !important;
+  text-align:left;
+  box-shadow:none !important;
+  transition:background .16s ease,border-color .16s ease,color .16s ease;
+}
+.sidebar .nav button .nav-icon{
+  display:inline-flex;
+  flex:0 0 19px;
+  width:19px;height:19px;
+  align-items:center;
+  justify-content:center;
+  color:#d8cafa !important;
+}
+.sidebar .nav button .nav-icon svg{
+  display:block;
+  width:19px;height:19px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.sidebar .nav button .nl{
+  min-width:0;
+  line-height:1.35;
+  overflow-wrap:anywhere;
+}
+.sidebar .nav button:hover{
+  background:rgba(255,255,255,.105) !important;
+  border-color:rgba(255,255,255,.08) !important;
+  color:#fff !important;
+}
+.sidebar .nav button.active{
+  background:rgba(224,214,255,.24) !important;
+  border-color:rgba(237,231,255,.12) !important;
+  color:#fff !important;
+  font-weight:650 !important;
+  box-shadow:inset 3px 0 0 #e5ddff !important;
+}
+.sidebar .nav button.active .nav-icon,
+.sidebar .nav button:hover .nav-icon{color:#fff !important}
+.sidebar-toggle-tab{
+  background:#7252c7 !important;
+  color:#fff !important;
+  border:1px solid rgba(255,255,255,.18) !important;
+  box-shadow:0 4px 14px rgba(48,27,100,.24) !important;
+}
+body.sidebar-collapsed .sidebar-toggle-tab{
+  background:#7252c7 !important;
+}
+@media(max-width:760px){
+  .sidebar{
+    background:linear-gradient(180deg,#56399e 0%,#503593 55%,#493087 100%) !important;
+    box-shadow:12px 0 32px rgba(31,17,68,.22) !important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .sidebar .nav button{transition:none !important}
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
