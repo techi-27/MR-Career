@@ -70,9 +70,8 @@ test('all application routes render content without a page-error fallback', asyn
   await chooseRole(page);
   const views = [
     'dashboard', 'careers', 'discover', 'compare', 'profile', 'switch', 'jobs',
-    'planner', 'roadmap', 'tech', 'skills', 'exams', 'labs', 'quizzes',
-    'interview', 'resume', 'jd', 'readiness', 'skillgap', 'weekly', 'coach',
-    'projects', 'portfolio',
+    'planner', 'roadmap', 'exams', 'labs', 'interview', 'resume', 'jd',
+    'readiness', 'weekly', 'projects',
   ];
   for (const view of views) {
     await page.evaluate(viewName => window.navigate(viewName), view);
@@ -83,6 +82,34 @@ test('all application routes render content without a page-error fallback', asyn
     expect(result, `View "${view}" should not show the generic page-error message`).not.toContain('Unable to load this page.');
   }
   expect(pageErrors, 'Uncaught browser errors: ' + pageErrors.join('\n')).toEqual([]);
+});
+
+test('simplified navigation hides incomplete and duplicate destinations while legacy links redirect safely', async ({ page }) => {
+  await openApp(page);
+  await chooseRole(page);
+  const workspace = page.locator('#content .workspace-tabs');
+  await expect(workspace).toBeVisible();
+
+  const visibleTabs = await workspace.locator('.workspace-tab').allTextContents();
+  expect(visibleTabs).not.toContain('Knowledge self-check');
+  expect(visibleTabs).not.toContain('Technology explorer');
+  expect(visibleTabs).not.toContain('Skill dependencies');
+  expect(visibleTabs).not.toContain('Skill gap priorities');
+  expect(visibleTabs).not.toContain('Daily career coach');
+
+  const legacyRoutes = [
+    ['tech', 'Roadmap & Learning'],
+    ['skills', 'Roadmap & Learning'],
+    ['quizzes', 'Learn & Practice'],
+    ['skillgap', 'Job Readiness'],
+    ['coach', 'My Progress'],
+    ['portfolio', 'Project Studio'],
+  ];
+  for (const [legacy, expectedTabGroup] of legacyRoutes) {
+    await page.evaluate(viewName => window.navigate(viewName), legacy);
+    await expect(page.locator('#content .workspace-tabs')).toContainText(expectedTabGroup);
+    await expect(page.locator('#pageTitle')).not.toHaveText('Page Error');
+  }
 });
 
 test('global search opens, filters results and supports keyboard shortcut', async ({ page }) => {
