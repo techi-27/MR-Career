@@ -259,7 +259,7 @@ The workflow runs on pushes to `main`, pull requests targeting `main`, manual di
 - Available main navigation items can be opened without uncaught JavaScript errors.
 - About page's **Open workspace** button label is visible and fits inside the viewport.
 
-The latest recorded run passed all **4 tests**. This does not mean every workflow, browser, assistive technology, or feature has been tested. Continue manual testing for core learning flows, data import/export, keyboard navigation, and real mobile devices.
+The latest recorded run passed all **14 automated tests**. This is expanded smoke/regression coverage, not a guarantee that every workflow, browser, assistive technology, or feature has been exhaustively tested. Continue manual testing for all form fields, curriculum interactions, accessibility, and real mobile devices. See [FUNCTIONAL_AUDIT.md](FUNCTIONAL_AUDIT.md) for the audit summary and next priorities.
 
 ### Run the tests on your computer
 
