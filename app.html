@@ -4983,7 +4983,13 @@ function renderPlanner(){
 function renderDomain(idx){
  const d=CURRICULUM.domains[idx];
  const roleWeight=roleWeights()[d.name]||0;
- if(!roleWeight){setPage("Not in Selected Role",`<div class="card"><div class="notice">This domain is not part of the current <b>${esc(selectedRole())}</b> learning path. Select another role to include it.</div></div>`);return;}
+ if(!roleWeight){
+  const role=selectedRole();
+  const relevant=v9RoleDomains(role).map(name=>({name,index:CURRICULUM.domains.findIndex(x=>x.name===name),weight:Number(roleWeights()[name]||0)})).filter(x=>x.index>=0);
+  const suggestions=relevant.map(x=>`<button class="btn" style="display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;text-align:left;margin-top:8px;padding:12px" onclick="navigate('domain:${x.index}')"><span><b>${esc(x.name.replace(/^\\d+\\s*/, ""))}</b><span class="small" style="display:block">${esc(roleContext(role,x.name))}</span></span><span class="badge">${x.weight}% role weight</span></button>`).join("");
+  setPage("Learning Path for "+role,`<div class="card"><div class="notice" style="margin-bottom:14px">You're viewing a domain outside the current <b>${esc(role)}</b> learning path. Your role-specific context is shown below; choose one of the recommended domains to open its topics and progress.</div><h3 style="margin:0 0 8px">Recommended for ${esc(role)}</h3><p class="small">These are the learning domains mapped to your selected role.</p>${suggestions}<div style="margin-top:14px"><button class="btn primary" onclick="navigate('roadmap')">View full role roadmap</button> <button class="btn" onclick="navigate('dashboard')">Back to Home</button></div></div>`);
+  return;
+ }
  let h=`<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px"><button class="btn" onclick="navigate('dashboard')">Back to Learning Home</button><button class="btn" onclick="navigate('roadmap')">View Roadmap</button></div><div class="notice" style="margin-bottom:12px"><b>${esc(selectedRole())}</b> relevance for this domain: <b>${roleWeight}%</b> · Domain progress: <b>${Math.round(domainProgress(d.name))}%</b></div><div class="controls">
  <input id="searchBox" placeholder="Search topics..." oninput="filterRows()">
  <select id="statusFilter" onchange="filterRows()"><option value="">All Status</option>${["Not Started","Learning","Practicing","Completed","Need Revision","Blocked"].map(x=>`<option>${x}</option>`).join("")}</select>
