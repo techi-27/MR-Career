@@ -5758,8 +5758,9 @@ function v9XP(){
  const s=stats(),labs=new Set([...(state.v9?.doneLabs||[]),...(state.v6?.doneLabKeys||[]),...(state.v6?.doneLabs||[])]),portfolio=new Set(state.v9?.doneProjects||[]);
  const studio=Object.values(state.v9?.projects||{}).filter(p=>p?.checks&&Object.values(p.checks).some(Boolean)).length;
  const projects=Math.max(portfolio.size,studio,state.v6?.doneProjectKeys?.length||0,state.v6?.doneProjects?.length||0);
- updateQuizScore();updateInterviewScore();const quiz=Number(state.v9?.quizScore||0),interview=Number(state.v9?.interviewScore||0);
- return Math.min(10000,Math.round(s.completed*20+labs.size*40+projects*100+quiz*2+interview*2+(s.avg||0)));
+ // Quiz scoring is not implemented yet; exclude it until a real scoring function exists.
+ updateInterviewScore();const interview=Number(state.v9?.interviewScore||0);
+ return Math.min(10000,Math.round(s.completed*20+labs.size*40+projects*100+interview*2+(s.avg||0)));
 }
 
 function v9RoleDomains(role=selectedRole()){
