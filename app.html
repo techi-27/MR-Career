@@ -3574,6 +3574,50 @@ html body .sidebar::-webkit-scrollbar-thumb{background:#cbd5e1!important}
   html body .cg-welcome h2{font-size:28px}
 }
 </style>
+
+<style id="v14-30-fix-learning-action-button-squeeze">
+/* Keep action labels horizontal and prevent flex/grid parents from collapsing buttons. */
+html body .btn,
+html body button.btn,
+html body #content button {
+  writing-mode: horizontal-tb !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+}
+html body .v6-actions > .btn,
+html body .v8-actions > .btn,
+html body .detail-actions > .btn,
+html body .plan-actions > .btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: max-content !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+}
+html body .v6-timeline,
+html body .v6-timeline-item,
+html body .v6-timeline-item > .v6-card {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+@media (max-width: 640px) {
+  html body .v6-actions > .btn,
+  html body .v8-actions > .btn,
+  html body .detail-actions > .btn,
+  html body .plan-actions > .btn {
+    flex: 0 1 auto !important;
+    min-width: max-content !important;
+    max-width: 100% !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to main content</a>
