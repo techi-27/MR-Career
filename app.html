@@ -3913,11 +3913,12 @@ html body .v9-project > textarea { min-height:64px!important;border:1px solid #d
   <div class="brand"><button type="button" class="brand-mark brand-sidebar-toggle" onclick="toggleSidebar()" aria-label="Collapse sidebar" title="Collapse sidebar"><span class="hamburger-lines" aria-hidden="true"><i></i><i></i><i></i></span></button><span class="brand-name">MR.Career</span><small>Learn • Practice • Build • Get Hired</small></div>
   
   <div class="nav">
-    <div class="mini">YOUR JOURNEY</div>
+    <div class="mini">YOUR CAREER JOURNEY</div>
     <button data-view="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9M9 21v-7h6v7"/></svg></span><span class="nl">Home</span></button>
+    <button data-view="roadmap"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></svg></span><span class="nl">Learning Roadmap</span></button>
+    <button data-view="planner"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h3M8 17h7"/></svg></span><span class="nl">Study Planner</span></button>
     <button data-view="discover"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg></span><span class="nl">Career Discovery</span></button>
-    <button data-view="careerpaths"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="6" cy="5" r="2"/><circle cx="18" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 5h8M18 7v10M6 7v5a3 3 0 0 0 3 3h7"/></svg></span><span class="nl">Career Paths</span></button>
-    <button data-view="roadmap"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></svg></span><span class="nl">My Journey</span></button>
+    <div class="mini">BUILD &amp; GET HIRED</div>
     <button data-view="projects"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V4h8v3M3 12h18M10 12v2h4v-2"/></svg></span><span class="nl">Projects</span></button>
     <button data-view="interview"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 3.9a8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg></span><span class="nl">Interview Prep</span></button>
     <div class="mini">PERSONAL SETTINGS</div>
@@ -4975,7 +4976,7 @@ function renderCurrent(){return renderRoute(window.__itCareerCurrentView||"dashb
 function navParentView(view){
  const v=String(view||"dashboard");
  if(v.startsWith("domain:"))return "roadmap";
- return ({discover:"careers",compare:"careers",jobs:"switch",planner:"switch",tech:"roadmap",skills:"roadmap",exams:"roadmap",quizzes:"labs",interview:"labs",portfolio:"projects",jd:"resume",skillgap:"readiness",coach:"weekly"})[v]||v;
+ return ({discover:"discover",careers:"discover",compare:"discover",jobs:"switch",planner:"planner",tech:"roadmap",skills:"roadmap",exams:"roadmap",quizzes:"labs",interview:"interview",portfolio:"projects",jd:"resume",skillgap:"readiness",coach:"weekly"})[v]||v;
 }
 function navigate(view,opts={}){
  view=String(view||"dashboard"); const current=window.__itCareerCurrentView||"dashboard";
@@ -5066,17 +5067,16 @@ function renderDashboard(){
   const plan=plannerState();
   const completedStages=[
     {label:"Choose your target role",done:!!role,view:"profile"},
-    {label:"Get a personalised learning plan",done:!!plan.generated,view:"planner"},
-    {label:"Learn and practise each day",done:s.completed>0,view:"roadmap"},
-    {label:"Build projects and prove your skills",done:completedProjectProofCount()>0,view:"projects"},
-    {label:"Prepare for interviews and apply for jobs",done:Number(state.v9?.interviewScore||0)>0||!!state.v9?.resumeText,view:"interview"}
+    {label:"Select the topics you need to learn",done:!!plan.generated,view:"planner"},
+    {label:"Set your study schedule",done:!!plan.generated,view:"planner"},
+    {label:"Learn each topic and track progress",done:s.completed>0,view:"roadmap"}
   ];
   const nextStage=completedStages.findIndex(x=>!x.done);
   let h=`<section class="v8-hero career-home-hero">
-    <div class="v8-label" style="color:#b9dcff">YOUR CAREER JOURNEY</div>
-    <h2>Small steps. Real career progress.</h2>
-    <p>Follow one clear next step toward becoming a <b>${esc(role)}</b>. Your learning, practice and projects stay together in one place.</p>
-    <div class="v6-actions"><button class="btn primary" onclick="navigate('roadmap')">Continue my journey</button><button class="btn" onclick="navigate('profile')">Change target role</button></div>
+    <div class="v8-label" style="color:#b9dcff">YOUR PERSONAL IT CAREER GUIDE</div>
+    <h2>Know what to learn. Know what to do next.</h2>
+    <p>MR.Career guides students, working professionals, beginners, and career changers from choosing an IT role to learning the right skills with a realistic daily plan.</p>
+    <div class="career-home-target"><span class="career-home-target-label">YOUR TARGET ROLE</span><strong>${esc(role)}</strong><div class="v6-actions"><button class="btn primary" onclick="navigate('roadmap')">Explore my learning roadmap</button><button class="btn" onclick="navigate('profile')">Change target role</button></div></div>
   </section>`;
   h+=`<section class="section career-home-progress"><div class="section-title"><h2>Your progress</h2><span class="small">${s.completed} of ${s.total} topics completed</span></div>
     <div class="card"><div class="top"><div><div class="label">TARGET ROLE</div><h3>${esc(role)}</h3><p class="small">${esc(cfg.description||"Your personalised career path")}</p></div><span class="pct">${s.progress}%</span></div><div class="progress"><span style="width:${s.progress}%"></span></div></div></section>`;
@@ -5096,9 +5096,13 @@ function renderDashboard(){
     h+=`<button type="button" class="career-journey-step ${stage.done?"is-done":i===nextStage?"is-current":""}" onclick="navigate('${stage.view}')"><span class="career-journey-number">${stage.done?"✓":i+1}</span><span class="career-journey-copy"><b>${stage.label}</b><small>${stage.done?"Completed":i===nextStage?"Your next milestone":"Up next"}</small></span><span class="career-journey-arrow" aria-hidden="true">›</span></button>`;
   });
   h+=`</div></section>`;
-  h+=`<section class="section"><div class="section-title"><h2>Quick access</h2></div><div class="career-quick-links">
-    <button class="card" onclick="navigate('planner')"><b>Daily learning plan</b><span class="small">Plan and track your study days</span></button>
-    <button class="card" onclick="navigate('projects')"><b>Build a project</b><span class="small">Show proof of your skills</span></button>
+  h+=`<section class="section"><div class="section-title"><h2>Continue your learning</h2><span class="small">Your core tools, always easy to find</span></div><div class="career-quick-links">
+    <button class="card" onclick="navigate('roadmap')"><b>Learning roadmap</b><span class="small">See role-specific topics and open a lesson</span></button>
+    <button class="card" onclick="navigate('planner')"><b>Study planner</b><span class="small">Choose topics, set dates, and track daily sessions</span></button>
+    <button class="card" onclick="navigate('discover')"><b>Explore IT roles</b><span class="small">Compare career options if your goal changes</span></button>
+  </div></section>
+  <section class="section"><div class="section-title"><h2>Build toward your next career step</h2><span class="small">Supporting tools</span></div><div class="career-quick-links">
+    <button class="card" onclick="navigate('projects')"><b>Build projects</b><span class="small">Turn learning into practical proof</span></button>
     <button class="card" onclick="navigate('interview')"><b>Interview preparation</b><span class="small">Practise role-specific questions</span></button>
   </div></section>`;
   setPage("Home",h);
@@ -7183,5 +7187,20 @@ html body #welcomeRoleTrigger:focus-visible {
 }
 </style>
 
+
+<style id="v14-32-guided-career-journey-focus">
+html body .career-home-hero h2{max-width:850px!important;font-size:clamp(27px,3vw,38px)!important;line-height:1.16!important;letter-spacing:-.025em!important}
+html body .career-home-hero>p{max-width:850px!important;font-size:15px!important;line-height:1.7!important}
+html body .career-home-target{margin-top:20px!important;padding:16px 18px!important;border:1px solid rgba(255,255,255,.55)!important;border-radius:15px!important;background:rgba(255,255,255,.68)!important;max-width:780px!important}
+html body .career-home-target-label{display:block;font-size:10px!important;letter-spacing:.09em!important;font-weight:800!important;color:#5b6f8c!important;margin-bottom:5px!important}
+html body .career-home-target>strong{display:block;font-size:20px!important;color:#172747!important;line-height:1.35!important;overflow-wrap:anywhere!important}
+html body .career-home-target .v6-actions{margin-top:12px!important}
+html body .career-journey-steps{gap:10px!important}
+html body .career-journey-step{min-height:80px!important;padding:14px 16px!important;align-items:flex-start!important}
+html body .career-journey-copy>b{font-size:14px!important;line-height:1.4!important}
+html body .career-journey-copy>small{font-size:12px!important;line-height:1.45!important;white-space:normal!important}
+html body .career-journey-step.is-current{border-color:#7da7e8!important;background:#f1f6ff!important;box-shadow:inset 3px 0 0 #5687d6!important}
+@media(max-width:650px){html body .career-home-target{padding:13px!important}html body .career-home-target .v6-actions{align-items:stretch!important;flex-direction:column!important}html body .career-home-target .v6-actions .btn{width:100%!important}html body .career-journey-step{min-height:0!important;padding:12px!important}}
+</style>
 </body>
 </html>
