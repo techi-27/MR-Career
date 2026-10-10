@@ -5038,7 +5038,9 @@ function setPage(title,html){window.__itCareerRenderedOnce=true;
   document.getElementById("pageTitle").textContent=title;
   const showBack=(window.__itCareerCurrentView||"dashboard")!=="dashboard";
   const backBar=showBack?`<div class="page-backbar"><div class="back-left"><button class="btn" onclick="navigate('back')">Back</button><span class="back-title">${esc(title)}</span></div><button class="btn" onclick="navigate('dashboard')">Home</button></div>`:"";
-  document.getElementById("content").innerHTML=backBar+renderWorkspaceTabs(window.__itCareerCurrentView||"dashboard")+html;
+  const currentView=window.__itCareerCurrentView||"dashboard";
+  const compactCorePage=currentView==="roadmap";
+  document.getElementById("content").innerHTML=(compactCorePage?"":backBar+renderWorkspaceTabs(currentView))+html;
   // Domain IDs are internal ordering keys; hide numeric prefixes in user-facing text.
   const walker=document.createTreeWalker(document.getElementById("content"),NodeFilter.SHOW_TEXT);
   let node;while((node=walker.nextNode())){
@@ -5657,83 +5659,52 @@ function roadmapMilestoneFor(domain){
 function renderRoadmap(){
   const role=selectedRole();
   const rec=typeof recommendedTopics==="function"?recommendedTopics(role):[];
-  let h=`<div class="v6-hero">
-    <div class="v6-label" style="color:#b9dcff">ROLE ROADMAP</div>
-    <h2>${esc(role)} Roadmap</h2>
-    <p>This page answers one question: <b>what should I learn for this role?</b> It is independent of your study dates. Use Study Planner when you want to turn this roadmap into a dated schedule.</p>
-    <div class="v6-actions">
-      <button class="btn primary" onclick="navigate('planner')">Build My Study Plan</button>
-      <button class="btn" onclick="navigate('dashboard')">Back to Home</button>
-    </div>
-  </div>`;
-
-  h+=`<div class="card section"><div class="section-title"><h2>Next steps</h2><span class="small">Turn this roadmap into action</span></div><div class="plan-actions"><button class="btn primary" onclick="navigate('planner')">Build study plan</button><button class="btn" onclick="navigate('labs')">Practice labs</button><button class="btn" onclick="navigate('exams')">Certification guidance</button></div><p class="small" style="margin-top:10px">Technology details and prerequisites are included in the roadmap topics, so you can follow one learning path without duplicate pages.</p></div>`;
-  h+=`<div class="v6-grid-3">
-    <div class="v6-card"><div class="v6-label">Target role</div><div class="v6-metric">${esc(role)}</div><div class="v6-muted">${esc(roleFamily(role))}</div></div>
-    <div class="v6-card"><div class="v6-label">Role skills</div><div class="v6-metric">${rec.length}</div><div class="v6-muted">Role-specific capabilities</div></div>
-    <div class="v6-card"><div class="v6-label">Role progress</div><div class="v6-metric">${roleStats(role).progress}%</div><div class="v6-muted">Based on your saved learning progress</div></div>
-  </div>`;
-
-  h+=`<div class="section"><div class="section-title"><h2>Recommended Learning Journey</h2><span class="small">Changes automatically when you change the target role</span></div>
-  <div class="v6-card"><div class="v6-timeline">`;
-
+  const chosen=rec.filter(r=>isPlannerSelected(r.domain)).length;
+  let h=`<section class="roadmap-page-hero">
+    <div class="v6-label">YOUR LEARNING ROADMAP</div>
+    <h2>What to learn to become a ${esc(role)}</h2>
+    <p>This roadmap is tailored to your target role. Review the recommended topics, open any topic to see what to learn, and select the topics you want included in your study plan.</p>
+    <div class="roadmap-hero-meta"><span>${rec.length} recommended learning areas</span><span>${chosen} selected for your plan</span></div>
+  </section>`;
+  h+=`<section class="section roadmap-selection-section">
+    <div class="section-title roadmap-section-heading"><div><h2>Your role-specific learning topics</h2><p class="small">Choose the areas you want to study. You can change your selection any time.</p></div><button class="btn" onclick="resetPlannerSelection();navigate('roadmap')">Reset selection</button></div>
+    <div class="roadmap-topic-list">`;
   if(!rec.length){
-    h+=`<div class="v9-note v9-warning"><b>No roadmap skills are configured for ${esc(role)} yet.</b><br>Choose another target role or use Career Discovery. Your role selection is still saved.</div>`;
+    h+=`<div class="card"><b>No roadmap topics are configured for ${esc(role)} yet.</b><p class="small">Choose another role or visit Career Discovery.</p><button class="btn" onclick="navigate('discover')">Explore roles</button></div>`;
   }
   rec.forEach((r,i)=>{
     const d=CURRICULUM.domains.find(x=>x.name===r.domain);
+    const idx=d?CURRICULUM.domains.indexOf(d):-1;
     const progress=Math.round(domainProgress(r.domain));
     const pr=rolePriority(r.weight);
-    h+=`<div class="v6-timeline-item">
-      <div class="v6-date">STEP ${i+1}</div>
-      <div class="v6-dot"></div>
-      <div class="v6-card" style="padding:12px;margin-bottom:4px">
-        <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap">
-          <div><span class="v6-label">${roadmapMilestoneFor(r.domain)}</span><h3 style="margin:3px 0">${i+1}. ${esc(r.domain)}</h3></div>
-          <span class="v6-prio ${pr.toLowerCase()}">${pr}</span>
-        </div>
-        <p class="v6-muted">${esc(roleContext(role,r.domain))}</p>
-        <div class="v6-tags">
-          <span class="v6-tag">Role priority ${r.weight}%</span>
-          <span class="v6-tag">Your progress ${progress}%</span>
-        </div>
-        <div class="v6-actions">
-          <button class="btn" onclick="v6OpenWhy(${esc(jsArg(r.domain))})">Why this?</button>
-          ${d?`<button class="btn primary" onclick="navigate('domain:${CURRICULUM.domains.indexOf(d)}')">Learn ${esc(r.domain)}</button>`:""}
+    const selected=isPlannerSelected(r.domain);
+    const topicCount=d&&Array.isArray(d.topics)?d.topics.length:0;
+    h+=`<article class="roadmap-topic-card ${selected?"is-selected":""}">
+      <label class="roadmap-topic-select" title="Include ${esc(r.domain)} in your study plan">
+        <input type="checkbox" ${selected?"checked":""} onchange="togglePlannerTopic(${esc(jsArg(r.domain))},this.checked);navigate('roadmap')" aria-label="Include ${esc(r.domain)} in study plan">
+        <span>Include in my plan</span>
+      </label>
+      <div class="roadmap-topic-main">
+        <div class="roadmap-topic-step">STEP ${i+1} <span class="v6-prio ${pr.toLowerCase()}">${pr}</span></div>
+        <h3>${esc(r.domain)}</h3>
+        <p>${esc(roleContext(role,r.domain))}</p>
+        <div class="roadmap-topic-meta"><span>${topicCount} lessons / subtopics</span><span>Role priority ${r.weight}%</span><span>${progress}% complete</span></div>
+        <div class="progress"><span style="width:${progress}%"></span></div>
+        <div class="roadmap-topic-actions">
+          ${idx>=0?`<button class="btn primary" onclick="navigate('domain:${idx}')">Explore topics &amp; learn <span aria-hidden="true">→</span></button>`:""}
+          <button class="btn" onclick="v6OpenWhy(${esc(jsArg(r.domain))})">Why learn this?</button>
         </div>
       </div>
-    </div>`;
+    </article>`;
   });
-
-  h+=`</div></div></div>`;
-  h+=`<div class="section"><div class="section-title"><h2>How the sequence works</h2></div><div class="v6-two">
-    <div class="v6-card"><b>Earlier skills unlock later skills</b><p class="v6-muted">The role order starts with prerequisites and moves toward role-specific professional capabilities.</p></div>
-    <div class="v6-card"><b>Dates belong in Study Planner</b><p class="v6-muted">Roadmap = what to learn. Study Planner = when to learn it.</p></div>
-  </div></div>`;
-  setPage("Roadmap",h);
+  h+=`</div>
+    <div class="roadmap-selection-footer"><div><b>${chosen} of ${rec.length} learning areas selected</b><p class="small">Only selected areas will be used when you create your study plan.</p></div><button class="btn primary" onclick="navigate('planner')">Continue to Study Planner <span aria-hidden="true">→</span></button></div>
+  </section>`;
+  h+=`<section class="roadmap-next-step"><div><div class="v6-label">NEXT STEP</div><h3>Turn your selected topics into a daily schedule</h3><p>Choose your start date, timeline, and study availability in Study Planner.</p></div><button class="btn primary" onclick="navigate('planner')">Make my study plan</button></section>`;
+  setPage("Learning Roadmap",h);
 }
 
 
-/* ================= V8 UNIVERSAL CAREER ENGINE ================= */
-const V8_DISCOVERY_QUESTIONS=[
- {id:'code',q:'How do you feel about writing code?',a:[['Love building software','dev'],['I can do it, but prefer other work','data'],['I prefer less coding','business'],['I enjoy technical automation','infra']]},
- {id:'problem',q:'What kind of problems sound most interesting?',a:[['Building apps and features','dev'],['Analyzing data and finding patterns','data'],['Keeping systems reliable and fast','infra'],['Understanding people, process and business','business']]},
- {id:'visual',q:'Which activity sounds most enjoyable?',a:[['Designing interfaces and user experiences','design'],['Building APIs and services','dev'],['Working with dashboards and metrics','data'],['Managing cloud/infrastructure','infra']]},
- {id:'security',q:'How interested are you in security?',a:[['Very interested','security'],['Somewhat interested','infra'],['Not my main interest','dev'],['I prefer business/product decisions','business']]},
- {id:'math',q:'How comfortable are you with statistics and mathematics?',a:[['I enjoy it','data'],['I am comfortable','ai'],['I prefer logic over math','dev'],['I do not want much math','business']]},
- {id:'people',q:'What work style fits you best?',a:[['Build and ship things','dev'],['Investigate and analyze','data'],['Operate and troubleshoot systems','infra'],['Communicate, organize and lead','business']]},
- {id:'design',q:'What would you most like to create?',a:[['A mobile/web application','dev'],['An AI/data solution','ai'],['A secure cloud platform','security'],['A product/process strategy','business']]},
- {id:'environment',q:'Where would you like to spend most of your time?',a:[['IDE / code editor','dev'],['Cloud / terminals / Kubernetes','infra'],['SQL / notebooks / dashboards','data'],['Meetings / product / customers','business']]}
-];
-const V8_TAG_ROLES={
- dev:['Software Developer','Frontend Developer','Backend Developer','Full Stack Developer','Java Developer','Python Developer','JavaScript/TypeScript Developer','Mobile Developer','SDET'],
- data:['Data Analyst','Data Engineer','Data Scientist','ML Engineer'],
- ai:['AI Engineer','GenAI Engineer','MLOps Engineer','ML Engineer'],
- infra:['Cloud Engineer','DevOps Engineer','Site Reliability Engineer (SRE)','Platform Engineer','Network Engineer','System Administrator','Database Administrator','Cloud Architect'],
- security:['Cybersecurity Analyst','Cybersecurity Engineer','Cloud Security Engineer'],
- business:['Business Analyst','Product Manager','Project Manager / Scrum Master','Engineering Manager','Solutions Architect','Enterprise Architect'],
- design:['UI/UX Designer']
-};
 function v8SetDiscovery(id,val){
  state.discovery=state.discovery||{answers:{},completed:false};
  state.discovery.answers=state.discovery.answers||{};
@@ -7201,6 +7172,42 @@ html body .career-journey-copy>b{font-size:14px!important;line-height:1.4!import
 html body .career-journey-copy>small{font-size:12px!important;line-height:1.45!important;white-space:normal!important}
 html body .career-journey-step.is-current{border-color:#7da7e8!important;background:#f1f6ff!important;box-shadow:inset 3px 0 0 #5687d6!important}
 @media(max-width:650px){html body .career-home-target{padding:13px!important}html body .career-home-target .v6-actions{align-items:stretch!important;flex-direction:column!important}html body .career-home-target .v6-actions .btn{width:100%!important}html body .career-journey-step{min-height:0!important;padding:12px!important}}
+</style>
+
+<style id="v14-33-roadmap-content-first-topic-selection">
+html body .roadmap-page-hero{padding:24px 28px!important;margin:0 0 22px!important;border:1px solid #dce7f4!important;border-radius:22px!important;background:linear-gradient(115deg,#e0ebff 0%,#e4f7f4 100%)!important;box-shadow:0 12px 28px rgba(35,61,100,.07)!important}
+html body .roadmap-page-hero .v6-label{color:#5078b8!important;font-size:11px!important;font-weight:850!important;letter-spacing:.09em!important}
+html body .roadmap-page-hero h2{margin:7px 0 9px!important;font-size:clamp(25px,2.5vw,34px)!important;line-height:1.2!important;color:#172b4d!important}
+html body .roadmap-page-hero>p{max-width:900px!important;margin:0!important;color:#526a88!important;font-size:14px!important;line-height:1.65!important}
+html body .roadmap-hero-meta{display:flex!important;gap:8px!important;flex-wrap:wrap!important;margin-top:15px!important}
+html body .roadmap-hero-meta span{padding:6px 10px!important;border-radius:999px!important;background:rgba(255,255,255,.75)!important;border:1px solid rgba(130,157,194,.24)!important;color:#36577f!important;font-size:11px!important;font-weight:750!important}
+html body .roadmap-selection-section{margin-top:0!important}
+html body .roadmap-section-heading{align-items:center!important;gap:12px!important}
+html body .roadmap-section-heading h2{margin:0 0 4px!important}
+html body .roadmap-section-heading .small{margin:0!important}
+html body .roadmap-topic-list{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}
+html body .roadmap-topic-card{position:relative!important;min-width:0!important;display:flex!important;flex-direction:column!important;gap:12px!important;padding:17px!important;border:1px solid #dfe7f1!important;border-radius:16px!important;background:#fff!important;box-shadow:0 4px 14px rgba(26,48,82,.035)!important;transition:border-color .16s,background .16s!important}
+html body .roadmap-topic-card.is-selected{border-color:#8eabe2!important;background:#f8faff!important}
+html body .roadmap-topic-select{display:flex!important;align-items:center!important;gap:8px!important;color:#526782!important;font-size:11px!important;font-weight:750!important;cursor:pointer!important}
+html body .roadmap-topic-select input{width:16px!important;height:16px!important;margin:0!important;accent-color:#557bd1!important;flex:0 0 auto!important}
+html body .roadmap-topic-main{min-width:0!important}
+html body .roadmap-topic-step{display:flex!important;align-items:center!important;gap:9px!important;color:#69809e!important;font-size:10px!important;font-weight:850!important;letter-spacing:.07em!important}
+html body .roadmap-topic-main h3{font-size:17px!important;line-height:1.35!important;margin:7px 0!important;color:#1c2e4d!important;overflow-wrap:anywhere!important}
+html body .roadmap-topic-main>p{font-size:12px!important;line-height:1.6!important;color:#5d7089!important;margin:0 0 12px!important}
+html body .roadmap-topic-meta{display:flex!important;gap:7px!important;flex-wrap:wrap!important;margin:0 0 10px!important}
+html body .roadmap-topic-meta span{font-size:10px!important;line-height:1.4!important;color:#536984!important;background:#f0f4fa!important;padding:5px 7px!important;border-radius:6px!important}
+html body .roadmap-topic-main .progress{height:5px!important;margin:0 0 13px!important}
+html body .roadmap-topic-actions{display:flex!important;align-items:center!important;gap:8px!important;flex-wrap:wrap!important}
+html body .roadmap-topic-actions .btn{min-height:36px!important;padding:8px 11px!important;font-size:12px!important}
+html body .roadmap-selection-footer{display:flex!important;justify-content:space-between!important;align-items:center!important;gap:14px!important;margin-top:16px!important;padding:15px 17px!important;border:1px solid #dce6f2!important;border-radius:14px!important;background:#f7f9fd!important}
+html body .roadmap-selection-footer b{font-size:13px!important;color:#243957!important}
+html body .roadmap-selection-footer p{margin:4px 0 0!important}
+html body .roadmap-next-step{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:16px!important;margin:18px 0 4px!important;padding:18px 20px!important;border:1px solid #dce6f2!important;border-radius:16px!important;background:#fff!important}
+html body .roadmap-next-step h3{margin:5px 0!important;font-size:17px!important}
+html body .roadmap-next-step p{margin:0!important;font-size:12px!important;line-height:1.5!important;color:#60738c!important}
+html body .roadmap-next-step .v6-label{font-size:10px!important;font-weight:850!important;letter-spacing:.08em!important;color:#6684b3!important}
+@media(max-width:900px){html body .roadmap-topic-list{grid-template-columns:minmax(0,1fr)!important}}
+@media(max-width:650px){html body .roadmap-page-hero{padding:19px!important;border-radius:17px!important;margin-bottom:16px!important}html body .roadmap-topic-card{padding:14px!important}html body .roadmap-selection-footer,html body .roadmap-next-step{align-items:stretch!important;flex-direction:column!important}html body .roadmap-selection-footer .btn,html body .roadmap-next-step .btn{width:100%!important}html body .roadmap-section-heading{align-items:flex-start!important;flex-direction:column!important}}
 </style>
 </body>
 </html>
