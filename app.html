@@ -5595,6 +5595,11 @@ function setPlannerCalendarMonth(delta){
 }
 function selectPlannerDate(date){
  const p=plannerState();p.selectedDate=date;p.calendarMonth=isoMonthKey(date);savePlanner(p);renderPlanner();
+ setTimeout(()=>{const calendar=document.querySelector(".study-calendar-card");if(calendar)calendar.scrollIntoView({behavior:"smooth",block:"start"});},60);
+}
+function viewPlannerDateInCalendar(date){
+ const p=plannerState();p.selectedDate=date;p.calendarMonth=isoMonthKey(date);savePlanner(p);renderPlanner();
+ setTimeout(()=>{const calendar=document.querySelector(".study-calendar-card");if(calendar)calendar.scrollIntoView({behavior:"smooth",block:"start"});},60);
 }
 function toggleStudySession(entryId){
  const p=plannerState(),entries=plannerDailyEntries(),entry=entries.find(e=>e.id===entryId);
@@ -5648,7 +5653,7 @@ function renderPlannerCalendar(entries){
   const label={completed:"Completed",today:"Today",missed:"Missed",rescheduled:"Moved",planned:"Planned"}[entry.status]||"Planned";
   const selected=date===p.selectedDate;
   const domainShort=entry.domain.replace(/^\d+\s*/,"");
-  h+=`<button type="button" class="study-day-cell status-${entry.status} ${selected?"is-selected":""}" title="${esc(date+" · "+domainShort+" · "+entry.activity)}" onclick="selectPlannerDate(${esc(jsArg(date))})"><span class="study-day-top"><b>${day}</b><small>${label}</small></span><span class="study-day-domain">${esc(domainShort)}</span><span class="study-day-activity">${esc(entry.activity)}</span></button>`;
+  h+=`<button type="button" class="study-day-cell status-${entry.status} ${selected?"is-selected":""}" title="${esc(date+" · "+domainShort+" · "+entry.activity)}" onclick="selectPlannerDate(${esc(jsArg(date))})"><span class="study-day-top"><b>${day}</b><small>${label}</small></span><span class="study-day-domain" title="${esc(entry.topic)}">${esc(entry.topic)}</span><span class="study-day-category" title="${esc(domainShort)}">${esc(domainShort)}</span><span class="study-day-activity">${esc(entry.activity)}</span></button>`;
  }
  const filled=month.getDay()+nDays;
  for(let i=filled;i%7!==0;i++)h+=`<div class="study-day-empty" aria-hidden="true"></div>`;
@@ -5680,7 +5685,7 @@ function renderPlannerNextLesson(entries){
  const chosen=pending.find(e=>e.status==="today")||pending.find(e=>e.status==="missed")||pending.find(e=>e.status==="planned")||pending.find(e=>e.status==="rescheduled")||entries[0];
  if(!chosen)return '<div class="planner-next-lesson"><h3>Your schedule is ready</h3><p>All sessions are marked complete. Review your notes or continue to a project.</p><button class="btn primary" onclick="navigate(\'projects\')">Build a project</button></div>';
  const stateLabel={today:"Today's lesson",missed:"Catch-up lesson",planned:"Next upcoming lesson",rescheduled:"Catch-up lesson",completed:"Review a completed lesson"}[chosen.status]||"Next lesson";
- return '<section class="planner-next-lesson"><div class="planner-next-lesson-copy"><div class="v9-label">START HERE · '+esc(stateLabel.toUpperCase())+'</div><h3>'+esc(chosen.topic)+'</h3><p class="planner-next-domain">'+esc(chosen.domain.replace(/^\d+\s*/,""))+' <span>·</span> '+esc(formatDate(chosen.date))+'</p><div class="planner-task-line"><b>Today\'s task:</b> '+esc(chosen.activityText||chosen.activity)+'</div><ol class="planner-learn-steps"><li>Open the lesson and read the explanation and worked example.</li><li>Try the practice exercise before revealing the solution.</li><li>Write one thing you learned, then return here and mark the session complete.</li></ol><p class="small">Your lesson stays inside MR.Career. Opening it does not automatically mark the topic as mastered.</p></div><div class="planner-next-lesson-action"><span class="planner-lesson-icon"><span aria-hidden="true">↗</span></span><button class="btn primary" onclick="startStudySession('+esc(jsArg(chosen.id))+')">Open this lesson <span aria-hidden="true">→</span></button><button class="btn" onclick="selectPlannerDate('+esc(jsArg(chosen.date))+')">View this day in calendar</button></div></section>';
+ return '<section class="planner-next-lesson"><div class="planner-next-lesson-copy"><div class="v9-label">START HERE · '+esc(stateLabel.toUpperCase())+'</div><h3>'+esc(chosen.topic)+'</h3><p class="planner-next-domain">'+esc(chosen.domain.replace(/^\d+\s*/,""))+' <span>·</span> '+esc(formatDate(chosen.date))+'</p><div class="planner-task-line"><b>Today\'s task:</b> '+esc(chosen.activityText||chosen.activity)+'</div><ol class="planner-learn-steps"><li>Open the lesson and read the explanation and worked example.</li><li>Try the practice exercise before revealing the solution.</li><li>Write one thing you learned, then return here and mark the session complete.</li></ol><p class="small">Your lesson stays inside MR.Career. Opening it does not automatically mark the topic as mastered.</p></div><div class="planner-next-lesson-action"><span class="planner-lesson-icon"><span aria-hidden="true">↗</span></span><button class="btn primary" onclick="startStudySession('+esc(jsArg(chosen.id))+')">Open this lesson <span aria-hidden="true">→</span></button><button class="btn" onclick="viewPlannerDateInCalendar('+esc(jsArg(chosen.date))+')">View this day in calendar</button></div></section>';
 }
 function renderPlanner(){
  ensurePlannerSelections();
@@ -7606,6 +7611,25 @@ html body .planner-next-lesson-action{display:flex;flex-direction:column;gap:9px
 html body .planner-lesson-icon{display:grid;place-items:center;align-self:center;width:52px;height:52px;border-radius:15px;background:#d9f2e3;color:#176b43;font-size:27px;font-weight:800}
 html body .planner-next-lesson-action .btn{white-space:normal}
 @media(max-width:760px){html body .planner-simple-form{grid-template-columns:minmax(0,1fr)}html body .planner-topic-summary-card{grid-template-columns:minmax(0,1fr)}html body .planner-topic-summary-card .plan-actions{grid-column:auto}html body .planner-next-lesson{grid-template-columns:minmax(0,1fr)}html body .planner-next-lesson-action{align-items:stretch}html body .planner-lesson-icon{align-self:flex-start}}
+</style>
+<style id="v14-41-planner-contrast-calendar">
+/* V14.41 — planner contrast, compact setup and calendar navigation */
+html body .planner-simple-setup{padding:14px 20px 18px!important}
+html body .planner-simple-setup>.v9-label{display:block;color:#fff!important;margin:0 0 5px!important;font-size:11px;line-height:1.35;letter-spacing:.09em;font-weight:800}
+html body .planner-simple-setup>h2{color:#fff!important;margin:0 0 8px!important;line-height:1.2}
+html body .planner-simple-setup>p:not(.planner-simple-hint){color:#f3f8ff!important;margin:0;line-height:1.5}
+html body .planner-simple-form{margin-top:12px!important}
+html body .planner-simple-hint{color:#203247!important;background:#f5f8fc!important;margin:10px 0 0!important;padding:9px 12px!important;line-height:1.5}
+html body .planner-simple-hint b{color:#172b42!important}
+html body .planner-quick-actions{margin-top:10px!important}
+html body .study-day-category{display:block;font-size:8px;line-height:1.2;color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html body .study-day-domain{font-size:9px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html body .study-calendar-card{scroll-margin-top:18px}
+@media(max-width:760px){
+ html body .planner-simple-setup{padding:13px!important}
+ html body .planner-simple-setup>.v9-label{font-size:10px}
+ html body .study-day-category{display:none}
+}
 </style>
 </body>
 </html>
