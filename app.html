@@ -5179,16 +5179,42 @@ function renderCourseLesson(domain,topic,det){
  const list=items=>items.map(x=>"<li>"+esc(x)+"</li>").join("");
  const terms=p.terms.map(x=>'<div class="course-term"><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div>').join("");
  const i=Number(topic.index)||0;
- return '<section class="course-lesson" id="courseLesson">'+
-  '<div class="course-lesson-heading"><div><div class="learning-eyebrow">LESSON 01 · CORE TEACHING</div><h3>'+esc(p.title)+'</h3><p>Read the explanation, follow the example, then attempt the exercise before opening the solution.</p></div><span class="course-badge">Self-paced lesson</span></div>'+
-  '<div class="course-content-grid">'+
-   '<article class="course-content-card"><div class="course-label">THE IDEA</div><h4>Understand the concept</h4><p>'+esc(p.what)+'</p><h5>How to approach it</h5><p>'+esc(p.how)+'</p></article>'+
-   '<article class="course-content-card course-example"><div class="course-label">WORKED EXAMPLE</div><h4>See the reasoning</h4><p>'+esc(p.example)+'</p><div class="course-teacher-tip"><b>Pause and check:</b> Can you explain why each step is necessary, and what evidence would show it worked?</div></article>'+
-   '<article class="course-content-card"><div class="course-label">GUIDED WALKTHROUGH</div><h4>Follow these steps</h4><ol>'+list(p.steps)+'</ol></article>'+
-   '<article class="course-content-card"><div class="course-label">YOUR TURN</div><h4>Try it yourself</h4><p>'+esc(p.practice)+'</p><textarea class="learning-answer" rows="4" placeholder="Write your approach, steps, result, and questions…" onchange="saveLearningField('+esc(jsArg(domain))+','+i+',\'practiceAnswer\',this.value)" id="coursePracticeAnswer">'+esc(topic.practiceAnswer||'')+'</textarea><div class="course-solution-actions"><button type="button" class="btn" onclick="document.getElementById(\'courseSolution\').hidden=false">Reveal worked solution</button></div><div id="courseSolution" class="course-solution" hidden><b>Worked solution / expected reasoning</b><p>'+esc(p.solution)+'</p></div></article>'+
-   '<article class="course-content-card"><div class="course-label">AVOID THESE</div><h4>Common beginner mistakes</h4><ul>'+list(p.mistakes)+'</ul></article>'+
-   '<article class="course-content-card"><div class="course-label">QUICK REFERENCE</div><h4>Key terms</h4><div class="course-terms">'+terms+'</div></article>'+
-  '</div></section>';
+ const step=Math.max(1,Math.min(5,Number(topic.courseStep)||1));
+ const card=(n,html)=>'<article class="course-content-card" data-course-step="'+n+'" '+(step===n?'':'hidden')+'>'+html+'</article>';
+ return '<section class="course-lesson" id="courseLesson" data-domain="'+esc(domain)+'" data-topic-index="'+i+'" data-current-step="'+step+'">'+
+  '<div class="course-lesson-heading"><div><div class="learning-eyebrow">GUIDED LESSON · 5 SHORT STEPS</div><h3>'+esc(p.title)+'</h3><p>Work through one step at a time. Your place is saved, so you can return later without starting over.</p></div><span class="course-badge">Step <span id="courseStepNumber">'+step+'</span> of 5</span></div>'+
+  '<div class="course-stepper" role="group" aria-label="Lesson steps">'+
+   '<button type="button" data-step-nav="1" class="'+(step===1?'is-active':'')+'" onclick="setCourseLessonStep(1)">1. Understand</button>'+
+   '<button type="button" data-step-nav="2" class="'+(step===2?'is-active':'')+'" onclick="setCourseLessonStep(2)">2. Example</button>'+
+   '<button type="button" data-step-nav="3" class="'+(step===3?'is-active':'')+'" onclick="setCourseLessonStep(3)">3. Walkthrough</button>'+
+   '<button type="button" data-step-nav="4" class="'+(step===4?'is-active':'')+'" onclick="setCourseLessonStep(4)">4. Practise</button>'+
+   '<button type="button" data-step-nav="5" class="'+(step===5?'is-active':'')+'" onclick="setCourseLessonStep(5)">5. Review</button>'+
+  '</div>'+
+  '<div class="course-step-progress"><span id="courseStepProgress" style="width:'+Math.round(step/5*100)+'%"></span></div>'+
+  '<div class="course-content-grid course-guided-grid">'+
+   card(1,'<div class="course-label">STEP 1 · THE IDEA</div><h4>Understand the concept</h4><p>'+esc(p.what)+'</p><h5>How to approach it</h5><p>'+esc(p.how)+'</p><div class="course-prompt"><b>Pause and think</b><span>How would you explain this idea to a colleague in two sentences?</span></div>')+
+   card(2,'<div class="course-label">STEP 2 · WORKED EXAMPLE</div><h4>See the reasoning</h4><p>'+esc(p.example)+'</p><div class="course-teacher-tip"><b>Check your understanding:</b> Can you explain why each step is necessary and what evidence would show it worked?</div>')+
+   card(3,'<div class="course-label">STEP 3 · FOLLOW ALONG</div><h4>Try these steps in order</h4><ol>'+list(p.steps)+'</ol><div class="course-prompt"><b>Before continuing</b><span>Identify the expected result and one edge case you should test.</span></div>')+
+   card(4,'<div class="course-label">STEP 4 · YOUR TURN</div><h4>Try it yourself before viewing the answer</h4><p>'+esc(p.practice)+'</p><label for="coursePracticeAnswer"><b>Your attempt</b></label><textarea class="learning-answer" rows="5" placeholder="Write your approach, steps, expected result and questions…" onchange="saveLearningField('+esc(jsArg(domain))+','+i+',\'practiceAnswer\',this.value)" id="coursePracticeAnswer">'+esc(topic.practiceAnswer||'')+'</textarea><div class="course-solution-actions"><button type="button" class="btn" onclick="document.getElementById(\'courseSolution\').hidden=false">Reveal worked solution</button></div><div id="courseSolution" class="course-solution" '+(topic.solutionRevealed?'':'hidden')+'><b>Worked solution / expected reasoning</b><p>'+esc(p.solution)+'</p><button type="button" class="btn" onclick="saveLearningField('+esc(jsArg(domain))+','+i+',\'solutionRevealed\',true);this.textContent=\'Solution reviewed\'">Mark solution reviewed</button></div>')+
+   card(5,'<div class="course-label">STEP 5 · REVIEW</div><h4>Common beginner mistakes</h4><ul>'+list(p.mistakes)+'</ul><h4>Key terms to remember</h4><div class="course-terms">'+terms+'</div><div class="course-prompt"><b>Ready to move on?</b><span>Explain the concept, give an example, and name one mistake to avoid without looking above.</span></div>')+
+  '</div>'+
+  '<div class="course-step-actions"><button type="button" class="btn" id="coursePreviousStep" '+(step===1?'disabled':'')+' onclick="setCourseLessonStep('+Math.max(1,step-1)+')">← Previous step</button><span id="courseStepHint">Complete this step before moving on. You can revisit any step.</span><button type="button" class="btn primary" id="courseNextStep" '+(step===5?'disabled':'')+' onclick="setCourseLessonStep('+Math.min(5,step+1)+')">'+(step===5?'Lesson steps complete':'Next step →')+'</button></div>'+
+ '</section>';
+}
+function setCourseLessonStep(nextStep){
+ const root=document.getElementById("courseLesson");
+ if(!root)return;
+ const step=Math.max(1,Math.min(5,Number(nextStep)||1));
+ root.dataset.currentStep=String(step);
+ root.querySelectorAll("[data-course-step]").forEach(card=>{card.hidden=Number(card.dataset.courseStep)!==step;});
+ root.querySelectorAll("[data-step-nav]").forEach(button=>{const active=Number(button.dataset.stepNav)===step;button.classList.toggle("is-active",active);button.setAttribute("aria-current",active?"step":"false");});
+ const number=document.getElementById("courseStepNumber");if(number)number.textContent=String(step);
+ const progress=document.getElementById("courseStepProgress");if(progress)progress.style.width=Math.round(step/5*100)+"%";
+ const prev=document.getElementById("coursePreviousStep");if(prev){prev.disabled=step===1;prev.onclick=()=>setCourseLessonStep(step-1);}
+ const next=document.getElementById("courseNextStep");if(next){next.disabled=step===5;next.textContent=step===5?"Lesson steps complete":"Next step →";next.onclick=()=>setCourseLessonStep(step+1);}
+ const hint=document.getElementById("courseStepHint");if(hint)hint.textContent=["Read the idea and connect it to something you already know.","Follow the example and explain why the result makes sense.","Follow each instruction in order and predict the result.","Try the task before revealing the worked solution.","Review the mistakes and explain the idea without looking."][step-1];
+ const domain=root.dataset.domain,index=Number(root.dataset.topicIndex);
+ if(domain&&Number.isInteger(index))saveLearningField(domain,index,"courseStep",step);
 }
 function learningWorkspaceState(domain,i){
  const key=topicKey(domain,i);
@@ -7630,6 +7656,26 @@ html body .study-calendar-card{scroll-margin-top:18px}
  html body .planner-simple-setup>.v9-label{font-size:10px}
  html body .study-day-category{display:none}
 }
+</style>
+<style id="v14-42-guided-step-learning">
+/* V14.42 — turn the lesson into a focused, resumable sequence */
+html body .course-lesson{scroll-margin-top:12px}
+html body .course-stepper{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:14px 0 9px}
+html body .course-stepper button{min-width:0;padding:9px 7px;border:1px solid #d8e3f1;border-radius:9px;background:#fff;color:#536985;font-size:11px;font-weight:800;line-height:1.35;cursor:pointer}
+html body .course-stepper button.is-active{border-color:#3974c7;background:#eaf2ff;color:#214f8d;box-shadow:inset 0 0 0 1px #3974c7}
+html body .course-step-progress{height:5px;overflow:hidden;background:#e6edf6;border-radius:999px;margin-bottom:14px}
+html body .course-step-progress span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#3b82f6,#16a085);transition:width .18s ease}
+html body .course-guided-grid{grid-template-columns:minmax(0,1fr)}
+html body .course-guided-grid .course-content-card[hidden]{display:none!important}
+html body .course-guided-grid .course-content-card{padding:clamp(16px,2.5vw,24px);min-height:210px}
+html body .course-guided-grid .course-content-card h4{font-size:19px}
+html body .course-guided-grid .course-content-card p,html body .course-guided-grid .course-content-card li{font-size:14px;line-height:1.8}
+html body .course-prompt{display:flex;flex-direction:column;gap:4px;margin-top:16px;padding:12px 14px;border-left:3px solid #4f86ce;border-radius:0 9px 9px 0;background:#f0f6ff;color:#355477;font-size:13px;line-height:1.6}
+html body .course-prompt b{color:#244c7b}
+html body .course-step-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:13px;padding-top:13px;border-top:1px solid #e0e8f2}
+html body .course-step-actions>span{flex:1;text-align:center;font-size:11px;line-height:1.45;color:#64758b}
+html body .course-step-actions .btn:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:620px){html body .course-stepper{grid-template-columns:repeat(2,minmax(0,1fr))}html body .course-stepper button:last-child{grid-column:1/-1}html body .course-step-actions{flex-wrap:wrap}html body .course-step-actions>span{order:3;flex-basis:100%;text-align:left}html body .course-guided-grid .course-content-card{min-height:0}}
 </style>
 </body>
 </html>
