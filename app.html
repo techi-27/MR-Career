@@ -5290,7 +5290,7 @@ Something I still find confusing…
 Next thing to practise…" oninput="saveLearningField(${esc(jsArg(domain))},${i},'learningNotes',this.value)">${esc(saved.learningNotes)}</textarea><div class="learning-notes-footer"><span id="learningSaveStatus">Saved in this browser</span><button class="btn" onclick="saveLearningField(${esc(jsArg(domain))},${i},'learningNotes',document.getElementById('learningNotes').value)">Save notes</button></div></section>
   <div class="section"><div class="section-title"><h2>Knowledge check</h2><span class="small">Answer first, then use the self-check guide</span></div><div class="detail-grid">${quizzes}</div></div>
   <div class="section"><div class="section-title"><h2>Explain it like an interview</h2><span class="small">Practise explaining the topic, not memorizing a definition</span></div><div class="detail-grid">${interviews||'<div class="detail-box"><p>Explain the topic, give a real example, and describe one failure mode or trade-off.</p></div>'}</div></div>
-  <section class="learning-finish-card"><div><h3>Ready to record this learning session?</h3><p>Mark complete when you can explain the concept and have attempted the practical exercise. You can return to your notes any time.</p><p class="small">Current status: <b>${esc(t.status)}</b> · ${pct(t)}% complete · ${Number(t.actualHours)||0} actual hours</p></div><div class="detail-actions learning-finish-actions"><button class="btn" onclick="quickProgress(${esc(jsArg(domain))},${i},50)">Keep in progress</button><button class="btn" onclick="openNextLearningTopic(${esc(jsArg(domain))},${i})">Continue to next lesson →</button><button class="btn" onclick="openProjectStudioFromLearning()">Build project proof</button><button class="btn primary" onclick="quickComplete(${esc(jsArg(domain))},${i})">I learned this topic</button></div></section>
+  <section class="learning-finish-card"><div><h3>Ready to record this learning session?</h3><p>Mark complete when you can explain the concept and have attempted the practical exercise. You can return to your notes any time.</p><p class="small">Current status: <b>${esc(t.status)}</b> · ${pct(t)}% complete · ${Number(t.actualHours)||0} actual hours</p></div><div class="detail-actions learning-finish-actions"><button class="btn" onclick="quickProgress(${esc(jsArg(domain))},${i},50)">Keep in progress</button><button class="btn" onclick="openNextLearningTopic(${esc(jsArg(domain))},${i})">Continue to next lesson →</button><button class="btn" onclick="openProjectStudioFromLearning()">Build project proof</button><button class="btn primary" onclick="finishLearningSession(${esc(jsArg(domain))},${i})">Complete learning session</button></div></section>
  </div></div>`;
  document.body.appendChild(modal);
 }
@@ -7698,5 +7698,42 @@ html body .learning-finish-actions .btn{white-space:normal}
 html body .learning-finish-actions .btn.primary{order:0}
 @media(max-width:850px){html body .learning-finish-actions{display:grid;grid-template-columns:minmax(0,1fr)}html body .learning-finish-actions .btn{width:100%}}
 </style>
+
+<script id="v14-44-learning-evidence-completion">
+/* V14.44 — make lesson completion meaningful: practice attempt + reflection checkpoints.
+   Daily schedule completion remains separate from topic mastery. */
+function finishLearningSession(domain,index){
+  const saved=learningWorkspaceState(domain,index);
+  const practice=String(saved.practiceAnswer||"").trim();
+  const checkpoints=Object.values(saved.learningChecklist||{}).filter(Boolean).length;
+  if(practice.length<20){
+    alert("Before completing this lesson, add a short practical attempt in the Practise step. Include what you tried and the result or expected result.");
+    const practiceField=document.getElementById("coursePracticeAnswer");
+    if(practiceField){setCourseLessonStep(4);practiceField.focus();practiceField.scrollIntoView({behavior:"smooth",block:"center"});}
+    return;
+  }
+  if(checkpoints<2){
+    alert("Complete at least 2 of the 3 learning checkpoints so you can confirm what you understand and what you still need to practise.");
+    const checkpoint=document.querySelector(".learning-checkpoints");
+    if(checkpoint)checkpoint.scrollIntoView({behavior:"smooth",block:"center"});
+    return;
+  }
+  const key=topicKey(domain,index);
+  if(!state.topics[key])state.topics[key]={};
+  state.topics[key].masteredAt=new Date().toISOString();
+  state.topics[key].lastReviewedAt=new Date().toISOString();
+  state.topics[key].practiceEvidenceSaved=true;
+  state.topics[key].status="Completed";
+  state.topics[key].progress=100;
+  state.learningActivityDates=Array.isArray(state.learningActivityDates)?state.learningActivityDates:[];
+  const today=typeof localTodayISO==="function"?localTodayISO():new Date().toISOString().slice(0,10);
+  if(!state.learningActivityDates.includes(today))state.learningActivityDates.push(today);
+  state.learningActivityDates=state.learningActivityDates.slice(-90);
+  save();
+  closeLearning();
+  renderCurrent();
+}
+</script>
+
 </body>
 </html>
