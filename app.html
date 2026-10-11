@@ -5099,6 +5099,7 @@ function renderDashboard(){
     <p>MR.Career guides students, working professionals, beginners, and career changers from choosing an IT role to learning the right skills with a realistic daily plan.</p>
     <div class="career-home-target"><span class="career-home-target-label">YOUR TARGET ROLE</span><strong>${esc(role)}</strong><div class="v6-actions"><button class="btn primary" onclick="navigate('roadmap')">Explore my learning roadmap</button><button class="btn" onclick="navigate('profile')">Change target role</button></div></div>
   </section>`;
+  h+=renderLearningReturnCard();
   h+=`<section class="section career-home-progress"><div class="section-title"><h2>Your progress</h2><span class="small">${s.completed} of ${s.total} topics completed</span></div>
     <div class="card"><div class="top"><div><div class="label">TARGET ROLE</div><h3>${esc(role)}</h3><p class="small">${esc(cfg.description||"Your personalised career path")}</p></div><span class="pct">${s.progress}%</span></div><div class="progress"><span style="width:${s.progress}%"></span></div></div></section>`;
   if(next){
@@ -7732,6 +7733,37 @@ function finishLearningSession(domain,index){
   save();
   closeLearning();
   renderCurrent();
+}
+</script>
+
+
+<script id="v14-45-daily-learning-return-loop">
+/* V14.45 — a useful reason to return: short spaced reviews based on completed lessons. */
+function renderLearningReturnCard(){
+  const today=typeof localTodayISO==="function"?localTodayISO():new Date().toISOString().slice(0,10);
+  const completed=[];
+  CURRICULUM.domains.forEach(domain=>{
+    (domain.topics||[]).forEach((_,index)=>{
+      const topic=getTopic(domain.name,index);
+      const saved=state.topics[topicKey(domain.name,index)]||{};
+      if(topic.status==="Completed"&&saved.masteredAt){
+        const last=String(saved.lastReviewedAt||saved.masteredAt).slice(0,10);
+        const days=Math.max(0,Math.floor((new Date(today+"T00:00:00")-new Date(last+"T00:00:00"))/86400000));
+        const intervals=[1,3,7,14,30];
+        const nextInterval=intervals.find(n=>days<n)||30;
+        completed.push({domain:domain.name,index,topic:topic.topic,days,last,nextInterval,due:days>=1});
+      }
+    });
+  });
+  if(!completed.length)return "";
+  completed.sort((a,b)=>(b.due-a.due)||(b.days-a.days));
+  const item=completed[0];
+  const dueCount=completed.filter(x=>x.due).length;
+  const title=item.due?"Bring a skill back to mind":"Keep your knowledge fresh";
+  const copy=item.due
+    ? dueCount+" topic"+(dueCount===1?" is":"s are")+" ready for a quick review. Recalling concepts after a gap helps you retain them better."
+    : "You have no overdue reviews. A short recall session now helps keep your completed topics fresh.";
+  return '<section class="section learning-return-card"><div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-color:#dfe5fb;background:linear-gradient(120deg,var(--card),var(--soft))"><div style="flex:1;min-width:220px"><div class="v6-label">5-MINUTE REVIEW</div><h3 style="margin:5px 0 6px">'+esc(title)+'</h3><p class="small" style="margin:0 0 8px">'+esc(copy)+'</p><b>'+esc(item.topic)+'</b><div class="small">'+esc(item.domain)+' · '+(item.due?'Review due now':'Last reviewed today')+'</div></div><button type="button" class="btn primary" onclick="openLearning('+esc(jsArg(item.domain))+','+item.index+')">'+(item.due?'Review this topic':'Quick recall')+' →</button></div></section>';
 }
 </script>
 
