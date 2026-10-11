@@ -4826,7 +4826,7 @@ function renderGlobalSearchResults(){
 document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openGlobalSearch();}else if(e.key==="/"&&!["INPUT","TEXTAREA","SELECT"].includes(document.activeElement?.tagName)){e.preventDefault();openGlobalSearch();}else if(e.key==="Escape")closeGlobalSearch();});
 
 function routeRenderers(){
- return {dashboard:renderDashboard,planner:renderPlanner,roadmap:renderRoadmap,discover:renderCareerDiscovery,
+ return {dashboard:renderDashboard,mission:renderTodaysMission,planner:renderPlanner,roadmap:renderRoadmap,discover:renderCareerDiscovery,
  profile:renderProfile,careers:renderCareerDiscovery,careerpaths:renderCareerDiscovery,compare:renderCareerDiscovery,
  toolkit:renderCareerToolkit,projects:renderProjects,resume:renderResume,labs:renderLabs,exams:renderExams,
  interview:renderInterview,readiness:renderReadiness,portfolio:renderProjects,jd:renderJD,weekly:renderDashboard,
@@ -4976,7 +4976,7 @@ function renderCurrent(){return renderRoute(window.__itCareerCurrentView||"dashb
 function navParentView(view){
  const v=String(view||"dashboard");
  if(v.startsWith("domain:"))return "roadmap";
- return ({discover:"discover",careers:"discover",careerpaths:"discover",compare:"discover",jobs:"discover",switch:"discover",planner:"planner",tech:"roadmap",skills:"roadmap",exams:"toolkit",quizzes:"toolkit",labs:"toolkit",projects:"toolkit",interview:"toolkit",resume:"toolkit",jd:"toolkit",readiness:"toolkit",weekly:"dashboard",portfolio:"toolkit",skillgap:"toolkit",coach:"dashboard"})[v]||v;
+ return ({mission:"dashboard",discover:"discover",careers:"discover",careerpaths:"discover",compare:"discover",jobs:"discover",switch:"discover",planner:"planner",tech:"roadmap",skills:"roadmap",exams:"toolkit",quizzes:"toolkit",labs:"toolkit",projects:"toolkit",interview:"toolkit",resume:"toolkit",jd:"toolkit",readiness:"toolkit",weekly:"dashboard",portfolio:"toolkit",skillgap:"toolkit",coach:"dashboard"})[v]||v;
 }
 function navigate(view,opts={}){
  view=String(view||"dashboard"); const current=window.__itCareerCurrentView||"dashboard";
@@ -5100,6 +5100,7 @@ function renderDashboard(){
     <div class="career-home-target"><span class="career-home-target-label">YOUR TARGET ROLE</span><strong>${esc(role)}</strong><div class="v6-actions"><button class="btn primary" onclick="navigate('roadmap')">Explore my learning roadmap</button><button class="btn" onclick="navigate('profile')">Change target role</button></div></div>
   </section>`;
   h+=renderLearningReturnCard();
+  h+=renderTodayMissionLauncher();
   h+=`<section class="section career-home-progress"><div class="section-title"><h2>Your progress</h2><span class="small">${s.completed} of ${s.total} topics completed</span></div>
     <div class="card"><div class="top"><div><div class="label">TARGET ROLE</div><h3>${esc(role)}</h3><p class="small">${esc(cfg.description||"Your personalised career path")}</p></div><span class="pct">${s.progress}%</span></div><div class="progress"><span style="width:${s.progress}%"></span></div></div></section>`;
   if(next){
@@ -7764,6 +7765,136 @@ function renderLearningReturnCard(){
     ? dueCount+" topic"+(dueCount===1?" is":"s are")+" ready for a quick review. Recalling concepts after a gap helps you retain them better."
     : "You have no overdue reviews. A short recall session now helps keep your completed topics fresh.";
   return '<section class="section learning-return-card"><div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-color:#dfe5fb;background:linear-gradient(120deg,var(--card),var(--soft))"><div style="flex:1;min-width:220px"><div class="v6-label">5-MINUTE REVIEW</div><h3 style="margin:5px 0 6px">'+esc(title)+'</h3><p class="small" style="margin:0 0 8px">'+esc(copy)+'</p><b>'+esc(item.topic)+'</b><div class="small">'+esc(item.domain)+' · '+(item.due?'Review due now':'Last reviewed today')+'</div></div><button type="button" class="btn primary" onclick="openLearning('+esc(jsArg(item.domain))+','+item.index+')">'+(item.due?'Review this topic':'Quick recall')+' →</button></div></section>';
+}
+</script>
+
+
+<script id="v14-46-todays-mission-linux">
+/* Today's Mission: interactive Linux processes and services lesson.
+   The page guides the learner through commands in their own terminal; it never executes shell commands in the browser. */
+function todayMissionState(){
+  state.todayMission=state.todayMission&&typeof state.todayMission==="object"?state.todayMission:{};
+  const m=state.todayMission;
+  m.checked=m.checked&&typeof m.checked==="object"?m.checked:{};
+  m.hints=m.hints&&typeof m.hints==="object"?m.hints:{};
+  m.answers=Array.isArray(m.answers)?m.answers:[];
+  m.quizSubmitted=!!m.quizSubmitted;
+  m.quizScore=Number.isFinite(Number(m.quizScore))?Number(m.quizScore):null;
+  m.completed=!!m.completed;
+  return m;
+}
+function todayMissionSave(){
+  save();
+}
+function todayMissionProgress(){
+  const m=todayMissionState();
+  const criteria=["p1a","p1b","p2a","p2b","p3a","p3b"];
+  const done=criteria.filter(k=>m.checked[k]).length;
+  const quizPassed=m.quizSubmitted&&m.quizScore>=4;
+  const complete=done===criteria.length&&quizPassed;
+  return {done,total:criteria.length,quizPassed,complete,percent:Math.round((done/criteria.length)*75)+(quizPassed?25:0)};
+}
+function renderTodayMissionLauncher(){
+  const m=todayMissionState(),p=todayMissionProgress();
+  return '<section class="section tm-launcher"><div class="tm-launcher-card"><div class="tm-launcher-copy"><span class="tm-eyebrow">TODAY\'S MISSION</span><h3>Linux processes &amp; services</h3><p>Learn to inspect processes, safely stop a test process, and investigate system services using real terminal commands.</p><div class="tm-launcher-meta"><span>35–45 min</span><span>3 terminal exercises</span><span>5-question knowledge check</span></div></div><div class="tm-launcher-action"><div class="tm-mini-progress"><span style="width:'+p.percent+'%"></span></div><small>'+(p.complete?'Mission completed':p.done+' of '+p.total+' validation checks · '+(m.quizPassed?'quiz passed':'quiz not passed'))+'</small><button type="button" class="btn primary" onclick="navigate(\'mission\')">'+(p.complete?'Review mission':'Continue mission')+' →</button></div></div></section>';
+}
+function tmToggle(key,checked){
+  const m=todayMissionState();m.checked[key]=!!checked;m.completed=false;todayMissionSave();renderTodaysMission();
+}
+function tmHint(key){
+  const m=todayMissionState();m.hints[key]=!m.hints[key];todayMissionSave();renderTodaysMission();
+}
+function tmChooseAnswer(index,value){
+  const m=todayMissionState();m.answers[index]=String(value);m.quizSubmitted=false;m.quizScore=null;m.completed=false;todayMissionSave();
+  document.querySelectorAll('[data-tm-question="'+index+'"] .tm-option').forEach(el=>el.classList.toggle('is-picked',el.dataset.value===String(value)));
+}
+function tmSubmitQuiz(){
+  const m=todayMissionState();
+  if(m.answers.length<5||[0,1,2,3,4].some(i=>m.answers[i]===undefined||m.answers[i]==="")){
+    const feedback=document.getElementById("tmQuizFeedback");
+    if(feedback)feedback.innerHTML='<strong>Almost there.</strong> Answer all five questions before checking your score.';
+    return;
+  }
+  const key=["b","a","c","b","c"];
+  m.quizScore=key.reduce((score,answer,i)=>score+(m.answers[i]===answer?1:0),0);
+  m.quizSubmitted=true;m.completed=false;todayMissionSave();renderTodaysMission();
+  const feedback=document.getElementById("tmQuizFeedback");
+  if(feedback)feedback.scrollIntoView({behavior:"smooth",block:"center"});
+}
+function tmCompleteMission(){
+  const p=todayMissionProgress();
+  if(!p.complete){alert("Finish all six terminal validation checks and score at least 4 out of 5 on the knowledge check before completing this mission.");return;}
+  const m=todayMissionState();m.completed=true;m.completedAt=new Date().toISOString();todayMissionSave();renderTodaysMission();
+}
+function renderTodaysMission(){
+  const m=todayMissionState(),p=todayMissionProgress();
+  const check=(key,label,detail)=>'<label class="tm-check"><input type="checkbox" '+(m.checked[key]?'checked':'')+' onchange="tmToggle(\''+key+'\',this.checked)"><span><b>'+label+'</b><small>'+detail+'</small></span></label>';
+  const hint=(key,title,copy)=>'<div class="tm-hint-wrap"><button type="button" class="btn tm-hint-button" onclick="tmHint(\''+key+'\')">'+(m.hints[key]?'Hide hint':'Show hint')+' · '+title+'</button>'+(m.hints[key]?'<div class="tm-hint">'+copy+'</div>':'')+'</div>';
+  const exercise=(n,title,goal,command,why,criteria,hintKey,hintCopy)=>'<article class="tm-exercise"><div class="tm-exercise-heading"><span class="tm-exercise-number">'+n+'</span><div><h4>'+title+'</h4><p>'+goal+'</p></div><span class="tm-status '+(criteria.every(k=>m.checked[k])?'is-done':'')+'">'+(criteria.every(k=>m.checked[k])?'Validated':'In progress')+'</span></div><div class="tm-terminal"><div class="tm-terminal-bar"><span class="tm-terminal-dot"></span><span class="tm-terminal-dot"></span><span class="tm-terminal-dot"></span><small>YOUR LINUX TERMINAL</small></div><pre><code>'+command+'</code></pre></div><p class="tm-why">'+why+'</p>'+hint(hintKey,'guided hint',hintCopy)+'<div class="tm-validation"><b>Validation criteria</b>'+criteria.map((k,i)=>check(k,i===0?'I ran the command and inspected the output':'I can explain what the result tells me',i===0?'Do not just paste the command; identify the relevant fields.':'Be able to describe the evidence in your own words.')).join('')+'</div></article>';
+  const questions=[
+    {q:"What is the PID of a process?",opts:[["a","The PID of its parent process"],["b","A unique process identifier"],["c","The port used by a service"]],explain:"PID identifies a process. PPID identifies its parent process."},
+    {q:"Which command is best for inspecting one process's PID, state and elapsed time?",opts:[["a","ps -p "$PID" -o pid,ppid,stat,etime,cmd"],["b","systemctl --failed"],["c","df -h"]],explain:"ps can select a PID and display specific process fields."},
+    {q:"Which signal should you normally try first to stop a process you started for this lab?",opts:[["a","SIGKILL immediately"],["b","SIGSTOP"],["c","SIGTERM"]],explain:"SIGTERM requests a graceful exit. SIGKILL should be a last resort when appropriate."},
+    {q:"A systemd service is failing. What is the best first response?",opts:[["a","Restart every service"],["b","Inspect systemctl status and relevant journal logs"],["c","Delete its configuration"]],explain:"Inspect status, recent logs and recent changes before choosing a corrective action."},
+    {q:"What does systemctl is-active SERVICE tell you?",opts:[["a","How much disk space is free"],["b","The process's parent PID"],["c","Whether the service is active according to systemd"]],explain:"It reports the service's active state; it does not by itself prove the application is healthy."}
+  ];
+  let quiz='';
+  questions.forEach((q,i)=>{
+    quiz+='<fieldset class="tm-question" data-tm-question="'+i+'"><legend><span>Q'+(i+1)+'</span> '+q.q+'</legend><div class="tm-options">'+q.opts.map(o=>'<label class="tm-option '+(m.answers[i]===o[0]?'is-picked':'')+'" data-value="'+o[0]+'"><input type="radio" name="tmq'+i+'" '+(m.answers[i]===o[0]?'checked':'')+' onchange="tmChooseAnswer('+i+',\''+o[0]+'\')"><span>'+o[1].replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</span></label>').join('')+'</div>'+(m.quizSubmitted?'<div class="tm-explanation '+(m.answers[i]===["b","a","c","b","c"][i]?'correct':'')+'"><b>'+(m.answers[i]===["b","a","c","b","c"][i]?'Correct':'Review this')+'</b> '+q.explain+'</div>':'')+'</fieldset>';
+  });
+  const quizFeedback=m.quizSubmitted?'<div class="tm-quiz-result '+(m.quizScore>=4?'passed':'retry')+'"><b>'+(m.quizScore>=4?'Knowledge check passed':'Keep practising, then try again')+'</b><span>Score: '+m.quizScore+'/5 · '+(m.quizScore>=4?'You met the 80% pass threshold.':'You need at least 4/5. Your answers are saved; change any answer and resubmit.')+'</span></div>':'<div class="tm-quiz-result" id="tmQuizFeedback"><span>Answer all five questions. You need at least 4 correct answers to pass.</span></div>';
+  let h='<section class="tm-page"><div class="tm-breadcrumb"><button class="btn" onclick="navigate(\'dashboard\')">← Home</button><span>Today\'s Mission</span><span>Linux fundamentals</span></div>';
+  h+='<header class="tm-hero"><div class="tm-hero-main"><span class="tm-eyebrow">TODAY\'S MISSION · LINUX</span><h2>Processes &amp; Services</h2><p>Learn what is running, understand how processes relate to services, and investigate failures using evidence—not guesswork.</p><div class="tm-meta"><span>35–45 minutes</span><span>Beginner → practical</span><span>Terminal required</span></div></div><div class="tm-hero-side"><div class="tm-progress-ring"><strong>'+p.percent+'%</strong><span>mission progress</span></div><div class="tm-progress-track"><span style="width:'+p.percent+'%"></span></div><small>'+(p.complete?'All validation criteria passed':p.done+' / '+p.total+' checks · '+(p.quizPassed?'quiz passed':'quiz pending'))+'</small></div></header>';
+  if(m.completed)h+='<div class="tm-completion-banner"><b>Mission complete — well done.</b><span>You inspected processes, practised safe process control, investigated service state and passed the knowledge check.</span></div>';
+  h+='<div class="tm-layout"><div class="tm-main-column">';
+  h+='<section class="tm-panel"><div class="tm-section-kicker">01 · LEARN THE CONCEPT</div><h3>Processes and services are related, but not the same</h3><p>A <b>process</b> is a running instance of a program with its own PID, state, resource usage and parent process. A <b>service</b> is a background capability managed by an init/service manager such as systemd. A service can start, supervise and restart one or more processes; not every process is a service.</p><div class="tm-concept-grid"><article><b>Process</b><p>Inspect with <code>ps</code>, <code>pgrep</code>, <code>top</code> or <code>htop</code>.</p><small>Useful fields: PID, PPID, STAT, elapsed time, CPU and memory.</small></article><article><b>Service</b><p>Inspect with <code>systemctl</code> on systemd-based systems.</p><small>Useful evidence: active state, unit status, recent logs and exit reason.</small></article></div><div class="tm-table-wrap"><table class="tm-reference-table"><thead><tr><th>Command</th><th>What it tells you</th></tr></thead><tbody><tr><td><code>ps -ef</code></td><td>Snapshot of running processes.</td></tr><tr><td><code>ps -p PID -o pid,ppid,stat,etime,cmd</code></td><td>Selected fields for one process.</td></tr><tr><td><code>pgrep -a NAME</code></td><td>Matching process IDs and command lines.</td></tr><tr><td><code>kill -TERM PID</code></td><td>Requests a process to exit gracefully.</td></tr><tr><td><code>systemctl status UNIT</code></td><td>Unit state and recent service details.</td></tr><tr><td><code>journalctl -u UNIT -n 20 --no-pager</code></td><td>Recent logs for a service unit.</td></tr></tbody></table></div><div class="tm-callout"><b>Safety rule</b><span>Only send signals to the test process you created for this lesson. Start with read-only inspection. Do not stop production services or run privileged start/stop commands on an unfamiliar system.</span></div></section>';
+  h+='<section class="tm-panel"><div class="tm-section-kicker">02 · GUIDED TERMINAL EXERCISES</div><h3>Run, inspect, explain</h3><p>Open a Linux terminal, WSL, or a disposable Linux lab. Run the commands yourself; MR.Career does not execute commands in your browser. Use the hints when needed, then check each validation criterion.</p>';
+  h+=exercise("1","Build a process snapshot","Find active processes and identify which process owns each PID.",'ps -eo pid,ppid,stat,comm,%cpu,%mem --sort=-%cpu | head -n 8',"The output is a snapshot. PID identifies the process; PPID identifies its parent; STAT shows its state. Sorting by CPU is a quick way to inspect resource use.",["p1a","p1b"],"h1","The first row should be column headings. Read a row as one process: PID, parent PID, state, command name, CPU and memory. The exact processes vary by machine.");
+  h+=exercise("2","Inspect and stop your own test process","Create a harmless sleep process, inspect its metadata, then request a graceful exit.",'sleep 300 &\nPID=$!\necho "Test PID: $PID"\nps -p "$PID" -o pid,ppid,stat,etime,cmd\nkill -TERM "$PID"\nps -p "$PID" -o pid,stat,cmd',"Run the block in the same shell so PID remains set. The final ps may print only its header or report no process; that is expected if the test process exited.",["p2a","p2b"],"h2","$! stores the PID of the most recent background job. Confirm the PID belongs to the sleep command before signalling it. If the process already exited, rerun the exercise from the beginning.");
+  h+=exercise("3","Inspect a system service","Find running and failed systemd units, then inspect one known service and its recent logs.",'systemctl list-units --type=service --state=running --no-pager | head -n 12\nsystemctl --failed --no-pager\nsystemctl status <service-name> --no-pager\njournalctl -u <service-name> -n 20 --no-pager',"Replace <service-name> with a real unit available on your machine, such as ssh or cron where installed. Some systems use different names or do not use systemd; do not assume a service exists.",["p3a","p3b"],"h3","Start with systemctl list-units to discover actual unit names. A permission message for logs can be normal on restricted accounts. If systemctl reports that the system was not booted with systemd, use a systemd-based VM or lab for this exercise.");
+  h+='</section><section class="tm-panel"><div class="tm-section-kicker">03 · TROUBLESHOOTING METHOD</div><h3>Use evidence before changing anything</h3><ol class="tm-troubleshoot-list"><li><b>Confirm the symptom.</b><span>What is failing, since when, and for whom?</span></li><li><b>Inspect state.</b><span>Check process state and service status; do not guess.</span></li><li><b>Read recent logs.</b><span>Look for the first relevant error around the failure time.</span></li><li><b>Form one hypothesis.</b><span>Use a targeted check to test it.</span></li><li><b>Make the smallest safe change.</b><span>Verify recovery and record what changed.</span></li></ol></section>';
+  h+='<section class="tm-panel tm-quiz-panel"><div class="tm-section-kicker">04 · KNOWLEDGE CHECK</div><h3>Can you explain what you just used?</h3><p>Choose one answer for each question. Pass mark: 4 out of 5.</p>'+quiz+'<div class="tm-quiz-actions"><button type="button" class="btn" onclick="tmSubmitQuiz()">Check answers</button><button type="button" class="btn" onclick="const m=todayMissionState();m.answers=[];m.quizSubmitted=false;m.quizScore=null;m.completed=false;todayMissionSave();renderTodaysMission()">Reset quiz</button></div>'+quizFeedback+'</section>';
+  h+='</div><aside class="tm-side-column"><section class="tm-panel tm-sticky-panel"><div class="tm-section-kicker">MISSION CHECKLIST</div><h3>Your proof of learning</h3><div class="tm-side-progress"><span style="width:'+Math.round(p.done/p.total*100)+'%"></span></div><b>'+p.done+' of '+p.total+' terminal checks</b><p class="tm-muted">Check a criterion only after you have run the command and can explain the result.</p><div class="tm-checklist-status">'+[["Process snapshot",["p1a","p1b"]],["Safe process control",["p2a","p2b"]],["Service investigation",["p3a","p3b"]]].map(group=>'<div><span class="tm-check-dot '+(group[1].every(k=>m.checked[k])?'done':'')+'">'+(group[1].every(k=>m.checked[k])?'✓':'•')+'</span><span>'+group[0]+'</span><b>'+group[1].filter(k=>m.checked[k]).length+'/2</b></div>').join('')+'</div><div class="tm-side-divider"></div><div class="tm-side-score"><span>Knowledge check</span><b>'+(m.quizSubmitted?m.quizScore+'/5':'Not attempted')+'</b><small>'+(p.quizPassed?'Passed · 80% or higher':m.quizSubmitted?'Not passed · retry required':'Required · score 4/5')+'</small></div><button type="button" class="btn primary tm-finish-button" onclick="tmCompleteMission()" '+(p.complete?'':'disabled')+'>'+(m.completed?'Mission completed ✓':'Complete today\'s mission')+'</button><small class="tm-finish-note">'+(p.complete?'All criteria met. Save your win.':'Complete all six checks and pass the quiz to unlock.')+'</small></section><section class="tm-panel tm-outcome-panel"><div class="tm-section-kicker">SUCCESS LOOKS LIKE</div><h3>By the end, you can…</h3><ul><li>Explain PID, PPID and process state.</li><li>Inspect and stop your own test process safely.</li><li>Find service state and relevant logs.</li><li>Describe the first steps in evidence-led troubleshooting.</li></ul></section></aside></div></section>';
+  h+='<style id="v14-46-todays-mission-linux-css">'+
+  'html body .tm-page{max-width:1240px;margin:0 auto;color:var(--ink,#172033)}'+
+  'html body .tm-breadcrumb{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 16px;color:var(--muted,#64748b);font-size:12px}'+
+  'html body .tm-breadcrumb span+span:before{content:"/";margin-right:10px;color:#a0aabe}'+
+  'html body .tm-hero{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:24px;align-items:center;padding:28px;border-radius:22px;background:linear-gradient(120deg,#172747,#263f68);color:#fff;margin-bottom:18px}'+
+  'html body .tm-eyebrow,html body .tm-section-kicker{font-size:10px;font-weight:850;letter-spacing:.12em;color:#4b80c7}'+
+  'html body .tm-hero .tm-eyebrow{color:#a8d0ff}html body .tm-hero h2{font-size:clamp(25px,3.5vw,36px);line-height:1.15;margin:9px 0 10px;color:#fff}'+
+  'html body .tm-hero p{max-width:690px;color:#d8e4f5;line-height:1.65;margin:0}'+
+  'html body .tm-meta,html body .tm-launcher-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}'+
+  'html body .tm-meta span{padding:6px 9px;border:1px solid #526886;border-radius:8px;color:#e5edf8;font-size:11px}'+
+  'html body .tm-hero-side{padding:15px;border:1px solid #526886;border-radius:15px;background:#ffffff0a;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center}'+
+  'html body .tm-progress-ring{width:94px;height:94px;border:6px solid #6b91bf;border-radius:50%;display:flex;flex-direction:column;justify-content:center;align-items:center}'+
+  'html body .tm-progress-ring strong{font-size:23px;color:#fff}html body .tm-progress-ring span,html body .tm-hero-side small{font-size:10px;color:#d8e4f5}'+
+  'html body .tm-progress-track,html body .tm-side-progress,html body .tm-mini-progress{height:6px;border-radius:99px;background:#dbe5f1;overflow:hidden;width:100%}'+
+  'html body .tm-progress-track span,html body .tm-side-progress span,html body .tm-mini-progress span{display:block;height:100%;background:#5ea0e5;border-radius:inherit;transition:width .2s}'+
+  'html body .tm-layout{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:18px;align-items:start}html body .tm-main-column,html body .tm-side-column{min-width:0;display:flex;flex-direction:column;gap:16px}'+
+  'html body .tm-panel{background:var(--card,#fff);border:1px solid var(--line,#e3e9f2);border-radius:17px;padding:22px;min-width:0;box-shadow:0 4px 14px rgba(23,39,71,.035)}'+
+  'html body .tm-panel h3{font-size:20px;line-height:1.3;color:var(--ink,#172033);margin:7px 0 10px}html body .tm-panel h4{font-size:15px;line-height:1.4;margin:0;color:var(--ink,#172033)}'+
+  'html body .tm-panel p{font-size:13px;line-height:1.65;color:var(--muted,#5c6b82)}html body .tm-panel code{font-size:12px;background:#f1f5f9;color:#24456d;border-radius:5px;padding:2px 4px;overflow-wrap:anywhere}'+
+  'html body .tm-concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:17px 0}html body .tm-concept-grid article{padding:15px;border:1px solid var(--line,#e3e9f2);border-radius:12px;background:var(--soft,#f8fafc)}'+
+  'html body .tm-concept-grid article>b{font-size:15px}html body .tm-concept-grid article p{margin:7px 0}html body .tm-concept-grid small{font-size:11px;line-height:1.5;color:var(--muted,#64748b)}'+
+  'html body .tm-table-wrap{max-width:100%;overflow-x:auto;border:1px solid var(--line,#e3e9f2);border-radius:10px}html body .tm-reference-table{border-collapse:collapse;width:100%;min-width:470px;font-size:12px}html body .tm-reference-table th,html body .tm-reference-table td{padding:10px 12px;border-bottom:1px solid var(--line,#e3e9f2);text-align:left;vertical-align:top}html body .tm-reference-table th{background:var(--soft,#f8fafc);color:var(--ink,#172033)}'+
+  'html body .tm-callout{display:flex;gap:12px;padding:13px 15px;margin-top:15px;border-left:3px solid #e5a33b;border-radius:0 10px 10px 0;background:#fff8e9;color:#7a4c0b;font-size:12px;line-height:1.55}html body .tm-callout b{white-space:nowrap}'+
+  'html body .tm-exercise{border:1px solid var(--line,#e3e9f2);border-radius:14px;padding:16px;margin-top:14px;min-width:0}html body .tm-exercise-heading{display:flex;gap:10px;align-items:flex-start}html body .tm-exercise-number{width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;border-radius:9px;background:#eaf2ff;color:#2e5e9a;font-weight:850}html body .tm-exercise-heading>div{flex:1;min-width:0}html body .tm-exercise-heading p{margin:4px 0 0}'+
+  'html body .tm-status{font-size:10px;font-weight:800;color:#8a641a;background:#fff6df;padding:5px 7px;border-radius:7px;white-space:nowrap}html body .tm-status.is-done{color:#176849;background:#e5f7ee}'+
+  'html body .tm-terminal{margin:13px 0;border-radius:10px;overflow:hidden;background:#101b2a;color:#e7edf7}html body .tm-terminal-bar{height:31px;display:flex;align-items:center;gap:5px;padding:0 10px;background:#1b2a3d}html body .tm-terminal-dot{width:7px;height:7px;border-radius:50%;background:#64758b}html body .tm-terminal-bar small{margin-left:7px;color:#b5c2d4;font-size:9px;letter-spacing:.1em}html body .tm-terminal pre{margin:0;padding:14px;overflow-x:auto;white-space:pre;line-height:1.65}html body .tm-terminal code{background:none;color:#cce6ff;padding:0;font:12px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace}'+
+  'html body .tm-why{margin:10px 0!important}html body .tm-hint-button{font-size:11px;padding:7px 10px;border:1px solid var(--line,#e3e9f2)}html body .tm-hint{margin-top:8px;padding:11px 12px;border-radius:9px;background:#eef6ff;color:#2c527c;font-size:12px;line-height:1.6}'+
+  'html body .tm-validation{display:grid;gap:8px;padding-top:14px;margin-top:13px;border-top:1px solid var(--line,#e3e9f2)}html body .tm-validation>b{font-size:12px;margin-bottom:2px}html body .tm-check{display:flex;align-items:flex-start;gap:9px;padding:9px 10px;border:1px solid var(--line,#e3e9f2);border-radius:9px;cursor:pointer}html body .tm-check input{margin-top:3px;accent-color:#2e7d62;flex:0 0 auto}html body .tm-check span{display:flex;flex-direction:column;gap:3px;min-width:0}html body .tm-check b{font-size:11px}html body .tm-check small{font-size:10px;line-height:1.5;color:var(--muted,#64748b)}'+
+  'html body .tm-troubleshoot-list{display:grid;gap:11px;padding-left:22px}html body .tm-troubleshoot-list li{padding-left:3px;color:var(--ink,#172033);font-size:13px}html body .tm-troubleshoot-list span{display:block;color:var(--muted,#64748b);font-size:12px;line-height:1.5;margin-top:3px}'+
+  'html body .tm-sticky-panel{position:sticky;top:16px}html body .tm-muted,html body .tm-finish-note{display:block;color:var(--muted,#64748b);font-size:11px;line-height:1.5;margin:8px 0 12px}html body .tm-checklist-status{display:grid;gap:11px;margin-top:16px}html body .tm-checklist-status>div{display:grid;grid-template-columns:20px minmax(0,1fr) auto;align-items:center;gap:8px;font-size:11px}html body .tm-checklist-status b{color:var(--muted,#64748b);font-size:10px}html body .tm-check-dot{width:19px;height:19px;border-radius:50%;display:grid;place-items:center;background:#eef2f7;color:#64748b;font-size:11px}html body .tm-check-dot.done{background:#d9f5e7;color:#176849}html body .tm-side-divider{height:1px;background:var(--line,#e3e9f2);margin:17px 0}html body .tm-side-score{display:grid;gap:4px;font-size:12px}html body .tm-side-score b{font-size:18px}html body .tm-side-score small{font-size:10px;color:var(--muted,#64748b)}html body .tm-finish-button{width:100%;margin-top:15px}html body .tm-finish-button:disabled{opacity:.45;cursor:not-allowed}html body .tm-outcome-panel ul{padding-left:18px;display:grid;gap:9px;font-size:12px;line-height:1.5;color:var(--muted,#64748b)}'+
+  'html body .tm-question{border:1px solid var(--line,#e3e9f2);border-radius:12px;padding:14px;margin:12px 0 0;min-width:0}html body .tm-question legend{padding:0 5px;max-width:100%;white-space:normal;font-size:13px;line-height:1.5;font-weight:750;color:var(--ink,#172033)}html body .tm-question legend span{color:#4d83c3;font-size:10px;letter-spacing:.08em;margin-right:5px}html body .tm-options{display:grid;gap:7px;margin-top:10px}html body .tm-option{display:flex;gap:9px;align-items:flex-start;padding:10px;border:1px solid var(--line,#e3e9f2);border-radius:9px;font-size:12px;line-height:1.5;cursor:pointer;min-width:0}html body .tm-option input{margin-top:3px;flex:0 0 auto;accent-color:#3679bd}html body .tm-option span{min-width:0;overflow-wrap:anywhere}html body .tm-option.is-picked{border-color:#8bb6e8;background:#f0f6ff}html body .tm-explanation{margin-top:9px;padding:10px;border-radius:8px;background:#fff2e7;color:#8b4b20;font-size:11px;line-height:1.55}html body .tm-explanation.correct{background:#e9f8ef;color:#176849}html body .tm-quiz-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}html body .tm-quiz-result{display:flex;flex-direction:column;gap:5px;padding:12px;margin-top:12px;border-radius:10px;background:var(--soft,#f8fafc);font-size:12px;line-height:1.5}html body .tm-quiz-result.passed{background:#e6f7ed;color:#176849}html body .tm-quiz-result.retry{background:#fff3e8;color:#8a4c1b}'+
+  'html body .tm-completion-banner{display:flex;flex-direction:column;gap:5px;padding:15px 18px;margin-bottom:16px;border:1px solid #b8e7cf;border-radius:12px;background:#eaf9f0;color:#176849;font-size:12px;line-height:1.5}'+
+  'html body .tm-launcher-card{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:22px;align-items:center;padding:22px;border:1px solid #dbe6f5;border-radius:18px;background:linear-gradient(110deg,#f4f8ff,#fff)}html body .tm-launcher-copy h3{font-size:20px;color:#172747;margin:6px 0}html body .tm-launcher-copy p{font-size:13px;line-height:1.6;color:#586b86;margin:0}html body .tm-launcher-meta span{font-size:10px;padding:5px 8px;border-radius:7px;background:#e8f0fc;color:#365a86}html body .tm-launcher-action{display:grid;gap:8px}html body .tm-launcher-action small{font-size:10px;color:#66758b;line-height:1.4}'+
+  'html body .tm-launcher-action .tm-mini-progress span{background:#4e91d9}'+
+  'html body .tm-finish-button:not(:disabled){background:#23785b;color:#fff}'+
+  '@media(max-width:900px){html body .tm-layout{grid-template-columns:minmax(0,1fr) 250px;gap:12px}html body .tm-panel{padding:17px}html body .tm-hero{grid-template-columns:minmax(0,1fr) 175px;padding:22px}}'+
+  '@media(max-width:700px){html body .tm-layout{grid-template-columns:minmax(0,1fr)}html body .tm-hero{grid-template-columns:minmax(0,1fr);padding:20px;gap:16px}html body .tm-hero-side{display:grid;grid-template-columns:70px minmax(0,1fr);text-align:left;justify-items:stretch;align-items:center}html body .tm-progress-ring{width:64px;height:64px;border-width:4px}html body .tm-progress-ring strong{font-size:17px}html body .tm-progress-ring span{font-size:8px}html body .tm-progress-track{grid-column:2}html body .tm-hero-side small{grid-column:2}html body .tm-sticky-panel{position:static}html body .tm-concept-grid{grid-template-columns:minmax(0,1fr)}html body .tm-launcher-card{grid-template-columns:minmax(0,1fr);gap:15px;padding:17px}html body .tm-launcher-action .btn{width:100%}html body .tm-exercise-heading{flex-wrap:wrap}html body .tm-status{margin-left:40px}html body .tm-callout{flex-direction:column;gap:4px}html body .tm-panel{padding:15px}html body .tm-hero h2{font-size:27px}}'+
+  '@media(max-width:380px){html body .tm-breadcrumb{gap:6px;font-size:10px}html body .tm-hero{padding:15px;border-radius:15px}html body .tm-panel{padding:12px}html body .tm-exercise{padding:11px}html body .tm-meta span{font-size:10px}html body .tm-reference-table{min-width:440px}}'+
+  '</style>';
+  setPage("Today's Mission",h);
 }
 </script>
 
