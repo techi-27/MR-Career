@@ -5290,11 +5290,25 @@ Something I still find confusing…
 Next thing to practise…" oninput="saveLearningField(${esc(jsArg(domain))},${i},'learningNotes',this.value)">${esc(saved.learningNotes)}</textarea><div class="learning-notes-footer"><span id="learningSaveStatus">Saved in this browser</span><button class="btn" onclick="saveLearningField(${esc(jsArg(domain))},${i},'learningNotes',document.getElementById('learningNotes').value)">Save notes</button></div></section>
   <div class="section"><div class="section-title"><h2>Knowledge check</h2><span class="small">Answer first, then use the self-check guide</span></div><div class="detail-grid">${quizzes}</div></div>
   <div class="section"><div class="section-title"><h2>Explain it like an interview</h2><span class="small">Practise explaining the topic, not memorizing a definition</span></div><div class="detail-grid">${interviews||'<div class="detail-box"><p>Explain the topic, give a real example, and describe one failure mode or trade-off.</p></div>'}</div></div>
-  <section class="learning-finish-card"><div><h3>Ready to record this learning session?</h3><p>Mark complete when you can explain the concept and have attempted the practical exercise. You can return to your notes any time.</p><p class="small">Current status: <b>${esc(t.status)}</b> · ${pct(t)}% complete · ${Number(t.actualHours)||0} actual hours</p></div><div class="detail-actions"><button class="btn" onclick="quickProgress(${esc(jsArg(domain))},${i},50)">Keep in progress</button><button class="btn primary" onclick="quickComplete(${esc(jsArg(domain))},${i})">I learned this topic</button></div></section>
+  <section class="learning-finish-card"><div><h3>Ready to record this learning session?</h3><p>Mark complete when you can explain the concept and have attempted the practical exercise. You can return to your notes any time.</p><p class="small">Current status: <b>${esc(t.status)}</b> · ${pct(t)}% complete · ${Number(t.actualHours)||0} actual hours</p></div><div class="detail-actions learning-finish-actions"><button class="btn" onclick="quickProgress(${esc(jsArg(domain))},${i},50)">Keep in progress</button><button class="btn" onclick="openNextLearningTopic(${esc(jsArg(domain))},${i})">Continue to next lesson →</button><button class="btn" onclick="openProjectStudioFromLearning()">Build project proof</button><button class="btn primary" onclick="quickComplete(${esc(jsArg(domain))},${i})">I learned this topic</button></div></section>
  </div></div>`;
  document.body.appendChild(modal);
 }
 
+function openNextLearningTopic(domain,index){
+ const current=CURRICULUM.domains.find(x=>x.name===domain);
+ if(current&&Number(index)+1<current.topics.length){closeLearning();openLearning(domain,Number(index)+1);return;}
+ const order=v9RoleDomains(selectedRole()),at=order.indexOf(domain);
+ for(let n=at+1;n<order.length;n++){
+  const next=CURRICULUM.domains.find(x=>x.name===order[n]);
+  if(next&&next.topics&&next.topics.length){closeLearning();openLearning(next.name,0);return;}
+ }
+ alert("You've reached the end of the currently configured learning path. Open Project Studio to apply your skills in a role-specific project.");
+}
+function openProjectStudioFromLearning(){
+ closeLearning();
+ navigate("projects");
+}
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeLearning()});
 function closeLearning(){document.getElementById("learningModal")?.remove()}
 function quickComplete(domain,i){updateTopic(domain,i,"status","Completed");updateTopic(domain,i,"progress",100);closeLearning();renderCurrent()}
@@ -7676,6 +7690,13 @@ html body .course-step-actions{display:flex;align-items:center;justify-content:s
 html body .course-step-actions>span{flex:1;text-align:center;font-size:11px;line-height:1.45;color:#64758b}
 html body .course-step-actions .btn:disabled{opacity:.45;cursor:not-allowed}
 @media(max-width:620px){html body .course-stepper{grid-template-columns:repeat(2,minmax(0,1fr))}html body .course-stepper button:last-child{grid-column:1/-1}html body .course-step-actions{flex-wrap:wrap}html body .course-step-actions>span{order:3;flex-basis:100%;text-align:left}html body .course-guided-grid .course-content-card{min-height:0}}
+</style>
+<style id="v14-43-lesson-next-project">
+/* V14.43 — connect lessons to the next topic and project proof */
+html body .learning-finish-actions{gap:8px;flex-wrap:wrap}
+html body .learning-finish-actions .btn{white-space:normal}
+html body .learning-finish-actions .btn.primary{order:0}
+@media(max-width:850px){html body .learning-finish-actions{display:grid;grid-template-columns:minmax(0,1fr)}html body .learning-finish-actions .btn{width:100%}}
 </style>
 </body>
 </html>
