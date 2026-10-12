@@ -5105,7 +5105,10 @@ function renderCareerToolkit(){
 
 function renderDashboard(){
   const s=stats(), role=selectedRole(), cfg=ROLE_CONFIG[role]||{};
-  const topics=allTopics();
+  const topics=selectedPlannerTopics().flatMap(({domain})=>{
+    const d=CURRICULUM.domains.find(item=>item.name===domain);
+    return (d?.topics||[]).map((_,index)=>({...getTopic(domain,index),domain,index}));
+  });
   const next=topics.find(x=>["Learning","Practicing","Need Revision"].includes(x.status))||topics.find(x=>x.status!=="Completed");
   const plan=plannerState();
   const completedStages=[
