@@ -5241,50 +5241,6 @@ function renderCourseLesson(domain,topic,det){
    (commands.length?'<section class="detail-box"><div class="learning-section-kicker">TOOLS · OPTIONAL REFERENCE</div><h4>Tools or commands you may use</h4><div class="code-list">'+commands.map(x=>esc(x)).join("\n")+'</div><p class="small">Use only the tools relevant to this task. Verify commands before running them in a real environment.</p></section>':'')+
   '</div></section>';
 }
-function setCourseLessonStep(nextStep){
- const root=document.getElementById("courseLesson");
- if(!root)return;
- const step=Math.max(1,Math.min(5,Number(nextStep)||1));
- root.dataset.currentStep=String(step);
- root.querySelectorAll("[data-course-step]").forEach(card=>{card.hidden=Number(card.dataset.courseStep)!==step;});
- root.querySelectorAll("[data-step-nav]").forEach(button=>{const active=Number(button.dataset.stepNav)===step;button.classList.toggle("is-active",active);button.setAttribute("aria-current",active?"step":"false");});
- const number=document.getElementById("courseStepNumber");if(number)number.textContent=String(step);
- const progress=document.getElementById("courseStepProgress");if(progress)progress.style.width=Math.round(step/5*100)+"%";
- const prev=document.getElementById("coursePreviousStep");if(prev){prev.disabled=step===1;prev.onclick=()=>setCourseLessonStep(step-1);}
- const next=document.getElementById("courseNextStep");if(next){next.disabled=step===5;next.textContent=step===5?"Lesson steps complete":"Next step →";next.onclick=()=>setCourseLessonStep(step+1);}
- const hint=document.getElementById("courseStepHint");if(hint)hint.textContent=["Read the idea and connect it to something you already know.","Follow the example and explain why the result makes sense.","Follow each instruction in order and predict the result.","Try the task before revealing the worked solution.","Review the mistakes and explain the idea without looking."][step-1];
- const domain=root.dataset.domain,index=Number(root.dataset.topicIndex);
- if(domain&&Number.isInteger(index))saveLearningField(domain,index,"courseStep",step);
-}
-function learningWorkspaceState(domain,i){
- const key=topicKey(domain,i);
- if(!state.topics[key])state.topics[key]={};
- const t=state.topics[key];
- t.learningChecklist=t.learningChecklist&&typeof t.learningChecklist==="object"?t.learningChecklist:{};
- t.learningNotes=typeof t.learningNotes==="string"?t.learningNotes:"";
- t.practiceAnswer=typeof t.practiceAnswer==="string"?t.practiceAnswer:"";
- t.reflection=typeof t.reflection==="string"?t.reflection:"";
- return t;
-}
-function saveLearningField(domain,i,field,value){
- const t=learningWorkspaceState(domain,i);
- t[field]=value;
- save();
- const status=document.getElementById("learningSaveStatus");
- if(status)status.textContent="Saved in this browser";
-}
-function toggleLearningCheckpoint(domain,i,index,checked){
- const t=learningWorkspaceState(domain,i);
- t.learningChecklist[String(index)]=!!checked;
- const done=Object.values(t.learningChecklist).filter(Boolean).length;
- const total=Number(document.getElementById("learningCheckpointTotal")?.dataset.total)||3;
- const progress=Math.max(Number(t.progress)||0,Math.round(done/total*70));
- updateTopic(domain,i,"progress",progress);
- const summary=document.getElementById("learningCheckpointSummary");
- if(summary)summary.textContent=done+" of "+total+" learning checkpoints complete";
- const bar=document.getElementById("learningCheckpointBar");
- if(bar)bar.style.width=Math.min(100,Math.round(done/total*100))+"%";
-}
 function openLearning(domain,i){
  state.v9=state.v9||{};
  state.v9.activeLearning={domain,index:Number(i),role:selectedRole(),openedAt:new Date().toISOString()};
