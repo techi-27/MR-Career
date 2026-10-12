@@ -2165,6 +2165,16 @@ html body #content .learning-panel-scroll{
 }
 html body #content .learning-head{padding-right:0!important}
 html body #content .learning-head .close-x{position:static!important;flex:0 0 auto!important}
+
+/* Remove the visible frame around the in-page lesson container (left over from modal styling). */
+html body #content > .learning-modal,
+html body #content .learning-modal,
+html body #content .learning-panel,
+html body #content .learning-panel-scroll{
+ border:0!important;outline:0!important;box-shadow:none!important;
+}
+html body #content > .learning-modal{background:transparent!important}
+html body #content .learning-panel-scroll{border-radius:0!important}
 </style>
 
 
