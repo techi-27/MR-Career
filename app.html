@@ -176,8 +176,9 @@ footer{padding:25px 0 10px;color:var(--muted);font-size:10px;text-align:center}
 @media(max-width:480px){.grid{grid-template-columns:1fr}}
 
 
-.learning-modal{position:fixed;inset:0;background:rgba(8,22,38,.56);z-index:100;display:flex;align-items:center;justify-content:center;padding:22px}
-.learning-panel{width:min(1120px,96vw);max-height:92vh;overflow:auto;background:#fff;border-radius:20px;box-shadow:0 25px 70px rgba(0,0,0,.25);padding:24px}
+/* Learning lessons open as a dedicated full-screen workspace, not a floating modal. */
+.learning-modal{position:fixed;inset:0;background:var(--bg,#f5f7fb);z-index:100;display:flex;align-items:stretch;justify-content:stretch;padding:0;overflow:hidden}
+.learning-panel{width:100%;height:100%;max-height:none;overflow:auto;background:var(--bg,#f5f7fb);border-radius:0;box-shadow:none;padding:24px clamp(16px,3vw,44px);}
 .learning-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:14px}
 .learning-head h2{margin:0;font-size:21px}.close-x{border:0;background:#f1f4f8;border-radius:10px;width:38px;height:38px;font-size:20px}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:15px}
@@ -189,7 +190,7 @@ footer{padding:25px 0 10px;color:var(--muted);font-size:10px;text-align:center}
 .quiz-q{font-weight:800;font-size:12px}.answer{display:none;margin-top:8px;padding:9px;background:#eef6ff;border-radius:8px;font-size:11px;color:#24527c}
 .quiz-card.revealed .answer{display:block}
 .detail-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-@media(max-width:700px){.detail-grid{grid-template-columns:1fr}.learning-modal{padding:8px}.learning-panel{max-height:96vh;padding:15px}}
+@media(max-width:700px){.detail-grid{grid-template-columns:1fr}.learning-modal{padding:0}.learning-panel{height:100%;max-height:none;padding:15px}}
 
 
 .sidebar{position:fixed}
