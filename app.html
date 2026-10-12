@@ -2166,6 +2166,16 @@ html body #content .learning-panel-scroll{
 html body #content .learning-head{padding-right:0!important}
 html body #content .learning-head .close-x{position:static!important;flex:0 0 auto!important}
 
+
+/* Remove the unwanted thin outlines highlighted around the lesson session cards. */
+html body #content .learning-start-card,
+html body #content .learning-progress-card{
+ border:0!important;
+ outline:0!important;
+ box-shadow:none!important;
+}
+html body #content .learning-start-card{border-radius:14px!important}
+html body #content .learning-progress-card{border-radius:12px!important}
 /* Remove the visible frame around the in-page lesson container (left over from modal styling). */
 html body #content > .learning-modal,
 html body #content .learning-modal,
