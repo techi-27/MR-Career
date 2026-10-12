@@ -5090,6 +5090,7 @@ function renderCareerToolkit(){
  const role=selectedRole();
  const items=[
   {title:"Hands-on labs",desc:"Practise technical skills with guided tasks and record completed labs.",view:"labs",icon:"⌘"},
+  {title:"Guided Linux mission",desc:"Follow a step-by-step terminal practice session with clear instructions.",view:"mission",icon:"▶"},
   {title:"Projects & portfolio",desc:"Build role-specific projects and collect evidence of your skills.",view:"projects",icon:"◇"},
   {title:"Interview preparation",desc:"Practise questions tied to the topics in your learning roadmap.",view:"interview",icon:"?"}, 
   {title:"Resume analyzer",desc:"Review your resume against your selected target role.",view:"resume",icon:"▤"},
@@ -5120,8 +5121,6 @@ function renderDashboard(){
     <p>MR.Career guides students, working professionals, beginners, and career changers from choosing an IT role to learning the right skills with a realistic daily plan.</p>
     <div class="career-home-target"><span class="career-home-target-label">YOUR TARGET ROLE</span><strong>${esc(role)}</strong><div class="v6-actions"><button class="btn primary" onclick="navigate('${selectedPlannerTopics().length===0?'roadmap':plan.generated?'planner':'planner'}')">${selectedPlannerTopics().length===0?'Choose learning topics':plan.generated?'Continue today’s plan':'Build my study plan'}</button><button class="btn" onclick="navigate('profile')">Change target role</button></div><p class="small">${selectedPlannerTopics().length===0?'Start by selecting the skills you need.':plan.generated?'Your plan is ready — continue with the next scheduled lesson.':'Your topics are selected. Set your study schedule next.'}</p></div>
   </section>`;
-  h+=renderLearningReturnCard();
-  h+=renderTodayMissionLauncher();
   h+=`<section class="section career-home-progress"><div class="section-title"><h2>Your progress</h2><span class="small">${s.completed} of ${s.total} topics completed</span></div>
     <div class="card"><div class="top"><div><div class="label">TARGET ROLE</div><h3>${esc(role)}</h3><p class="small">${esc(cfg.description||"Your personalised career path")}</p></div><span class="pct">${s.progress}%</span></div><div class="progress"><span style="width:${s.progress}%"></span></div></div></section>`;
   if(next){
@@ -5926,9 +5925,7 @@ function renderRoadmap(){
     </article>`;
   });
   h+=`</div>
-    <div class="roadmap-selection-footer"><div><b>${chosen} of ${rec.length} learning areas selected</b><p class="small">Only selected areas will be used when you create your study plan.</p></div><button class="btn primary" onclick="navigate('planner')">Continue to Study Planner <span aria-hidden="true">→</span></button></div>
-  </section>`;
-  h+=`<section class="roadmap-next-step"><div><div class="v6-label">NEXT STEP</div><h3>Turn your selected topics into a daily schedule</h3><p>Choose your start date, timeline, and study availability in Study Planner.</p></div><button class="btn primary" onclick="navigate('planner')">Make my study plan</button></section>`;
+    <div class="roadmap-selection-footer"><div><b>${chosen} of ${rec.length} learning areas selected</b><p class="small">Only selected areas will be used when you create your study plan.</p></div><button class="btn primary" onclick="navigate('planner')">Continue to Study Plonclick="navigate('planner')">Make my study plan</button></section>`;
   setPage("Learning Roadmap",h);
 }
 
