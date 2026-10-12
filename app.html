@@ -594,6 +594,24 @@ body.sidebar-collapsed .sidebar-toggle-tab{border-radius:0 8px 8px 0}
 }
 /* ===== End V14 Linear-inspired clean premium UI ===== */
 
+
+/* V15: a focused, single-page lesson instead of a multi-step wizard. */
+.course-one-page .course-lesson-heading{margin-bottom:16px}
+.course-one-page .course-lesson-heading p{max-width:760px}
+.course-one-page-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}
+.course-one-page-grid>.detail-box{min-width:0;margin:0}
+.course-one-page .course-learning-outcome{margin:0;padding:20px}
+.course-one-page .course-learning-outcome h4{margin:4px 0 10px}
+.course-one-page .course-learning-outcome p{line-height:1.65}
+.course-one-page .course-learning-outcome .learning-topic-list{margin:12px 0}
+.course-one-page-grid .detail-box h4{margin-top:4px}
+.course-one-page-grid .detail-box p,.course-one-page-grid .detail-box li{line-height:1.65}
+.course-solution-details{margin-top:14px;border:1px solid var(--border,#dbe4f0);border-radius:12px;padding:12px 14px;background:var(--surface,#fff)}
+.course-solution-details summary{cursor:pointer;font-weight:650;color:var(--text,#172554)}
+.course-solution-details .course-solution{padding-top:10px}
+.course-one-page .course-terms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(max-width:760px){.course-one-page-grid{grid-template-columns:minmax(0,1fr)}.course-one-page .course-terms{grid-template-columns:minmax(0,1fr)}.course-one-page .course-lesson-heading{display:block}.course-one-page .course-badge{display:inline-flex;margin-top:8px}}
+
 </style>
 
 <style id="v9-2-hide-study-domains">
@@ -5199,30 +5217,29 @@ function lessonContentFor(domain,topic,det){
 }
 function renderCourseLesson(domain,topic,det){
  const p=lessonContentFor(domain,topic.topic,det);
- const list=items=>items.map(x=>"<li>"+esc(x)+"</li>").join("");
- const terms=p.terms.map(x=>'<div class="course-term"><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div>').join("");
- const i=Number(topic.index)||0;
- const step=Math.max(1,Math.min(5,Number(topic.courseStep)||1));
- const card=(n,html)=>'<article class="course-content-card" data-course-step="'+n+'" '+(step===n?'':'hidden')+'>'+html+'</article>';
- return '<section class="course-lesson" id="courseLesson" data-domain="'+esc(domain)+'" data-topic-index="'+i+'" data-current-step="'+step+'">'+
-  '<div class="course-lesson-heading"><div><div class="learning-eyebrow">GUIDED LESSON · 5 SHORT STEPS</div><h3>'+esc(p.title)+'</h3><p>Work through one step at a time. Your place is saved, so you can return later without starting over.</p></div><span class="course-badge">Step <span id="courseStepNumber">'+step+'</span> of 5</span></div>'+
-  '<div class="course-stepper" role="group" aria-label="Lesson steps">'+
-   '<button type="button" data-step-nav="1" class="'+(step===1?'is-active':'')+'" onclick="setCourseLessonStep(1)">1. Understand</button>'+
-   '<button type="button" data-step-nav="2" class="'+(step===2?'is-active':'')+'" onclick="setCourseLessonStep(2)">2. Example</button>'+
-   '<button type="button" data-step-nav="3" class="'+(step===3?'is-active':'')+'" onclick="setCourseLessonStep(3)">3. Walkthrough</button>'+
-   '<button type="button" data-step-nav="4" class="'+(step===4?'is-active':'')+'" onclick="setCourseLessonStep(4)">4. Practise</button>'+
-   '<button type="button" data-step-nav="5" class="'+(step===5?'is-active':'')+'" onclick="setCourseLessonStep(5)">5. Review</button>'+
-  '</div>'+
-  '<div class="course-step-progress"><span id="courseStepProgress" style="width:'+Math.round(step/5*100)+'%"></span></div>'+
-  '<div class="course-content-grid course-guided-grid">'+
-   card(1,'<div class="course-label">STEP 1 · THE IDEA</div><h4>Understand the concept</h4><p>'+esc(p.what)+'</p><h5>How to approach it</h5><p>'+esc(p.how)+'</p><div class="course-prompt"><b>Pause and think</b><span>How would you explain this idea to a colleague in two sentences?</span></div>')+
-   card(2,'<div class="course-label">STEP 2 · WORKED EXAMPLE</div><h4>See the reasoning</h4><p>'+esc(p.example)+'</p><div class="course-teacher-tip"><b>Check your understanding:</b> Can you explain why each step is necessary and what evidence would show it worked?</div>')+
-   card(3,'<div class="course-label">STEP 3 · FOLLOW ALONG</div><h4>Try these steps in order</h4><ol>'+list(p.steps)+'</ol><div class="course-prompt"><b>Before continuing</b><span>Identify the expected result and one edge case you should test.</span></div>')+
-   card(4,'<div class="course-label">STEP 4 · YOUR TURN</div><h4>Try it yourself before viewing the answer</h4><p>'+esc(p.practice)+'</p><label for="coursePracticeAnswer"><b>Your attempt</b></label><textarea class="learning-answer" rows="5" placeholder="Write your approach, steps, expected result and questions…" onchange="saveLearningField('+esc(jsArg(domain))+','+i+',\'practiceAnswer\',this.value)" id="coursePracticeAnswer">'+esc(topic.practiceAnswer||'')+'</textarea><div class="course-solution-actions"><button type="button" class="btn" onclick="document.getElementById(\'courseSolution\').hidden=false">Reveal worked solution</button></div><div id="courseSolution" class="course-solution" '+(topic.solutionRevealed?'':'hidden')+'><b>Worked solution / expected reasoning</b><p>'+esc(p.solution)+'</p><button type="button" class="btn" onclick="saveLearningField('+esc(jsArg(domain))+','+i+',\'solutionRevealed\',true);this.textContent=\'Solution reviewed\'">Mark solution reviewed</button></div>')+
-   card(5,'<div class="course-label">STEP 5 · REVIEW</div><h4>Common beginner mistakes</h4><ul>'+list(p.mistakes)+'</ul><h4>Key terms to remember</h4><div class="course-terms">'+terms+'</div><div class="course-prompt"><b>Ready to move on?</b><span>Explain the concept, give an example, and name one mistake to avoid without looking above.</span></div>')+
-  '</div>'+
-  '<div class="course-step-actions"><button type="button" class="btn" id="coursePreviousStep" '+(step===1?'disabled':'')+' onclick="setCourseLessonStep('+Math.max(1,step-1)+')">← Previous step</button><span id="courseStepHint">Complete this step before moving on. You can revisit any step.</span><button type="button" class="btn primary" id="courseNextStep" '+(step===5?'disabled':'')+' onclick="setCourseLessonStep('+Math.min(5,step+1)+')">'+(step===5?'Lesson steps complete':'Next step →')+'</button></div>'+
- '</section>';
+ const list=items=>(items||[]).filter(Boolean).map(x=>"<li>"+esc(x)+"</li>").join("");
+ const terms=(p.terms||[]).map(x=>'<div class="course-term"><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div>').join("");
+ const learn=(Array.isArray(det.learn)?det.learn:[]).filter(Boolean);
+ const steps=(p.steps||[]).filter(Boolean);
+ const mistakes=(p.mistakes||[]).filter(Boolean);
+ const practice=det.lab||p.practice||("Apply "+topic.topic+" to a small, realistic task and verify the result.");
+ const commands=Array.isArray(det.commands)?det.commands.filter(Boolean):[];
+ const intro=det.context||("This topic is part of the skills used in "+selectedRole()+".");
+ return '<section class="course-lesson course-one-page" id="courseLesson" data-domain="'+esc(domain)+'" data-topic-index="'+(Number(topic.index)||0)+'">'+
+  '<div class="course-lesson-heading"><div><div class="learning-eyebrow">TOPIC LEARNING GUIDE</div><h3>'+esc(p.title||topic.topic)+'</h3><p>Everything you need for this topic is on this page. Read the explanation, follow the example, and try the practical task. No quiz or written answer is required.</p></div><span class="course-badge">One-page lesson</span></div>'+
+  '<div class="detail-box course-learning-outcome"><div class="learning-section-kicker">START HERE</div><h4>What you need to learn</h4><p>'+esc(intro)+'</p>'+
+  (learn.length?'<ul class="learning-topic-list">'+list(learn)+'</ul>':'<p>'+esc(topic.learn||"Understand the core idea, where it is used, and how to verify that it works.")+'</p>')+
+  '<p class="small"><b>Goal:</b> be able to explain the idea, recognize when to use it, and verify a real result.</p></div>'+
+  '<div class="learning-curriculum-grid course-one-page-grid">'+
+   '<section class="detail-box"><div class="learning-section-kicker">01 · UNDERSTAND</div><h4>'+esc(p.title||topic.topic)+' in plain English</h4><p>'+esc(p.what||topic.learn||intro)+'</p><h5>How to think about it</h5><p>'+esc(p.how||"Start with the problem, understand the inputs and expected result, then verify the behavior with a small example.")+'</p></section>'+
+   '<section class="detail-box"><div class="learning-section-kicker">02 · WORKED EXAMPLE</div><h4>See how it works</h4><p>'+esc(p.example||det.example||"Apply the concept to a small task, compare the actual result with the expected result, and investigate any difference.")+'</p></section>'+
+   '<section class="detail-box"><div class="learning-section-kicker">03 · FOLLOW THESE STEPS</div><h4>Learn it in order</h4><ol>'+list(steps.length?steps:["Identify the goal and prerequisites.","Follow a small example.","Try the task in a safe environment.","Verify the result and note what you learned."])+'</ol></section>'+
+   '<section class="detail-box"><div class="learning-section-kicker">04 · PRACTISE</div><h4>One practical task</h4><p>'+esc(practice)+'</p><p class="small">Check the expected result, complete the task, and verify the outcome. Keep useful output or a short README as evidence when appropriate.</p>'+
+   '<details class="course-solution-details"><summary>Show a suggested approach / solution</summary><div class="course-solution"><p>'+esc(p.solution||"A good solution meets the stated goal, verifies the result with evidence, handles a likely failure case, and explains the key trade-off.")+'</p></div></details></section>'+
+   (mistakes.length?'<section class="detail-box"><div class="learning-section-kicker">05 · AVOID THESE MISTAKES</div><h4>Common mistakes</h4><ul>'+list(mistakes)+'</ul></section>':'')+
+   (terms?'<section class="detail-box"><div class="learning-section-kicker">06 · KEY TERMS</div><h4>Words to remember</h4><div class="course-terms">'+terms+'</div></section>':'')+
+   (commands.length?'<section class="detail-box"><div class="learning-section-kicker">TOOLS · OPTIONAL REFERENCE</div><h4>Tools or commands you may use</h4><div class="code-list">'+commands.map(x=>esc(x)).join("\n")+'</div><p class="small">Use only the tools relevant to this task. Verify commands before running them in a real environment.</p></section>':'')+
+  '</div></section>';
 }
 function setCourseLessonStep(nextStep){
  const root=document.getElementById("courseLesson");
@@ -5272,60 +5289,21 @@ function openLearning(domain,i){
  state.v9=state.v9||{};
  state.v9.activeLearning={domain,index:Number(i),role:selectedRole(),openedAt:new Date().toISOString()};
  save();
- const t=getTopic(domain,i), d=CURRICULUM.domains.find(x=>x.name===domain), det=t.details||{}, role=selectedRole();
- const saved=learningWorkspaceState(domain,i);
- const modal=document.createElement("div"); modal.className="learning-modal"; modal.id="learningModal";
- const baseCommands=det.commands||[];
- const commands=roleCommands(role,domain);
- const effectiveCommands=commands.length?commands:baseCommands;
- const showCommands=shouldShowCommandPanel(role,domain,effectiveCommands);
- const learnItems=(det.learn||[]).filter(Boolean);
- const lessonPoints=learnItems.length?learnItems.slice(0,6):[t.topic,"Core concepts and terminology","Common workflows and practical use"];
- const checkpoints=[
-  {title:"Understand the concept",desc:"Explain "+t.topic+" in your own words, without copying the definition."},
-  {title:"Connect it to the role",desc:"Describe where "+t.topic+" appears in a real "+role+" task or system."},
-  {title:"Apply it in practice",desc:"Complete the exercise below and record evidence or the result."}
- ];
- const learn=lessonPoints.map(x=>`<li>${esc(x)}</li>`).join("");
- const checkpointsHtml=checkpoints.map((x,n)=>`<label class="learning-checkpoint"><input type="checkbox" ${saved.learningChecklist[String(n)]?"checked":""} onchange="toggleLearningCheckpoint(${esc(jsArg(domain))},${i},${n},this.checked)"><span><b>${esc(x.title)}</b><small>${esc(x.desc)}</small></span></label>`).join("");
- const conceptSummary=String(det.what||t.learn||("This lesson introduces "+t.topic+" and explains how it is used in "+role+" work."));
- const workedExample=String(det.example||det.context||("A practical example of "+t.topic+" is to apply it to a small, realistic task, observe the result, and compare that result with what you expected."));
- const keyTakeaway=String(det.solution||det.how||("Focus on what the concept does, when it is useful, and how to recognize it in a real system."));
-
+ const t=getTopic(domain,i), det=t.details||{}, role=selectedRole();
+ const modal=document.createElement("div");
  const weight=roleWeights()[domain]||0;
- const completed=Object.values(saved.learningChecklist).filter(Boolean).length;
- const practiceText=det.lab||("Create a small practical exercise that demonstrates "+t.topic+". Record the steps, expected result, actual result, and what you learned.");
- modal.innerHTML=`<div class="learning-panel"><div class="learning-panel-scroll">
-  <div class="learning-head"><div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px"><button class="btn" onclick="closeLearning()">Back to ${esc(domain)}</button><span class="badge">${esc(domain)} · ${esc(role)} · ${weight}% role weight</span></div><h2 style="margin-top:8px">${esc(t.topic)}</h2><div class="small">${esc(t.learn||"Guided learning session")}</div></div><button class="close-x" onclick="closeLearning()">×</button></div>
-  <section class="learning-start-card">
-   <div class="learning-start-top"><div><div class="learning-eyebrow">GUIDED LEARNING SESSION</div><h3>Understand the concept, then see it in practice</h3><p>Read the explanation, follow the worked example, and use the practical steps to see how the concept applies. No quiz or written answers required.</p></div><div class="learning-time-chip">Suggested: 30–45 min</div></div>
-   <div class="learning-session-steps"><span>1. Understand</span><span>2. See an example</span><span>3. Practise</span><span>4. Track progress</span></div>
-  </section>
-  <div class="learning-progress-card"><div><b>Your learning checkpoints</b><span id="learningCheckpointSummary">${completed} of 3 learning checkpoints complete</span></div><div class="progress"><span id="learningCheckpointBar" style="width:${Math.round(completed/3*100)}%"></span></div><span id="learningCheckpointTotal" data-total="3" hidden></span></div>
-  ${renderCourseLesson(domain,{...t,index:Number(i)},det)}
-  <div class="learning-curriculum-grid">
-   <section class="detail-box"><div class="learning-section-kicker">01 · UNDERSTAND</div><h3>Why this matters for ${esc(role)}</h3><p>${esc(det.context||roleContext(role,domain))}</p><h4>By the end, you should be able to</h4><ul><li>Explain ${esc(t.topic)} clearly in your own words.</li><li>Recognize when and why a ${esc(role)} uses it.</li><li>Apply it in a practical scenario and explain the result.</li></ul></section>
-   <section class="detail-box"><div class="learning-section-kicker">02 · LEARN THE CONCEPTS</div><h3>What to cover</h3><ul class="learning-topic-list">${learn}</ul><p class="small">Use these as a checklist, not just a reading list. Pause after each concept and explain it back in your own words.</p>${showCommands?`<h4>${roleFamily(role)==='Data & AI'||domain==='28 Databases & SQL'?'Commands / queries':'Tools to try'}</h4><div class="code-list">${effectiveCommands.map(x=>esc(x)).join("\n")||"No command-line practice required for this topic."}</div>`:""}</section>
-   <section class="detail-box"><div class="learning-section-kicker">03 · HANDS-ON PRACTICE</div><h3>Complete a practical exercise</h3><p>${esc(practiceText)}</p><ol><li>Write down the problem you are trying to solve.</li><li>Complete the task in a small, safe environment.</li><li>Capture the result and explain why it worked.</li><li>Record one issue you encountered and how you fixed it.</li></ol><div class="learning-proof-note"><b>Evidence to keep</b><span>Commands or steps, output/screenshots, a short README, and lessons learned. Add a GitHub link when appropriate.</span></div></section>
-   <section class="detail-box"><div class="learning-section-kicker">04 · CHECK YOUR UNDERSTANDING</div><h3>Mark each checkpoint as you complete it</h3><div class="learning-checkpoints">${checkpointsHtml}</div><div class="detail-actions"><button class="btn" onclick="quickProgress(${esc(jsArg(domain))},${i},50)">Save as in progress (50%)</button></div></section>
-  </div>
-  <section class="detail-box learning-notes-box"><div class="learning-section-kicker">06 · OPTIONAL PERSONAL NOTES</div><h3>Keep a note for next time</h3><p>Notes are optional. You can continue learning without writing anything.</p><label for="learningNotes"><b>My notes (optional)</b></label><textarea id="learningNotes" class="learning-answer" rows="4" placeholder="Optional: add a reminder or useful example…" oninput="saveLearningField(${esc(jsArg(domain))},${i},'learningNotes',this.value)">${esc(saved.learningNotes)}</textarea><div class="learning-notes-footer"><span id="learningSaveStatus">Saved in this browser</span><button class="btn" onclick="saveLearningField(${esc(jsArg(domain))},${i},'learningNotes',document.getElementById('learningNotes').value)">Save notes</button></div></section>
-  <section class="detail-box learning-concept-summary"><div class="learning-section-kicker">05 · THE CONCEPT IN PLAIN ENGLISH</div><h3>What you are learning</h3><p>${esc(conceptSummary)}</p><h4>Example you can relate to</h4><p>${esc(workedExample)}</p><h4>What to remember</h4><p>${esc(keyTakeaway)}</p><p class="small">Read this as a guide. You do not need to type answers or pass a quiz to continue.</p></section>
-  <section class="learning-finish-card"><div><h3>Ready to record this learning session?</h3><p>Mark complete when you can explain the concept and have attempted the practical exercise. You can return to your notes any time.</p><p class="small">Current status: <b>${esc(t.status)}</b> · ${pct(t)}% complete · ${Number(t.actualHours)||0} actual hours</p></div><div class="detail-actions learning-finish-actions"><button class="btn" onclick="quickProgress(${esc(jsArg(domain))},${i},50)">Keep in progress</button><button class="btn" onclick="openNextLearningTopic(${esc(jsArg(domain))},${i})">Continue to next lesson →</button><button class="btn" onclick="openProjectStudioFromLearning()">Build project proof</button><button class="btn primary" onclick="finishLearningSession(${esc(jsArg(domain))},${i})">Complete learning session</button></div></section>
- </div></div>`;
- modal.remove();
- const current=window.__itCareerCurrentView||"learning";
- if(current!=="lesson"){
-  const history=window.__itCareerHistory||[];
-  if(history[history.length-1]!==current)history.push(current);
-  window.__itCareerHistory=history.slice(-30);
- }
+ const roleWhy=roleContext(role,domain);
+ modal.innerHTML='<div class="learning-panel"><div class="learning-panel-scroll">'+
+  '<div class="learning-head"><div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px"><button class="btn" onclick="closeLearning()">← Back to learning</button><span class="badge">'+esc(domain)+' · '+esc(role)+' · '+weight+'% role weight</span></div><h2 style="margin-top:8px">'+esc(t.topic)+'</h2><p class="small">'+esc(t.learn||"Topic learning guide")+'</p></div><button class="close-x" onclick="closeLearning()" aria-label="Close lesson">×</button></div>'+
+  '<div class="learning-start-card"><div class="learning-eyebrow">YOUR LEARNING GOAL</div><h3>Know what to learn, why it matters, and how to apply it</h3><p>'+esc(roleWhy)+'</p><div class="learning-session-steps"><span>Understand</span><span>See an example</span><span>Follow the steps</span><span>Practise</span></div></div>'+
+  renderCourseLesson(domain,{...t,index:Number(i)},det)+
+  '<section class="learning-finish-card"><div><h3>Finish this topic</h3><p>Mark it complete when you understand the main idea and have tried the practical task. You can revisit this page at any time.</p><p class="small">Current status: <b>'+esc(t.status||"Not Started")+'</b> · '+pct(t)+'% complete · '+(Number(t.actualHours)||0)+' actual hours</p></div><div class="detail-actions learning-finish-actions"><button class="btn" onclick="quickProgress('+esc(jsArg(domain))+','+Number(i)+',50)">Keep in progress</button><button class="btn" onclick="openNextLearningTopic('+esc(jsArg(domain))+','+Number(i)+')">Next topic →</button><button class="btn primary" onclick="finishLearningSession('+esc(jsArg(domain))+','+Number(i)+')">Mark topic complete</button></div></section>'+
+  '</div></div>';
  window.__itCareerCurrentView="lesson";
  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===navParentView("lesson")));
- setPage(t.topic,modal.querySelector(".learning-panel").outerHTML);
+ setPage(t.topic,modal.firstElementChild.outerHTML);
  window.scrollTo({top:0,behavior:"auto"});
 }
-
 function renderLearningLessonPage(){
  const a=state.v9&&state.v9.activeLearning;
  if(!a||!CURRICULUM.domains.find(x=>x.name===a.domain)?.topics?.[a.index]){
