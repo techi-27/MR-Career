@@ -5187,9 +5187,9 @@ function lessonContentFor(domain,topic,det){
  ];
  return packs.find(x=>x.match.test(d+" "+t))||{
   title:"Learn "+topic,
-  what:(det&&det.context?String(det.context)+" ":"")+topic+" is a capability you should be able to explain, apply, and troubleshoot in the context of your target role. Learn core terms first, connect each concept to a real task, and verify it with evidence.",
-  how:"Start with the goal and prerequisites. Break the topic into small concepts, work through one example, practise with controlled input, inspect the result, and explain the reasoning. If the result differs from expectation, isolate the cause using evidence.",
-  example:"Take a realistic scenario involving "+topic+". State the expected outcome, list assumptions, perform one step at a time, and compare actual with expected results. Explain what would change if the input, scale, permissions, or failure conditions changed.",
+  what:(det&&det.context?String(det.context)+" ":"")+topic+" is a skill used to solve a real problem in the selected role. Focus on the essential concepts, when to use them, and how to recognize failure.",
+  how:"Start with one realistic task. Identify inputs, expected results, dependencies and risks; work in small steps; verify the outcome; then explain the key decision and one failure case.",
+  example:"For a "+topic+" task in the target role, state the goal, prerequisites and success signal. Work through the smallest useful example, inspect the result, then change one assumption to see how behavior changes.",
   steps:["Define the problem this topic helps solve and identify prerequisites.","Write key terms and explain them in your own words.","Work through a small example and record each decision.","Practise a normal case, an edge case, and a failure case.","Summarize results, limitations, and the next step."],
   practice:"Create a small scenario that uses "+topic+". Record the objective, setup, steps, expected result, actual result, and what you learned.",
   solution:"A complete solution states the goal and assumptions, demonstrates the workflow, verifies the outcome with evidence, handles an edge or failure case, and explains limitations. Validate technical specifics against the topic's actual behavior.",
@@ -5367,6 +5367,69 @@ const ROLE_ORDER = {
  "Platform Architect":["01 Linux","02 Networking","03 AWS","05 Kubernetes","06 Terraform","07 GitOps","08 Platform IDP","10 DevSecOps","11 Observability","14 System Design","17 Architecture Leadership","13 SRE","09 Crossplane","12 Python Bash","15 AI ML Basics","16 AI ML Platform","18 Projects Interview"]
 }
 Object.assign(ROLE_ORDER,UNIVERSAL_ROLE_ORDER);;
+
+/* V14: focus primary roadmaps on skills needed for the selected role. */
+(function applyCurriculumQualityLayer(){
+  const sharedExtras=new Set(["00 Computer Fundamentals","54 Career & Interview Foundations"]);
+  const exclusions={
+    "Senior Platform Engineer":["15 AI ML Basics","16 AI ML Platform"],
+    "Platform Architect":["15 AI ML Basics","16 AI ML Platform"],
+    "Developer Platform Engineer":["16 AI ML Platform"],
+    "Kubernetes Platform Engineer":["16 AI ML Platform"],
+    "Platform SRE":["16 AI ML Platform"]
+  };
+  const roles=new Set([...Object.keys(ROLE_CONFIG||{}),...Object.keys(ROLE_ORDER||{})]);
+  roles.forEach(role=>{
+    const omit=new Set([...sharedExtras,...(exclusions[role]||[])]);
+    if(ROLE_ORDER[role])ROLE_ORDER[role]=ROLE_ORDER[role].filter(d=>!omit.has(d));
+    const cfg=ROLE_CONFIG[role]; if(!cfg||!cfg.weights)return;
+    Object.keys(cfg.weights).forEach(d=>{if(omit.has(d))delete cfg.weights[d];});
+    const entries=Object.entries(cfg.weights).filter(([,w])=>Number(w)>0);
+    const total=entries.reduce((n,[,w])=>n+Number(w),0);
+    if(total){
+      const scaled=entries.map(([domain,w])=>({domain,raw:Number(w)*100/total,base:Math.floor(Number(w)*100/total)}));
+      let left=100-scaled.reduce((n,x)=>n+x.base,0);
+      scaled.sort((a,b)=>(b.raw-b.base)-(a.raw-a.base));
+      scaled.forEach(x=>{if(left>0){x.base++;left--;}});
+      cfg.weights=Object.fromEntries(scaled.map(x=>[x.domain,x.base]));
+    }
+    if(String(cfg.description||"").startsWith("Personalized ")){
+      const family=roleFamily(role);
+      const descriptions={
+        "Software & Development":"Build, test and maintain reliable software through role-relevant coding, data and delivery skills.",
+        "Data & AI":"Turn data and models into useful, measurable systems with sound engineering and responsible deployment.",
+        "Cloud & Infrastructure":"Design, automate and operate secure, reliable cloud and infrastructure services.",
+        "Cybersecurity":"Protect systems through threat analysis, identity, secure configuration and incident response.",
+        "Quality Engineering":"Prevent defects with risk-based testing, automation and reliable release practices.",
+        "Design & Product":"Understand user needs and turn them into usable experiences, clear priorities and measurable outcomes.",
+        "Enterprise Technology":"Configure, extend and support enterprise platforms around real business workflows.",
+        "Architecture & Leadership":"Make sound technical and delivery decisions, communicate trade-offs and guide implementation."
+      };
+      cfg.description=role+": "+(descriptions[family]||"Build role-specific skills, practical experience and evidence needed to do the work confidently.");
+    }
+  });
+  const contexts={
+    "01 Linux":"Build a troubleshooting foundation: processes, permissions, services, logs, storage and shell automation.",
+    "02 Networking":"Learn request flow, DNS, routing, TLS, load balancing and how to isolate connectivity failures.",
+    "03 AWS":"Focus on AWS services used by the selected role: identity, networking, compute, containers, storage, observability and cost trade-offs.",
+    "04 Docker":"Package applications reproducibly, manage images and networking, and apply container security basics.",
+    "05 Kubernetes":"Progress from workloads and services to access control, scheduling, scaling, networking and production troubleshooting.",
+    "06 Terraform":"Learn declarative infrastructure, state safety, modules, environments, testing and controlled change review.",
+    "07 GitOps":"Connect source control, CI, declarative deployment and reconciliation; understand promotion and rollback.",
+    "08 Platform IDP":"Design self-service workflows and golden paths that reduce developer friction while keeping guardrails.",
+    "09 Crossplane":"Learn when platform APIs and compositions help teams provision governed infrastructure through Kubernetes.",
+    "10 DevSecOps":"Apply least privilege, secret handling, artifact security, policy and automated checks throughout delivery.",
+    "11 Observability":"Correlate metrics, logs and traces; create actionable alerts and connect signals to user impact.",
+    "12 Python Bash":"Build small, tested automations that handle errors, configuration and repeatable operational tasks.",
+    "13 SRE":"Use SLOs, incident response, post-incident learning, capacity and recovery practices to manage reliability.",
+    "14 System Design":"Explain system boundaries, data flow, scaling, resilience, security and cost through explicit trade-offs.",
+    "15 AI ML Basics":"Learn the ML and model-serving concepts needed for the selected AI/ML role.",
+    "16 AI ML Platform":"Build the platform side of ML: reproducible pipelines, model serving, GPU-aware scheduling, observability and governance.",
+    "17 Architecture Leadership":"Connect architecture choices to reliability, cost, risk, delivery constraints and stakeholder outcomes.",
+    "18 Projects Interview":"Turn selected role skills into demonstrable projects and concise technical explanations."
+  };
+  CURRICULUM.domains.forEach(d=>{if(contexts[d.name])d.details={...(d.details||{}),context:contexts[d.name]};});
+})();
 
 const ROLE_WHY = {
  "01 Linux":"Foundation for troubleshooting servers, containers and Kubernetes nodes.",
@@ -6025,21 +6088,47 @@ function v8SetRecommendedRole(role,destination='discover'){
 }
 
 function roleContext(role,domain){
-  const family=roleFamily(role);
-  const base=ROLE_WHY[domain]||"This capability supports the selected role.";
-  const special={
-    "Software & Development":`For ${role}, this capability supports building, testing and maintaining software that users and teams can rely on.`,
-    "Data & AI":`For ${role}, this capability supports turning data, models or AI systems into reliable, measurable outcomes.`,
-    "Cloud & Infrastructure":`For ${role}, this capability supports operating, automating and scaling production technology reliably.`,
-    "Cybersecurity":`For ${role}, this capability supports reducing risk, protecting systems and responding to security issues.`,
-    "Quality Engineering":`For ${role}, this capability supports preventing defects and improving confidence in software delivery.`,
-    "Design & Product":`For ${role}, this capability supports creating useful, accessible and measurable user experiences.`,
-    "Enterprise Technology":`For ${role}, this capability supports implementing and operating enterprise platforms and business processes.`,
-    "Architecture & Leadership":`For ${role}, this capability supports architecture decisions, trade-offs, technical direction and organizational impact.`
+  const name=String(domain||"").replace(/^\d+\s*/,"");
+  const outcomes={
+    "01 Linux":"diagnose processes, permissions, services, storage and host-level failures.",
+    "02 Networking":"trace DNS, routing, TLS and load-balancer problems.",
+    "03 AWS":"design and operate secure, reliable, cost-aware AWS infrastructure.",
+    "04 Docker":"build reproducible images and debug container runtime issues.",
+    "05 Kubernetes":"deploy, scale, secure and troubleshoot production workloads.",
+    "06 Terraform":"provision repeatable infrastructure with reusable modules and controlled state.",
+    "07 GitOps":"deliver changes through version-controlled deployment workflows.",
+    "08 Platform IDP":"create self-service developer workflows, golden paths and useful documentation.",
+    "09 Crossplane":"offer cloud resources through reusable platform APIs and compositions.",
+    "10 DevSecOps":"embed security checks and policy guardrails into delivery.",
+    "11 Observability":"use metrics, logs and traces to detect problems and explain service behavior.",
+    "12 Python Bash":"automate operational work with tested scripts and maintainable tooling.",
+    "13 SRE":"improve reliability through SLOs, incident learning and risk-based engineering.",
+    "14 System Design":"reason about service boundaries, failure modes, scale and trade-offs.",
+    "15 AI ML Basics":"understand model workloads, data flow and ML operational needs.",
+    "16 AI ML Platform":"deploy, serve, observe and govern model workloads on a repeatable platform.",
+    "17 Architecture Leadership":"make defensible architecture, cost, risk and delivery trade-offs.",
+    "18 Projects Interview":"prove skills with a working project, documented decisions and evidence.",
+    "19 Programming Fundamentals":"write readable, testable code and reason about inputs and edge cases.",
+    "20 Data Structures & Algorithms":"choose appropriate data structures and explain algorithmic trade-offs.",
+    "21 Web Fundamentals":"understand browser-to-server requests, APIs, HTTP behavior and web security.",
+    "28 Databases & SQL":"model data, query it safely and reason about transactions and performance.",
+    "29 Software Engineering Practices":"ship maintainable changes through reviews, tests and clear version history.",
+    "39 Security Engineering":"apply identity, threat modeling, secure configuration and risk reduction.",
+    "40 Networking":"trace requests and diagnose connectivity from client through network to service.",
+    "41 System Administration":"maintain operating systems, access, services, updates and recovery.",
+    "42 Cloud Computing":"select and operate cloud services with security, reliability and cost in mind.",
+    "43 DevOps & CI/CD":"automate build, test, release and rollback with repeatable pipelines.",
+    "44 Platform Engineering":"turn repeated developer needs into supported self-service capabilities.",
+    "45 Observability & SRE":"measure service health, investigate incidents and improve reliability.",
+    "50 Business Analysis":"turn stakeholder needs into clear requirements and acceptance criteria.",
+    "51 Product Management":"connect user problems, product outcomes, prioritization and measurable impact.",
+    "52 Project & Agile Management":"plan delivery, manage dependencies and make risks visible.",
+    "53 Communication & Professional Skills":"communicate decisions clearly across technical and non-technical teams."
   };
-  return `${special[family]||`For ${role}, this capability is part of the role's professional foundation.`} ${base}`;
+  const outcome=outcomes[domain]||("apply "+name.toLowerCase()+" to solve realistic "+role.toLowerCase()+" tasks");
+  const why=ROLE_WHY[domain];
+  return role+": learn "+name+" to "+outcome+(why?" This matters because "+why.charAt(0).toLowerCase()+why.slice(1):"")+".";
 }
-
 function roleReadinessBreakdown(role){
   const weights=ROLE_CONFIG[role]?.weights||{};
   const entries=Object.entries(weights).filter(([d,w])=>Number(w)>0).sort((a,b)=>Number(b[1])-Number(a[1]));
