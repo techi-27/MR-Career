@@ -2146,29 +2146,25 @@ html body .table-wrap:has(> table > tbody#topicRows) td:nth-child(1) .small{
 </style>
 
 
-<style id="v13-27-learning-modal-inset-scrollbar">
-/* Scroll inside an inset viewport so the scrollbar does not sit on the dialog's rounded edge. */
-html body #learningModal.learning-modal{box-sizing:border-box!important}
-html body #learningModal .learning-panel{
- display:flex!important;flex-direction:column!important;min-height:0!important;
- padding:0!important;overflow:hidden!important;
+<style id="v15-lesson-page-scroll-fix">
+/* Lesson is a normal app page now: use document scrolling, never a nested modal scrollbar. */
+html body #content .learning-modal{
+ position:static!important;inset:auto!important;display:block!important;
+ width:100%!important;max-width:100%!important;height:auto!important;max-height:none!important;
+ padding:0!important;margin:0!important;overflow:visible!important;background:transparent!important;
 }
-html body #learningModal .learning-panel-scroll{
- flex:1 1 auto!important;min-width:0!important;min-height:0!important;
- width:calc(100% - 12px)!important;max-height:calc(100dvh - 32px)!important;
- margin-right:12px!important;padding:22px 14px 22px 26px!important;
- box-sizing:border-box!important;overflow-x:hidden!important;overflow-y:auto!important;
- overscroll-behavior:contain!important;scrollbar-width:thin!important;
- scrollbar-color:#c4cbe0 transparent!important;
+html body #content .learning-panel{
+ display:block!important;position:static!important;width:100%!important;max-width:100%!important;
+ height:auto!important;max-height:none!important;min-height:0!important;overflow:visible!important;
+ padding:0!important;margin:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;
 }
-html body #learningModal .learning-panel-scroll::-webkit-scrollbar{width:8px!important}
-html body #learningModal .learning-panel-scroll::-webkit-scrollbar-track{background:transparent!important}
-html body #learningModal .learning-panel-scroll::-webkit-scrollbar-thumb{background:#c4cbe0!important;border-radius:999px!important;border:2px solid transparent!important;background-clip:padding-box!important}
-@media(max-width:760px){
- html body #learningModal.learning-modal{padding:8px!important}
- html body #learningModal .learning-panel{width:calc(100vw - 16px)!important;max-height:calc(100dvh - 16px)!important}
- html body #learningModal .learning-panel-scroll{width:calc(100% - 8px)!important;margin-right:8px!important;max-height:calc(100dvh - 16px)!important;padding:16px 10px 16px 16px!important}
+html body #content .learning-panel-scroll{
+ display:block!important;width:100%!important;max-width:100%!important;height:auto!important;max-height:none!important;
+ min-width:0!important;min-height:0!important;overflow:visible!important;overflow-x:visible!important;overflow-y:visible!important;
+ margin:0!important;padding:0!important;box-sizing:border-box!important;scrollbar-gutter:auto!important;
 }
+html body #content .learning-head{padding-right:0!important}
+html body #content .learning-head .close-x{position:static!important;flex:0 0 auto!important}
 </style>
 
 
