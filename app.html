@@ -176,9 +176,9 @@ footer{padding:25px 0 10px;color:var(--muted);font-size:10px;text-align:center}
 @media(max-width:480px){.grid{grid-template-columns:1fr}}
 
 
-/* Learning lessons open as a dedicated full-screen workspace, not a floating modal. */
-.learning-modal{position:fixed;inset:0;background:var(--bg,#f5f7fb);z-index:100;display:flex;align-items:stretch;justify-content:stretch;padding:0;overflow:hidden}
-.learning-panel{width:100%;height:100%;max-height:none;overflow:auto;background:var(--bg,#f5f7fb);border-radius:0;box-shadow:none;padding:24px clamp(16px,3vw,44px);}
+/* Lesson content is rendered inside the app's page area, not in a modal overlay. */
+.learning-modal{position:static;inset:auto;background:transparent;z-index:auto;display:block;padding:0;overflow:visible}
+.learning-panel{width:100%;height:auto;max-height:none;overflow:visible;background:transparent;border-radius:0;box-shadow:none;padding:0;}
 .learning-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:14px}
 .learning-head h2{margin:0;font-size:21px}.close-x{border:0;background:#f1f4f8;border-radius:10px;width:38px;height:38px;font-size:20px}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:15px}
@@ -190,7 +190,7 @@ footer{padding:25px 0 10px;color:var(--muted);font-size:10px;text-align:center}
 .quiz-q{font-weight:800;font-size:12px}.answer{display:none;margin-top:8px;padding:9px;background:#eef6ff;border-radius:8px;font-size:11px;color:#24527c}
 .quiz-card.revealed .answer{display:block}
 .detail-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-@media(max-width:700px){.detail-grid{grid-template-columns:1fr}.learning-modal{padding:0}.learning-panel{height:100%;max-height:none;padding:15px}}
+@media(max-width:700px){.detail-grid{grid-template-columns:1fr}.learning-modal{padding:0}.learning-panel{height:auto;max-height:none;padding:0}}
 
 
 .sidebar{position:fixed}
@@ -5296,7 +5296,12 @@ Next thing to practise…" oninput="saveLearningField(${esc(jsArg(domain))},${i}
   <div class="section"><div class="section-title"><h2>Explain it like an interview</h2><span class="small">Practise explaining the topic, not memorizing a definition</span></div><div class="detail-grid">${interviews||'<div class="detail-box"><p>Explain the topic, give a real example, and describe one failure mode or trade-off.</p></div>'}</div></div>
   <section class="learning-finish-card"><div><h3>Ready to record this learning session?</h3><p>Mark complete when you can explain the concept and have attempted the practical exercise. You can return to your notes any time.</p><p class="small">Current status: <b>${esc(t.status)}</b> · ${pct(t)}% complete · ${Number(t.actualHours)||0} actual hours</p></div><div class="detail-actions learning-finish-actions"><button class="btn" onclick="quickProgress(${esc(jsArg(domain))},${i},50)">Keep in progress</button><button class="btn" onclick="openNextLearningTopic(${esc(jsArg(domain))},${i})">Continue to next lesson →</button><button class="btn" onclick="openProjectStudioFromLearning()">Build project proof</button><button class="btn primary" onclick="finishLearningSession(${esc(jsArg(domain))},${i})">Complete learning session</button></div></section>
  </div></div>`;
- document.body.appendChild(modal);
+ const content=document.getElementById("content");
+ if(!content){alert("Unable to open the lesson page. Please refresh and try again.");return;}
+ content.replaceChildren(modal.querySelector(".learning-panel"));
+ const title=document.getElementById("pageTitle");
+ if(title)title.textContent=t.topic;
+ modal.remove();
 }
 
 function openNextLearningTopic(domain,index){
@@ -5314,7 +5319,7 @@ function openProjectStudioFromLearning(){
  navigate("projects");
 }
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeLearning()});
-function closeLearning(){document.getElementById("learningModal")?.remove()}
+function closeLearning(){renderCurrent()}
 function quickComplete(domain,i){updateTopic(domain,i,"status","Completed");updateTopic(domain,i,"progress",100);closeLearning();renderCurrent()}
 function quickProgress(domain,i,p){updateTopic(domain,i,"progress",p);closeLearning();renderCurrent()}
 
