@@ -127,9 +127,10 @@ The website includes:
 2. Choose **Open App** or **Get started** to enter the workspace.
 3. Explore a role or career direction that matches your goal.
 4. Review the skills and learning topics for that role.
-5. Build a study plan and choose practical work to complete.
-6. Revisit your progress regularly and adjust the next steps.
-7. Export a backup periodically if your progress is important to you.
+5. Open a topic in **Learn** and work through its single-page guide: understand the concept, follow the example, and try the practical task where available.
+6. Use the progress actions to continue learning, open the next topic, or mark the topic complete.
+7. Build or adjust your study plan and choose practical work to complete.
+8. Revisit your progress regularly and export a backup periodically if your progress is important to you.
 
 No account is required for the current version.
 
