@@ -3960,7 +3960,7 @@ html body .v9-project > textarea { min-height:64px!important;border:1px solid #d
     </label>
       <button class="btn" onclick="exportData()">Export</button>
       <button class="btn" onclick="importData()">Import</button>
-      <button class="btn danger" onclick="resetData()">Reset</button>
+      
     </div>
   </div>
   <div id="content" tabindex="-1" aria-live="polite"></div>
@@ -4978,7 +4978,7 @@ function renderFirstRun(){
  });
  const other=roles.filter(r=>!grouped.has(r));
  if(other.length)roleOptions+=`<div class="welcome-role-group">Other roles</div>${other.map(r=>`<button type="button" class="welcome-role-option" data-role="${esc(r)}" onclick="chooseWelcomeRole(this.dataset.role)">${esc(r)}</button>`).join("")}`;
- const h=`<div class="v8-hero"><div class="v8-label" style="color:#b9dcff">WELCOME TO IT CAREER OS</div><h2>Start with your career goal.</h2><p>Choose a target role to create a relevant roadmap, skill-gap analysis, projects and interview plan. Nothing is pre-selected.</p><div class="card welcome-role-card" style="max-width:720px;margin-top:18px"><label for="welcomeRoleTrigger"><b>What role are you working toward?</b></label><div id="welcomeRolePicker" class="welcome-role-picker"><button type="button" id="welcomeRoleTrigger" class="welcome-role-trigger" aria-haspopup="true" aria-expanded="false" onclick="toggleWelcomeRoleMenu()"><span class="welcome-role-label">Choose a target role...</span><span aria-hidden="true">▾</span></button><div id="welcomeRoleMenu" class="welcome-role-menu" hidden><input id="welcomeRoleSearch" class="welcome-role-search" type="search" placeholder="Search roles..." autocomplete="off" oninput="filterWelcomeRoles(this.value)" aria-label="Search roles"><div class="welcome-role-options">${roleOptions}<div class="welcome-role-empty" hidden>No matching roles found.</div></div></div></div><input id="welcomeRoleValue" type="hidden" value=""><button class="btn primary" style="margin-top:12px" onclick="const r=document.getElementById('welcomeRoleValue').value;if(!r){alert('Please choose a target role first.');return;}handleRoleChange(r);navigate('profile')">Set my target role</button><p class="small">You can change this at any time. Your progress is stored in this browser.</p></div><div class="v6-actions"><button class="btn" onclick="navigate('careers')">Explore all careers first</button><button class="btn" onclick="navigate('profile')">Set up my profile</button></div></div>`;
+ const h=`<div class="v8-hero"><div class="v8-label" style="color:#b9dcff">WELCOME TO IT CAREER OS</div><h2>Start with your career goal.</h2><p>Choose a target role to create a relevant roadmap, skill-gap analysis, projects and interview plan. Nothing is pre-selected.</p><div class="card welcome-role-card" style="max-width:720px;margin-top:18px"><label for="welcomeRoleTrigger"><b>What role are you working toward?</b></label><div id="welcomeRolePicker" class="welcome-role-picker"><button type="button" id="welcomeRoleTrigger" class="welcome-role-trigger" aria-haspopup="true" aria-expanded="false" onclick="toggleWelcomeRoleMenu()"><span class="welcome-role-label">Choose a target role...</span><span aria-hidden="true">▾</span></button><div id="welcomeRoleMenu" class="welcome-role-menu" hidden><input id="welcomeRoleSearch" class="welcome-role-search" type="search" placeholder="Search roles..." autocomplete="off" oninput="filterWelcomeRoles(this.value)" aria-label="Search roles"><div class="welcome-role-options">${roleOptions}<div class="welcome-role-empty" hidden>No matching roles found.</div></div></div></div><input id="welcomeRoleValue" type="hidden" value=""><button class="btn primary" style="margin-top:12px" onclick="const r=document.getElementById('welcomeRoleValue').value;if(!r){alert('Please choose a target role first.');return;}handleRoleChange(r);navigate('roadmap')">Set my target role</button><p class="small">You can change this at any time. Your progress is stored in this browser.</p></div><div class="v6-actions"><button class="btn" onclick="navigate('careers')">Explore all careers first</button><button class="btn" onclick="navigate('profile')">Set up my profile</button></div></div>`;
  setPage("Welcome",h);
 }
 function renderRoute(view){
@@ -5095,8 +5095,6 @@ function renderCareerToolkit(){
   {title:"Resume analyzer",desc:"Review your resume against your selected target role.",view:"resume",icon:"▤"},
   {title:"Job description analyzer",desc:"Compare a job description with your current skills and identify gaps.",view:"jd",icon:"≡"},
   {title:"Job readiness",desc:"Review priority skill gaps and what to strengthen next.",view:"readiness",icon:"✓"},
-  {title:"Certifications",desc:"Explore certifications relevant to your target role.",view:"exams",icon:"☆"},
-  {title:"Weekly progress",desc:"Review recent study-plan follow-through and next-week priorities.",view:"weekly",icon:"◷"}
  ];
  let h=`<section class="toolkit-hero"><div class="v6-label">SUPPORTING CAREER TOOLS</div><h2>Your ${esc(role)} Career Toolkit</h2><p>Use these tools when you are ready to practise, prove your skills, or prepare for your next career move. Your main learning journey stays in Home, Learning Roadmap and Study Planner.</p></section><section class="toolkit-grid">`;
  items.forEach(x=>{h+=`<button type="button" class="toolkit-card" onclick="navigate('${x.view}')"><span class="toolkit-icon" aria-hidden="true">${x.icon}</span><span class="toolkit-card-copy"><b>${x.title}</b><small>${x.desc}</small></span><span class="toolkit-arrow" aria-hidden="true">→</span></button>`;});
@@ -5111,8 +5109,8 @@ function renderDashboard(){
   const plan=plannerState();
   const completedStages=[
     {label:"Choose your target role",done:!!role,view:"profile"},
-    {label:"Select the topics you need to learn",done:!!plan.generated,view:"planner"},
-    {label:"Set your study schedule",done:!!plan.generated,view:"planner"},
+    {label:"Choose your learning topics",done:selectedPlannerTopics().length>0,view:"roadmap"},
+    {label:"Build your study schedule",done:!!plan.generated,view:"planner"},
     {label:"Learn each topic and track progress",done:s.completed>0,view:"roadmap"}
   ];
   const nextStage=completedStages.findIndex(x=>!x.done);
@@ -5120,7 +5118,7 @@ function renderDashboard(){
     <div class="v8-label" style="color:#b9dcff">YOUR PERSONAL IT CAREER GUIDE</div>
     <h2>Know what to learn. Know what to do next.</h2>
     <p>MR.Career guides students, working professionals, beginners, and career changers from choosing an IT role to learning the right skills with a realistic daily plan.</p>
-    <div class="career-home-target"><span class="career-home-target-label">YOUR TARGET ROLE</span><strong>${esc(role)}</strong><div class="v6-actions"><button class="btn primary" onclick="navigate('roadmap')">Explore my learning roadmap</button><button class="btn" onclick="navigate('profile')">Change target role</button></div></div>
+    <div class="career-home-target"><span class="career-home-target-label">YOUR TARGET ROLE</span><strong>${esc(role)}</strong><div class="v6-actions"><button class="btn primary" onclick="navigate('${selectedPlannerTopics().length===0?'roadmap':plan.generated?'planner':'planner'}')">${selectedPlannerTopics().length===0?'Choose learning topics':plan.generated?'Continue today’s plan':'Build my study plan'}</button><button class="btn" onclick="navigate('profile')">Change target role</button></div><p class="small">${selectedPlannerTopics().length===0?'Start by selecting the skills you need.':plan.generated?'Your plan is ready — continue with the next scheduled lesson.':'Your topics are selected. Set your study schedule next.'}</p></div>
   </section>`;
   h+=renderLearningReturnCard();
   h+=renderTodayMissionLauncher();
@@ -5142,11 +5140,7 @@ function renderDashboard(){
     h+=`<button type="button" class="career-journey-step ${stage.done?"is-done":i===nextStage?"is-current":""}" onclick="navigate('${stage.view}')"><span class="career-journey-number">${stage.done?"✓":i+1}</span><span class="career-journey-copy"><b>${stage.label}</b><small>${stage.done?"Completed":i===nextStage?"Your next milestone":"Up next"}</small></span><span class="career-journey-arrow" aria-hidden="true">›</span></button>`;
   });
   h+=`</div></section>`;
-  h+=`<section class="section"><div class="section-title"><h2>Continue your journey</h2><span class="small">Choose the next action you need</span></div><div class="career-quick-links">
-    <button class="card" onclick="navigate('roadmap')"><b>Learning roadmap</b><span class="small">Review skills and choose learning topics</span></button>
-    <button class="card" onclick="navigate('planner')"><b>Study planner</b><span class="small">Follow your daily learning schedule</span></button>
-    <button class="card" onclick="navigate('toolkit')"><b>Career toolkit</b><span class="small">Projects, practice, resume and interviews</span></button>
-  </div></section>`;
+
   setPage("Home",h);
 }
 
@@ -6437,7 +6431,7 @@ function renderProfile(){
     <div><span>Target salary</span><b id="summaryTargetSalary">${Number(p.targetSalary)>0?esc(Number(p.targetSalary).toLocaleString()):"Not set"}</b></div>
     <div class="profile-summary-updated"><span>Last saved</span><b id="summaryUpdated">${esc(p.updatedAt?new Date(p.updatedAt).toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}):"Existing saved profile")}</b></div>
   </div></div>`;
-  h+=`<div class="section card"><h3>Career operating rules</h3><div class="v9-note">Your target role controls learning, labs, projects, certifications, interviews and job-readiness guidance. Change the role anytime; your saved progress remains in this browser. Use Export regularly for a backup.</div></div>`;
+  h+=`<div class="section card"><h3>Career operating rules</h3><div class="v9-note">Your target role controls learning, labs, projects, interviews and job-readiness guidance. Change the role anytime; your saved progress remains in this browser. Use Export regularly for a backup.</div><div class="plan-actions" style="margin-top:14px"><button class="btn danger" onclick="resetData()">Reset all local data</button><span class="small">This permanently removes saved progress from this browser. Export a backup first.</span></div></div>`;
   setPage("My Career Profile",h);
 }
 function searchAndRender(kind,value){
