@@ -11,7 +11,7 @@ MR.Career helps learners explore technology roles, understand role expectations,
 - **Hosting:** GitHub Pages (static website)
 - **Current model:** No account, backend API, or server-side application database is required.
 
-> **Project status:** The site is deployed and automated Playwright smoke tests are running against the live GitHub Pages URL. The latest recorded run passed 4 tests. This is useful smoke-test coverage, not a guarantee that every feature or device has been exhaustively tested.
+> **Project status:** The site is published on GitHub Pages. The latest single-page learning update has deployed successfully; its live browser regression workflow is running separately. Automated checks are smoke/regression coverage, not a guarantee that every feature, browser, or device has been exhaustively tested.
 
 ---
 
@@ -64,10 +64,11 @@ The role and learning content may evolve as the project develops. Always verify 
 - Move between career information and relevant learning areas.
 
 ### 2. Roadmaps and learning curriculum
-- Follow structured roadmaps and topic-based learning content.
+- Follow structured roadmaps and topic-based learning content for a selected career direction.
 - Review curriculum areas and mark learning progress where supported.
 - Use learning recommendations to identify a next topic or area to revisit.
 - Explore computer fundamentals and technology-specific learning material.
+- Curriculum depth varies by role and topic; some topics may use general guidance where a dedicated lesson has not yet been authored.
 
 ### 3. Study planner
 - Organise learning goals and study activities.
@@ -75,9 +76,13 @@ The role and learning content may evolve as the project develops. Always verify 
 - Keep study activity connected to ongoing learning goals.
 - Revisit incomplete work and adjust your plan as your schedule changes.
 
-### 4. Continue Learning
-- Resume an in-progress topic where supported.
-- Get a recommendation for the next incomplete topic.
+### 4. Guided Learn pages and Continue Learning
+- Open a topic as one continuous, scrollable lesson page rather than navigating through a multi-step lesson wizard.
+- See **what to learn**, a plain-English explanation, a worked example, a step-by-step guide, a practical task, common mistakes, and key terms where the topic content provides them.
+- Reveal an optional suggested approach or solution when available; users are not forced to complete a quiz or type a written answer just to continue.
+- See relevant tools or commands when they apply to the topic.
+- Keep learning progress with actions to continue, open the next topic, or mark a topic complete.
+- Resume an in-progress topic where supported and get a recommendation for the next incomplete topic.
 - Keep completed topics distinct from other planner sessions and project activity.
 
 ### 5. Career switch planning
