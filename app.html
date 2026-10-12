@@ -5134,6 +5134,8 @@ function renderDashboard(){
       <div class="v8-label">LEARN &amp; PRACTISE</div><h3>${esc(next.topic||next.name||"Your next topic")}</h3><p class="small">${esc(domain)} · ${esc(next.status||"Not Started")} · ${pct(next)}% complete</p><div class="progress"><span style="width:${pct(next)}%"></span></div>
       <div class="plan-actions"><button class="btn primary" onclick='openLearning(${JSON.stringify(domain)},${index})'>Start learning</button><button class="btn" onclick="navigate('planner')">Study calendar</button></div>
     </div></section>`;
+  } else if(!selectedPlannerTopics().length) {
+    h+=`<section class="section"><div class="card"><h3>Choose your learning topics</h3><p class="small">Select the learning areas that match your target role. Your next lesson will appear here once you choose your topics.</p><button class="btn primary" onclick="navigate('roadmap')">Choose learning topics →</button></div></section>`;
   } else {
     h+=`<section class="section"><div class="card"><h3>Learning journey complete</h3><p class="small">Keep your skills fresh with projects and interview practice.</p><div class="plan-actions"><button class="btn primary" onclick="navigate('projects')">Build a project</button><button class="btn" onclick="navigate('interview')">Practise interviews</button></div></div></section>`;
   }
