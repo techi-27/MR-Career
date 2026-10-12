@@ -4828,7 +4828,7 @@ function renderGlobalSearchResults(){
 document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openGlobalSearch();}else if(e.key==="/"&&!["INPUT","TEXTAREA","SELECT"].includes(document.activeElement?.tagName)){e.preventDefault();openGlobalSearch();}else if(e.key==="Escape")closeGlobalSearch();});
 
 function routeRenderers(){
- return {dashboard:renderDashboard,mission:renderTodaysMission,planner:renderPlanner,roadmap:renderRoadmap,learning:renderLearningHub,discover:renderCareerDiscovery,
+ return {dashboard:renderDashboard,mission:renderTodaysMission,planner:renderPlanner,roadmap:renderRoadmap,learning:renderLearningHub,lesson:renderLearningLessonPage,discover:renderCareerDiscovery,
  profile:renderProfile,careers:renderCareerDiscovery,careerpaths:renderCareerDiscovery,compare:renderCareerDiscovery,
  toolkit:renderCareerToolkit,projects:renderProjects,resume:renderResume,labs:renderLabs,exams:renderExams,
  interview:renderInterview,readiness:renderReadiness,portfolio:renderProjects,jd:renderJD,weekly:renderDashboard,
@@ -4978,7 +4978,7 @@ function renderCurrent(){return renderRoute(window.__itCareerCurrentView||"dashb
 function navParentView(view){
  const v=String(view||"dashboard");
  if(v.startsWith("domain:"))return "roadmap";
- return ({mission:"dashboard",discover:"discover",careers:"discover",careerpaths:"discover",compare:"discover",jobs:"discover",switch:"discover",planner:"planner",learning:"learning",tech:"roadmap",skills:"roadmap",exams:"toolkit",quizzes:"toolkit",labs:"toolkit",projects:"toolkit",interview:"toolkit",resume:"toolkit",jd:"toolkit",readiness:"toolkit",weekly:"dashboard",portfolio:"toolkit",skillgap:"toolkit",coach:"dashboard"})[v]||v;
+ return ({mission:"dashboard",lesson:"learning",discover:"discover",careers:"discover",careerpaths:"discover",compare:"discover",jobs:"discover",switch:"discover",planner:"planner",learning:"learning",tech:"roadmap",skills:"roadmap",exams:"toolkit",quizzes:"toolkit",labs:"toolkit",projects:"toolkit",interview:"toolkit",resume:"toolkit",jd:"toolkit",readiness:"toolkit",weekly:"dashboard",portfolio:"toolkit",skillgap:"toolkit",coach:"dashboard"})[v]||v;
 }
 function navigate(view,opts={}){
  view=String(view||"dashboard"); const current=window.__itCareerCurrentView||"dashboard";
@@ -5296,17 +5296,30 @@ Next thing to practise…" oninput="saveLearningField(${esc(jsArg(domain))},${i}
   <div class="section"><div class="section-title"><h2>Explain it like an interview</h2><span class="small">Practise explaining the topic, not memorizing a definition</span></div><div class="detail-grid">${interviews||'<div class="detail-box"><p>Explain the topic, give a real example, and describe one failure mode or trade-off.</p></div>'}</div></div>
   <section class="learning-finish-card"><div><h3>Ready to record this learning session?</h3><p>Mark complete when you can explain the concept and have attempted the practical exercise. You can return to your notes any time.</p><p class="small">Current status: <b>${esc(t.status)}</b> · ${pct(t)}% complete · ${Number(t.actualHours)||0} actual hours</p></div><div class="detail-actions learning-finish-actions"><button class="btn" onclick="quickProgress(${esc(jsArg(domain))},${i},50)">Keep in progress</button><button class="btn" onclick="openNextLearningTopic(${esc(jsArg(domain))},${i})">Continue to next lesson →</button><button class="btn" onclick="openProjectStudioFromLearning()">Build project proof</button><button class="btn primary" onclick="finishLearningSession(${esc(jsArg(domain))},${i})">Complete learning session</button></div></section>
  </div></div>`;
- const content=document.getElementById("content");
- if(!content){alert("Unable to open the lesson page. Please refresh and try again.");return;}
- content.replaceChildren(modal.querySelector(".learning-panel"));
- const title=document.getElementById("pageTitle");
- if(title)title.textContent=t.topic;
  modal.remove();
+ const current=window.__itCareerCurrentView||"learning";
+ if(current!=="lesson"){
+  const history=window.__itCareerHistory||[];
+  if(history[history.length-1]!==current)history.push(current);
+  window.__itCareerHistory=history.slice(-30);
+ }
+ window.__itCareerCurrentView="lesson";
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===navParentView("lesson")));
+ setPage(t.topic,modal.querySelector(".learning-panel").outerHTML);
+ window.scrollTo({top:0,behavior:"auto"});
 }
 
+function renderLearningLessonPage(){
+ const a=state.v9&&state.v9.activeLearning;
+ if(!a||!CURRICULUM.domains.find(x=>x.name===a.domain)?.topics?.[a.index]){
+  window.__itCareerCurrentView="learning";
+  return renderLearningHub();
+ }
+ return openLearning(a.domain,a.index);
+}
 function openNextLearningTopic(domain,index){
  const current=CURRICULUM.domains.find(x=>x.name===domain);
- if(current&&Number(index)+1<current.topics.length){closeLearning();openLearning(domain,Number(index)+1);return;}
+ if(current&&Number(index)+1<current.topics.length){openLearning(domain,Number(index)+1);return;}
  const order=v9RoleDomains(selectedRole()),at=order.indexOf(domain);
  for(let n=at+1;n<order.length;n++){
   const next=CURRICULUM.domains.find(x=>x.name===order[n]);
@@ -5319,7 +5332,11 @@ function openProjectStudioFromLearning(){
  navigate("projects");
 }
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeLearning()});
-function closeLearning(){renderCurrent()}
+function closeLearning(){
+ window.__itCareerCurrentView="learning";
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===navParentView("learning")));
+ renderRoute("learning");window.scrollTo({top:0,behavior:"auto"});
+}
 function quickComplete(domain,i){updateTopic(domain,i,"status","Completed");updateTopic(domain,i,"progress",100);closeLearning();renderCurrent()}
 function quickProgress(domain,i,p){updateTopic(domain,i,"progress",p);closeLearning();renderCurrent()}
 
