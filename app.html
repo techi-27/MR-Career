@@ -6677,8 +6677,27 @@ resetData = function(){ __v10BaseResetData(); };
   }catch(err){
     console.error("MR.Career boot error:", err);
     var c=document.getElementById("content");
-    if(c){
-      c.innerHTML='<div class="card"><div class="notice v6-danger"><b>Career OS could not start.</b><br>Please refresh the page. If the issue continues, use Reset or clear local storage and reopen the app.</div></div>';
+    /* Recover the visible app instead of leaving users with a generic startup failure. */
+    try{
+      if(!state || typeof state!=="object" || Array.isArray(state)) state={};
+      state.topics=state.topics&&typeof state.topics==="object"&&!Array.isArray(state.topics)?state.topics:{};
+      state.weekly=state.weekly&&typeof state.weekly==="object"&&!Array.isArray(state.weekly)?state.weekly:{};
+      state.interview=state.interview&&typeof state.interview==="object"&&!Array.isArray(state.interview)?state.interview:{};
+      state.profile=state.profile&&typeof state.profile==="object"&&!Array.isArray(state.profile)?state.profile:{experience:"",goal:"",weeklyHours:""};
+      state.settings=state.settings&&typeof state.settings==="object"&&!Array.isArray(state.settings)?state.settings:{selectedRole:"",sidebarCollapsed:false};
+      state.v9=state.v9&&typeof state.v9==="object"&&!Array.isArray(state.v9)?state.v9:{};
+      state.v6=state.v6&&typeof state.v6==="object"&&!Array.isArray(state.v6)?state.v6:{};
+      state.planner=state.planner&&typeof state.planner==="object"&&!Array.isArray(state.planner)?state.planner:{startDate:"",endDate:"",duration:"6",durationUnit:"months",selected:{},generated:false};
+      state.planner.selected=state.planner.selected&&typeof state.planner.selected==="object"&&!Array.isArray(state.planner.selected)?state.planner.selected:{};
+      state.settings.selectedRole=ROLE_CONFIG[state.settings.selectedRole]?state.settings.selectedRole:"";
+      window.__itCareerHistory=[];
+      window.__itCareerCurrentView="dashboard";
+      if(typeof renderFirstRun==="function") renderFirstRun();
+      else if(c)c.innerHTML='<div class="card"><div class="notice v6-danger"><b>MR.Career could not initialize.</b><br>Reload the page. Your saved data has not been deliberately cleared.</div></div>';
+      try{save()}catch(saveErr){console.warn("Recovery state could not be saved:",saveErr);}
+    }catch(recoveryErr){
+      console.error("MR.Career recovery error:", recoveryErr);
+      if(c)c.innerHTML='<div class="card"><div class="notice v6-danger"><b>MR.Career could not initialize.</b><br>Open browser Developer Tools → Console and share the first red error. Your saved data has not been deliberately cleared.</div></div>';
     }
   }
 })();
